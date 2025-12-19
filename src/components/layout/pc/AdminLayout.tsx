@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { Layout, Menu, Button, Space, Avatar, Dropdown, FloatButton, Breadcrumb } from 'antd';
 import { Outlet, useNavigate, useLocation, Link } from 'react-router-dom';
 import { routeMeta } from '../../../router/routes';
+import { useTheme } from '../../../contexts/ThemeContext';
 import {
   DashboardOutlined,
   UserOutlined,
@@ -42,6 +43,7 @@ type MenuItem = Required<MenuProps>['items'][number];
 const AdminLayout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { config: themeConfig } = useTheme();
   const [themeSettingsVisible, setThemeSettingsVisible] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -206,10 +208,20 @@ const AdminLayout: React.FC = () => {
 
   return (
     <Layout className="admin-layout">
-      <Sider width={220} className="admin-sider" theme={isDarkMode ? 'dark' : 'dark'}>
-        <div className="admin-logo">
-          <Link to="/admin/dashboard">管理后台</Link>
-        </div>
+      <Sider 
+        width={220} 
+        className="admin-sider" 
+        theme={isDarkMode ? 'dark' : 'dark'}
+        collapsed={themeConfig.sidebarCollapsed}
+        collapsedWidth={80}
+      >
+        {themeConfig.showLogo && (
+          <div className="admin-logo">
+            <Link to="/admin/dashboard">
+              {themeConfig.sidebarCollapsed ? '后台' : '管理后台'}
+            </Link>
+          </div>
+        )}
         <Menu
           mode="inline"
           theme="dark"
@@ -221,21 +233,30 @@ const AdminLayout: React.FC = () => {
       </Sider>
       <Layout>
         <Header className="admin-header">
-          <Breadcrumb
-            items={getBreadcrumb().map((item, index) => ({
-              title: item,
-              key: index
-            }))}
-            separator="/"
-            style={{ fontSize: '18px', fontWeight: 'bold' }}
-          />
-          <Space>
+          {themeConfig.showBreadcrumb && (
+            <Breadcrumb
+              items={getBreadcrumb().map((item, index) => ({
+                title: item,
+                key: index
+              }))}
+              separator="/"
+              style={{ fontSize: '18px', fontWeight: 'bold' }}
+            />
+          )}
+          <Space size="middle">
             <Button 
+              shape="circle"
               icon={<BgColorsOutlined />} 
               onClick={() => setThemeSettingsVisible(true)}
-            >
-              主题设置
-            </Button>
+              title="主题设置"
+              style={{ 
+                width: '32px',
+                height: '32px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            />
             <Dropdown 
               menu={{ items: userMenuItems }} 
               placement="bottomRight"

@@ -14,7 +14,13 @@ import {
   Space, 
   Pagination,
   Empty,
-  Spin
+  Spin,
+  Drawer,
+  Form,
+  DatePicker,
+  Slider,
+  Checkbox,
+  Divider
 } from 'antd';
 import { 
   SearchOutlined, 
@@ -22,12 +28,13 @@ import {
   EyeOutlined, 
   LikeOutlined,
   ClockCircleOutlined,
-  FilterOutlined
+  FilterOutlined,
+  CloseOutlined
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
 const { Search } = Input;
-const { Option } = Select;
+const { RangePicker } = DatePicker;
 
 interface VideoItem {
   id: string;
@@ -43,13 +50,23 @@ interface VideoItem {
   tags: string[];
 }
 
+interface FilterValues {
+  dateRange?: [any, any];
+  durationRange?: [number, number];
+  viewsRange?: [number, number];
+  selectedTags?: string[];
+  authors?: string[];
+}
+
 const VideoList: React.FC = () => {
-  const [loading, setLoading] = useState(false);
-  const [searchKeyword, setSearchKeyword] = useState('');
+  const [loading] = useState(false);
   const [sortBy, setSortBy] = useState('latest');
   const [category, setCategory] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(12);
+  const [pageSize, setPageSize] = useState(12);
+  const [filterVisible, setFilterVisible] = useState(false);
+  const [filterValues, setFilterValues] = useState<FilterValues>({});
+  const [form] = Form.useForm();
 
   // 模拟视频数据
   const mockVideos: VideoItem[] = [
@@ -57,7 +74,7 @@ const VideoList: React.FC = () => {
       id: '1',
       title: 'React 18 新特性详解',
       description: '深入了解React 18的并发特性、Suspense改进和新的Hooks',
-      thumbnail: 'public/default/fileDefaultPc.jpg',
+      thumbnail: '/default/fileDefaultPc.jpg',
       duration: '15:30',
       views: 1250,
       likes: 89,
@@ -70,7 +87,7 @@ const VideoList: React.FC = () => {
       id: '2',
       title: 'TypeScript 高级类型系统',
       description: '掌握TypeScript的高级类型特性，提升代码质量',
-      thumbnail: 'public/default/fileDefaultPc.jpg',
+      thumbnail: '/default/fileDefaultPc.jpg',
       duration: '22:45',
       views: 980,
       likes: 67,
@@ -83,7 +100,7 @@ const VideoList: React.FC = () => {
       id: '3',
       title: 'Node.js 性能优化实战',
       description: '从内存管理到集群部署，全面提升Node.js应用性能',
-      thumbnail: 'public/default/fileDefaultPc.jpg',
+      thumbnail: '/default/fileDefaultPc.jpg',
       duration: '28:15',
       views: 1580,
       likes: 124,
@@ -109,22 +126,46 @@ const VideoList: React.FC = () => {
     { value: 'rating', label: '最高评分' },
   ];
 
+  const allTags = ['React', 'Vue', 'Angular', 'JavaScript', 'TypeScript', 'Node.js', 'Python', 'Java', 'Go', '性能优化', '架构设计', '微服务'];
+  const allAuthors = ['前端大师', 'TS专家', '后端架构师', 'AI研究员', '全栈工程师'];
+
   const handleSearch = (value: string) => {
-    setSearchKeyword(value);
     setCurrentPage(1);
     // TODO: 实际搜索逻辑
+    console.log('搜索:', value);
   };
 
   const handleSortChange = (value: string) => {
     setSortBy(value);
     setCurrentPage(1);
-    // TODO: 排序逻辑
   };
 
   const handleCategoryChange = (value: string) => {
     setCategory(value);
     setCurrentPage(1);
-    // TODO: 分类筛选逻辑
+  };
+
+  const handleFilterApply = () => {
+    const values = form.getFieldsValue();
+    setFilterValues(values);
+    setFilterVisible(false);
+    setCurrentPage(1);
+    console.log('筛选条件:', values);
+  };
+
+  const handleFilterReset = () => {
+    form.resetFields();
+    setFilterValues({});
+  };
+
+  const getActiveFilterCount = () => {
+    let count = 0;
+    if (filterValues.dateRange) count++;
+    if (filterValues.durationRange && (filterValues.durationRange[0] > 0 || filterValues.durationRange[1] < 120)) count++;
+    if (filterValues.viewsRange && (filterValues.viewsRange[0] > 0 || filterValues.viewsRange[1] < 100000)) count++;
+    if (filterValues.selectedTags && filterValues.selectedTags.length > 0) count++;
+    if (filterValues.authors && filterValues.authors.length > 0) count++;
+    return count;
   };
 
   const formatNumber = (num: number) => {
@@ -132,6 +173,12 @@ const VideoList: React.FC = () => {
       return `${(num / 10000).toFixed(1)}万`;
     }
     return num.toString();
+  };
+
+  const handlePageChange = (page: number, size: number) => {
+    setCurrentPage(page);
+    setPageSize(size);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const VideoCard: React.FC<{ video: VideoItem }> = ({ video }) => (
@@ -223,7 +270,7 @@ const VideoList: React.FC = () => {
             <div style={{ marginTop: '8px' }}>
               <Space wrap>
                 {video.tags.map(tag => (
-                  <Tag key={tag} size="small" color="blue">
+                  <Tag key={tag} color="blue">
                     {tag}
                   </Tag>
                 ))}
@@ -264,9 +311,9 @@ const VideoList: React.FC = () => {
               size="large"
             >
               {categories.map(cat => (
-                <Option key={cat.value} value={cat.value}>
+                <Select.Option key={cat.value} value={cat.value}>
                   {cat.label}
-                </Option>
+                </Select.Option>
               ))}
             </Select>
           </Col>
@@ -278,21 +325,120 @@ const VideoList: React.FC = () => {
               size="large"
             >
               {sortOptions.map(option => (
-                <Option key={option.value} value={option.value}>
+                <Select.Option key={option.value} value={option.value}>
                   {option.label}
-                </Option>
+                </Select.Option>
               ))}
             </Select>
           </Col>
           <Col xs={24} md={8}>
             <div style={{ textAlign: 'right' }}>
-              <Button icon={<FilterOutlined />}>
+              <Button 
+                icon={<FilterOutlined />}
+                onClick={() => setFilterVisible(true)}
+              >
                 高级筛选
+                {getActiveFilterCount() > 0 && (
+                  <Tag color="blue" style={{ marginLeft: 8 }}>
+                    {getActiveFilterCount()}
+                  </Tag>
+                )}
               </Button>
             </div>
           </Col>
         </Row>
       </Card>
+
+      {/* 高级筛选抽屉 */}
+      <Drawer
+        title="高级筛选"
+        placement="right"
+        onClose={() => setFilterVisible(false)}
+        open={filterVisible}
+        width={360}
+        extra={
+          <Button 
+            type="text" 
+            icon={<CloseOutlined />} 
+            onClick={() => setFilterVisible(false)}
+          />
+        }
+        footer={
+          <div style={{ display: 'flex', gap: 8 }}>
+            <Button onClick={handleFilterReset} style={{ flex: 1 }}>
+              重置
+            </Button>
+            <Button type="primary" onClick={handleFilterApply} style={{ flex: 1 }}>
+              应用筛选
+            </Button>
+          </div>
+        }
+      >
+        <Form form={form} layout="vertical">
+          <Form.Item name="dateRange" label="发布时间">
+            <RangePicker style={{ width: '100%' }} />
+          </Form.Item>
+
+          <Divider />
+
+          <Form.Item name="durationRange" label="视频时长（分钟）">
+            <Slider
+              range
+              min={0}
+              max={120}
+              defaultValue={[0, 120]}
+              marks={{
+                0: '0',
+                30: '30',
+                60: '60',
+                90: '90',
+                120: '120+'
+              }}
+            />
+          </Form.Item>
+
+          <Divider />
+
+          <Form.Item name="viewsRange" label="播放量">
+            <Slider
+              range
+              min={0}
+              max={100000}
+              step={1000}
+              defaultValue={[0, 100000]}
+              tooltip={{ formatter: (value: number | undefined) => formatNumber(value || 0) }}
+            />
+          </Form.Item>
+
+          <Divider />
+
+          <Form.Item name="selectedTags" label="标签筛选">
+            <Checkbox.Group style={{ width: '100%' }}>
+              <Row gutter={[8, 8]}>
+                {allTags.map(tag => (
+                  <Col span={12} key={tag}>
+                    <Checkbox value={tag}>{tag}</Checkbox>
+                  </Col>
+                ))}
+              </Row>
+            </Checkbox.Group>
+          </Form.Item>
+
+          <Divider />
+
+          <Form.Item name="authors" label="作者筛选">
+            <Checkbox.Group style={{ width: '100%' }}>
+              <Row gutter={[8, 8]}>
+                {allAuthors.map(author => (
+                  <Col span={24} key={author}>
+                    <Checkbox value={author}>{author}</Checkbox>
+                  </Col>
+                ))}
+              </Row>
+            </Checkbox.Group>
+          </Form.Item>
+        </Form>
+      </Drawer>
 
       {/* 视频列表 */}
       <Spin spinning={loading}>
@@ -306,21 +452,26 @@ const VideoList: React.FC = () => {
               ))}
             </Row>
 
-            {/* 分页 */}
-            <div style={{ textAlign: 'center', marginTop: '32px' }}>
+            {/* 分页 - 放在底部 */}
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'center', 
+              marginTop: '32px',
+              paddingTop: '24px',
+              borderTop: '1px solid #f0f0f0'
+            }}>
               <Pagination
                 current={currentPage}
                 pageSize={pageSize}
-                total={100} // 模拟总数
+                total={100}
                 showSizeChanger
                 showQuickJumper
+                pageSizeOptions={['12', '24', '36', '48']}
                 showTotal={(total, range) =>
                   `第 ${range[0]}-${range[1]} 条，共 ${total} 条`
                 }
-                onChange={(page, size) => {
-                  setCurrentPage(page);
-                  // TODO: 分页逻辑
-                }}
+                onChange={handlePageChange}
+                onShowSizeChange={handlePageChange}
               />
             </div>
           </>
@@ -332,7 +483,7 @@ const VideoList: React.FC = () => {
         )}
       </Spin>
 
-      <style jsx>{`
+      <style>{`
         .ant-card:hover .play-icon {
           opacity: 1 !important;
         }

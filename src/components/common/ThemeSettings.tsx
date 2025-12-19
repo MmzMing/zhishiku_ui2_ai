@@ -15,6 +15,7 @@ import {
   Typography,
   message,
   Tooltip,
+  Dropdown,
 } from 'antd';
 import {
   SettingOutlined,
@@ -24,8 +25,11 @@ import {
   CloseOutlined,
   ReloadOutlined,
   CheckOutlined,
+  GlobalOutlined,
 } from '@ant-design/icons';
 import type { Color } from 'antd/es/color-picker';
+import type { MenuProps } from 'antd';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -70,6 +74,41 @@ const DEFAULT_CONFIG: ThemeConfig = {
 const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
   const [config, setConfig] = useState<ThemeConfig>(DEFAULT_CONFIG);
   const [hasChanges, setHasChanges] = useState(false);
+  const { currentLanguage, setLanguage, t } = useLanguage();
+
+  // 语言选项
+  const languageOptions: MenuProps['items'] = [
+    {
+      key: 'zh-CN',
+      label: (
+        <Space>
+          <span>🇨🇳</span>
+          <span>{t('language.chinese')}</span>
+        </Space>
+      ),
+      onClick: () => setLanguage('zh-CN'),
+    },
+    {
+      key: 'en-US',
+      label: (
+        <Space>
+          <span>🇺🇸</span>
+          <span>{t('language.english')}</span>
+        </Space>
+      ),
+      onClick: () => setLanguage('en-US'),
+    },
+    {
+      key: 'ja-JP',
+      label: (
+        <Space>
+          <span>🇯🇵</span>
+          <span>{t('language.japanese')}</span>
+        </Space>
+      ),
+      onClick: () => setLanguage('ja-JP'),
+    },
+  ];
 
   // 预设主题颜色
   const presetColors = [
@@ -114,49 +153,97 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
     // 触发主题变化事件，让App.tsx重新应用主题
     window.dispatchEvent(new Event('theme-change'));
     
-    message.success('主题设置已保存');
+    message.success(t('theme.saved'));
     setHasChanges(false);
   };
 
   const handleReset = () => {
     setConfig(DEFAULT_CONFIG);
     setHasChanges(true);
-    message.info('已重置为默认设置');
+    message.info(t('theme.reset.success'));
   };
 
   return (
     <Drawer
       title={
-        <Space>
-          <SettingOutlined />
-          <span>主题设置</span>
-        </Space>
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center',
+          padding: '0 8px'
+        }}>
+          {/* 左侧：语言切换 */}
+          <Dropdown 
+            menu={{ items: languageOptions }} 
+            placement="bottomLeft"
+            trigger={['click']}
+          >
+            <Button 
+              type="text" 
+              icon={<GlobalOutlined />}
+              style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                padding: '4px 8px',
+                borderRadius: '6px'
+              }}
+            />
+          </Dropdown>
+
+          {/* 中间：主题设置图标 */}
+          <SettingOutlined 
+            style={{ 
+              fontSize: '18px',
+              color: 'var(--text-color-primary)'
+            }} 
+          />
+
+          {/* 右侧：操作按钮 */}
+          <Space size="small">
+            <Tooltip title={t('theme.reset')}>
+              <Button 
+                type="text" 
+                icon={<ReloadOutlined />} 
+                onClick={handleReset}
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  padding: '4px 8px',
+                  borderRadius: '6px'
+                }}
+              />
+            </Tooltip>
+            <Tooltip title={t('theme.close')}>
+              <Button 
+                type="text" 
+                icon={<CloseOutlined />} 
+                onClick={onClose}
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  padding: '4px 8px',
+                  borderRadius: '6px'
+                }}
+              />
+            </Tooltip>
+          </Space>
+        </div>
       }
       placement="right"
       width={360}
       open={visible}
       onClose={onClose}
-      extra={
-        <Space>
-          <Tooltip title="重置">
-            <Button type="text" icon={<ReloadOutlined />} onClick={handleReset} />
-          </Tooltip>
-          <Tooltip title="关闭">
-            <Button type="text" icon={<CloseOutlined />} onClick={onClose} />
-          </Tooltip>
-        </Space>
-      }
       footer={
         <div style={{ textAlign: 'right' }}>
           <Space>
-            <Button onClick={onClose}>取消</Button>
+            <Button onClick={onClose}>{t('theme.cancel')}</Button>
             <Button
               type="primary"
               icon={<CheckOutlined />}
               onClick={handleSave}
               disabled={!hasChanges}
             >
-              保存设置
+              {t('theme.save')}
             </Button>
           </Space>
         </div>
@@ -165,12 +252,12 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
       <div style={{ padding: '0 8px' }}>
         {/* 系统外观设置 */}
         <Title level={5}>
-          <BgColorsOutlined /> 系统外观
+          <BgColorsOutlined /> {t('theme.appearance')}
         </Title>
         
         {/* 主题模式 */}
         <div style={{ marginBottom: 24 }}>
-          <Text strong>主题模式</Text>
+          <Text strong>{t('theme.mode')}</Text>
           <div style={{ marginTop: 8 }}>
             <Radio.Group
               value={config.mode}
@@ -179,13 +266,13 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
               style={{ width: '100%' }}
             >
               <Radio.Button value="light" style={{ width: '33.33%', textAlign: 'center' }}>
-                浅色
+                {t('theme.mode.light')}
               </Radio.Button>
               <Radio.Button value="dark" style={{ width: '33.33%', textAlign: 'center' }}>
-                深色
+                {t('theme.mode.dark')}
               </Radio.Button>
               <Radio.Button value="auto" style={{ width: '33.33%', textAlign: 'center' }}>
-                跟随系统
+                {t('theme.mode.auto')}
               </Radio.Button>
             </Radio.Group>
           </div>
@@ -193,7 +280,7 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
 
         {/* 主色调 */}
         <div style={{ marginBottom: 24 }}>
-          <Text strong>主色调</Text>
+          <Text strong>{t('theme.primaryColor')}</Text>
           <div style={{ marginTop: 8 }}>
             <Space wrap>
               {presetColors.map(color => (
@@ -237,23 +324,23 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
 
         {/* 字体大小 */}
         <div style={{ marginBottom: 24 }}>
-          <Text strong>字体大小</Text>
+          <Text strong>{t('theme.fontSize')}</Text>
           <div style={{ marginTop: 8 }}>
             <Select
               value={config.fontSize}
               onChange={(value) => handleConfigChange('fontSize', value)}
               style={{ width: '100%' }}
             >
-              <Option value="small">小 (14px)</Option>
-              <Option value="medium">中 (16px)</Option>
-              <Option value="large">大 (18px)</Option>
+              <Option value="small">{t('theme.fontSize.small')}</Option>
+              <Option value="medium">{t('theme.fontSize.medium')}</Option>
+              <Option value="large">{t('theme.fontSize.large')}</Option>
             </Select>
           </div>
         </div>
 
         {/* 间距 */}
         <div style={{ marginBottom: 24 }}>
-          <Text strong>间距</Text>
+          <Text strong>{t('theme.spacing')}</Text>
           <div style={{ marginTop: 8 }}>
             <Radio.Group
               value={config.spacing}
@@ -262,13 +349,13 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
               style={{ width: '100%' }}
             >
               <Radio.Button value="compact" style={{ width: '33.33%', textAlign: 'center' }}>
-                紧凑
+                {t('theme.spacing.compact')}
               </Radio.Button>
               <Radio.Button value="normal" style={{ width: '33.33%', textAlign: 'center' }}>
-                常规
+                {t('theme.spacing.normal')}
               </Radio.Button>
               <Radio.Button value="loose" style={{ width: '33.33%', textAlign: 'center' }}>
-                宽松
+                {t('theme.spacing.loose')}
               </Radio.Button>
             </Radio.Group>
           </div>
@@ -278,12 +365,12 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
 
         {/* 布局自定义设置 */}
         <Title level={5}>
-          <LayoutOutlined /> 布局设置
+          <LayoutOutlined /> {t('theme.layout')}
         </Title>
 
         <div style={{ marginBottom: 16 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <Text>侧边栏展开状态</Text>
+            <Text>{t('theme.sidebar.expanded')}</Text>
             <Switch
               checked={!config.sidebarCollapsed}
               onChange={(checked) => handleConfigChange('sidebarCollapsed', !checked)}
@@ -291,7 +378,7 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <Text>顶部加载条显示</Text>
+            <Text>{t('theme.topLoadingBar')}</Text>
             <Switch
               checked={config.showTopLoadingBar}
               onChange={(checked) => handleConfigChange('showTopLoadingBar', checked)}
@@ -299,7 +386,7 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <Text>系统 Logo 显示</Text>
+            <Text>{t('theme.showLogo')}</Text>
             <Switch
               checked={config.showLogo}
               onChange={(checked) => handleConfigChange('showLogo', checked)}
@@ -307,7 +394,7 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <Text>导航按钮显示</Text>
+            <Text>{t('theme.showNavButtons')}</Text>
             <Switch
               checked={config.showNavButtons}
               onChange={(checked) => handleConfigChange('showNavButtons', checked)}
@@ -315,7 +402,7 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <Text>面包屑导航显示</Text>
+            <Text>{t('theme.showBreadcrumb')}</Text>
             <Switch
               checked={config.showBreadcrumb}
               onChange={(checked) => handleConfigChange('showBreadcrumb', checked)}
@@ -323,7 +410,7 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <Text>标签页常显设置</Text>
+            <Text>{t('theme.keepTabsAlive')}</Text>
             <Switch
               checked={config.keepTabsAlive}
               onChange={(checked) => handleConfigChange('keepTabsAlive', checked)}
@@ -331,7 +418,7 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <Text>底部信息显示</Text>
+            <Text>{t('theme.showFooter')}</Text>
             <Switch
               checked={config.showFooter}
               onChange={(checked) => handleConfigChange('showFooter', checked)}
@@ -343,12 +430,12 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
 
         {/* 页面功能设置 */}
         <Title level={5}>
-          <FontSizeOutlined /> 页面功能
+          <FontSizeOutlined /> {t('theme.pageFeatures')}
         </Title>
 
         <div style={{ marginBottom: 16 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <Text>导航过渡效果</Text>
+            <Text>{t('theme.pageTransition')}</Text>
             <Switch
               checked={config.enablePageTransition}
               onChange={(checked) => handleConfigChange('enablePageTransition', checked)}
@@ -356,7 +443,7 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <Text>文字选中功能</Text>
+            <Text>{t('theme.textSelection')}</Text>
             <Switch
               checked={config.allowTextSelection}
               onChange={(checked) => handleConfigChange('allowTextSelection', checked)}
@@ -374,7 +461,7 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
           fontSize: 12,
         }}>
           <Text type="secondary">
-            💡 提示：修改设置后需要点击"保存设置"按钮才会生效。
+            💡 {t('theme.tip')}
           </Text>
         </div>
       </div>

@@ -521,3 +521,142 @@ a:active {
     --text-color-tertiary: rgba(0, 0, 0, 0.45);
   }
 }
+/* ==================== 主题设置相关样式 ==================== */
+
+/* 主题设置圆形按钮样式 */
+.ant-btn-circle[title="主题设置"] {
+  border: 1px solid var(--border-color-base);
+  transition: all 0.3s ease;
+}
+
+.ant-btn-circle[title="主题设置"]:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  transform: scale(1.05);
+}
+
+/* 隐藏顶部加载条 */
+.hide-top-loading-bar .top-loading-bar {
+  display: none !important;
+}
+
+/* 隐藏Logo */
+.hide-logo .header-logo,
+.hide-logo .admin-logo,
+.hide-logo .mobile-header-logo,
+.hide-logo .mobile-admin-title {
+  display: none !important;
+}
+
+/* 隐藏导航按钮 */
+.hide-nav-buttons .header-nav {
+  display: none !important;
+}
+
+/* 隐藏面包屑导航 */
+.hide-breadcrumb .ant-breadcrumb {
+  display: none !important;
+}
+
+/* 隐藏页脚 */
+.hide-footer .front-footer,
+.hide-footer .admin-footer {
+  display: none !important;
+}
+
+/* 侧边栏折叠状态 */
+.sidebar-collapsed .admin-sider {
+  width: 80px !important;
+}
+
+.sidebar-collapsed .admin-sider .admin-logo {
+  text-align: center;
+  padding: 16px 8px;
+}
+
+.sidebar-collapsed .admin-sider .admin-logo a {
+  font-size: 12px;
+}
+
+/* 禁用文本选择 */
+.no-text-selection {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.no-text-selection input,
+.no-text-selection textarea,
+.no-text-selection .ant-input,
+.no-text-selection .ant-input-password {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* 页面过渡效果 */
+.page-transition-enabled .ant-layout-content {
+  transition: all 0.3s ease;
+}
+
+.page-transition-enabled .front-content,
+.page-transition-enabled .admin-content {
+  transition: all 0.3s ease;
+}
+
+/* 标签页常显设置 */
+.keep-tabs-alive .ant-tabs-tab {
+  position: relative;
+}
+
+.keep-tabs-alive .ant-tabs-tab::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: transparent;
+  pointer-events: none;
+}
+
+/* 字体大小应用 */
+html[style*="--base-font-size: 14px"] {
+  font-size: 14px;
+}
+
+html[style*="--base-font-size: 16px"] {
+  font-size: 16px;
+}
+
+html[style*="--base-font-size: 18px"] {
+  font-size: 18px;
+}
+
+/* 间距应用 */
+html[style*="--spacing-scale: 0.8"] .ant-card,
+html[style*="--spacing-scale: 0.8"] .ant-form-item {
+  margin-bottom: calc(16px * 0.8);
+}
+
+html[style*="--spacing-scale: 1.2"] .ant-card,
+html[style*="--spacing-scale: 1.2"] .ant-form-item {
+  margin-bottom: calc(16px * 1.2);
+}
+
+/* 响应式隐藏规则 */
+@media (max-width: 768px) {
+  .hide-nav-buttons .mobile-nav-section {
+    display: none !important;
+  }
+  
+  .hide-logo .mobile-header-logo {
+    display: none !important;
+  }
+  
+  .hide-footer .mobile-front-footer {
+    display: none !important;
+  }
+}

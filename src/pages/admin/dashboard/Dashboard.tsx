@@ -2,8 +2,9 @@
  * 控制台页面
  */
 
-import React from 'react';
-import { Card, Row, Col, Statistic, List, Typography, Space, Tag, Button } from 'antd';
+import React, { useState } from 'react';
+import { Card, Row, Col, Statistic, List, Typography, Space, Tag, Button, DatePicker } from 'antd';
+import { Line, Pie } from '@ant-design/charts';
 import { 
   UserOutlined, 
   FileTextOutlined, 
@@ -12,106 +13,138 @@ import {
   ArrowUpOutlined,
   ArrowDownOutlined,
   EyeOutlined,
-  LikeOutlined
+  LikeOutlined,
+  ReloadOutlined
 } from '@ant-design/icons';
+import { useDashboardData } from '../../../hooks/admin/useDashboardData';
+import dayjs from 'dayjs';
 
 const { Title, Text } = Typography;
+const { RangePicker } = DatePicker;
 
 const Dashboard: React.FC = () => {
-  // 模拟数据
-  const statsData = [
-    {
-      title: '用户总数',
-      value: 1328,
-      precision: 0,
-      valueStyle: { color: '#3f8600' },
-      prefix: <ArrowUpOutlined />,
-      suffix: '人',
-    },
-    {
-      title: '文档总数',
-      value: 1256,
-      precision: 0,
-      valueStyle: { color: '#1890ff' },
-      prefix: <FileTextOutlined />,
-      suffix: '篇',
-    },
-    {
-      title: '视频总数',
-      value: 892,
-      precision: 0,
-      valueStyle: { color: '#722ed1' },
-      prefix: <PlayCircleOutlined />,
-      suffix: '个',
-    },
-    {
-      title: '积分总额',
-      value: 156800,
-      precision: 0,
-      valueStyle: { color: '#faad14' },
-      prefix: <TrophyOutlined />,
-      suffix: '分',
-    },
-  ];
+  // 日期范围状态
+  const [dateRange, setDateRange] = useState<[dayjs.Dayjs, dayjs.Dayjs]>([
+    dayjs().subtract(30, 'day'),
+    dayjs()
+  ]);
 
-  const recentActivities = [
-    {
-      id: 1,
-      action: '编辑视频',
-      target: 'React入门教程',
-      user: '管理员',
-      time: '10分钟前',
-      type: 'video',
-    },
-    {
-      id: 2,
-      action: '新增文档',
-      target: 'JavaScript异步编程详解',
-      user: '编辑员',
-      time: '30分钟前',
-      type: 'document',
-    },
-    {
-      id: 3,
-      action: '用户注册',
-      target: '新用户 user123',
-      user: '系统',
-      time: '1小时前',
-      type: 'user',
-    },
-    {
-      id: 4,
-      action: '积分兑换',
-      target: '用户兑换下载权限',
-      user: 'user456',
-      time: '2小时前',
-      type: 'point',
-    },
-  ];
+  // 使用Dashboard数据Hook
+  const {
+    loading,
+    visitTrendData,
+    categoryData,
+    statsOverview,
+    recentActivities,
+    todoList,
+    refreshData
+  } = useDashboardData(dateRange[1].diff(dateRange[0], 'day'));
 
-  const todoList = [
-    {
-      id: 1,
-      title: '审核待发布视频',
-      count: 5,
-      priority: 'high',
-      link: '/admin/video',
+  // 访问趋势图表配置
+  const visitTrendConfig = {
+    data: visitTrendData,
+    xField: 'date',
+    yField: 'visits',
+    seriesField: 'type',
+    smooth: true,
+    animation: {
+      appear: {
+        animation: 'path-in',
+        duration: 1000,
+      },
     },
-    {
-      id: 2,
-      title: '处理用户反馈',
-      count: 12,
-      priority: 'medium',
-      link: '/admin/feedback',
+    point: {
+      size: 3,
+      shape: 'circle',
     },
-    {
-      id: 3,
-      title: '更新系统公告',
-      count: 1,
-      priority: 'low',
-      link: '/admin/system',
+    tooltip: {
+      formatter: (datum: any) => {
+        return {
+          name: '访问人数',
+          value: `${datum.visits} 人`,
+        };
+      },
     },
-  ];
+    color: ['#1890ff'],
+  };
+
+  // 分类占比饼图配置
+  const categoryPieConfig = {
+    data: categoryData,
+    angleField: 'value',
+    colorField: 'category',
+    radius: 0.8,
+    innerRadius: 0.4,
+    label: {
+      type: 'inner',
+      offset: '-30%',
+      content: ({ percent }: any) => `${(percent * 100).toFixed(0)}%`,
+      style: {
+        fontSize: 14,
+        textAlign: 'center',
+      },
+    },
+    legend: {
+      position: 'bottom',
+    },
+    interactions: [
+      {
+        type: 'element-active',
+      },
+    ],
+    tooltip: {
+      formatter: (datum: any) => {
+        return {
+          name: datum.category,
+          value: `${datum.value} (${datum.percentage}%)`,
+        };
+      },
+    },
+  };
+
+  // 统计卡片数据
+  const getStatsCards = () => {
+    if (!statsOverview) return [];
+    
+    return [
+      {
+        title: '用户总数',
+        value: statsOverview.totalUsers,
+        precision: 0,
+        valueStyle: { color: '#3f8600' },
+        prefix: <ArrowUpOutlined />,
+        suffix: '人',
+        growth: statsOverview.growthRate.users,
+      },
+      {
+        title: '文档总数',
+        value: statsOverview.totalDocuments,
+        precision: 0,
+        valueStyle: { color: '#1890ff' },
+        prefix: <FileTextOutlined />,
+        suffix: '篇',
+        growth: statsOverview.growthRate.documents,
+      },
+      {
+        title: '视频总数',
+        value: statsOverview.totalVideos,
+        precision: 0,
+        valueStyle: { color: '#722ed1' },
+        prefix: <PlayCircleOutlined />,
+        suffix: '个',
+        growth: statsOverview.growthRate.videos,
+      },
+      {
+        title: '积分总额',
+        value: statsOverview.totalPoints,
+        precision: 0,
+        valueStyle: { color: '#faad14' },
+        prefix: <TrophyOutlined />,
+        suffix: '分',
+        growth: 0,
+      },
+    ];
+  };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
@@ -143,100 +176,176 @@ const Dashboard: React.FC = () => {
 
   return (
     <div style={{ padding: '24px' }}>
-      <Title level={2} style={{ marginBottom: '24px' }}>
-        控制台
-      </Title>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+        <Title level={2} style={{ margin: 0 }}>
+          控制台
+        </Title>
+        <Space>
+          <RangePicker
+            value={dateRange}
+            onChange={(dates) => {
+              if (dates) {
+                setDateRange([dates[0]!, dates[1]!]);
+              }
+            }}
+            format="YYYY-MM-DD"
+          />
+          <Button 
+            icon={<ReloadOutlined />} 
+            onClick={refreshData}
+            loading={loading}
+          >
+            刷新
+          </Button>
+        </Space>
+      </div>
 
-      {/* 数据统计卡片 */}
-      <Row gutter={[16, 16]} style={{ marginBottom: '24px' }}>
-        {statsData.map((stat, index) => (
-          <Col xs={24} sm={12} lg={6} key={index}>
-            <Card>
-              <Statistic
-                title={stat.title}
-                value={stat.value}
-                precision={stat.precision}
-                valueStyle={stat.valueStyle}
-                prefix={stat.prefix}
-                suffix={stat.suffix}
+      <div style={{ opacity: loading ? 0.6 : 1, transition: 'opacity 0.3s' }}>
+        {/* 数据统计卡片 */}
+        <Row gutter={[16, 16]} style={{ marginBottom: '24px' }}>
+          {getStatsCards().map((stat, index) => (
+            <Col xs={24} sm={12} lg={6} key={index}>
+              <Card>
+                <Statistic
+                  title={stat.title}
+                  value={stat.value}
+                  precision={stat.precision}
+                  valueStyle={stat.valueStyle}
+                  prefix={stat.prefix}
+                  suffix={stat.suffix}
+                />
+                {stat.growth !== undefined && (
+                  <div style={{ marginTop: 8, fontSize: 12, color: stat.growth >= 0 ? '#52c41a' : '#ff4d4f' }}>
+                    {stat.growth >= 0 ? '↗' : '↘'} {Math.abs(stat.growth)}% 较上期
+                  </div>
+                )}
+              </Card>
+            </Col>
+          ))}
+        </Row>
+
+        {/* 图表区域 */}
+        <Row gutter={[16, 16]} style={{ marginBottom: '24px' }}>
+          {/* 访问趋势折线图 */}
+          <Col xs={24} lg={16}>
+            <Card 
+              title="访问趋势" 
+              extra={<Button type="link">查看详情</Button>}
+              bodyStyle={{ padding: '20px', height: '360px' }}
+            >
+              {visitTrendData.length > 0 ? (
+                <Line {...visitTrendConfig} height={320} />
+              ) : (
+                <div style={{ 
+                  height: 320, 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  color: '#999'
+                }}>
+                  暂无数据
+                </div>
+              )}
+            </Card>
+          </Col>
+
+          {/* 观看分类占比饼图 */}
+          <Col xs={24} lg={8}>
+            <Card 
+              title="观看分类占比" 
+              extra={<Button type="link">查看详情</Button>}
+              bodyStyle={{ padding: '20px', height: '360px' }}
+            >
+              {categoryData.length > 0 ? (
+                <Pie {...categoryPieConfig} height={320} />
+              ) : (
+                <div style={{ 
+                  height: 320, 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  color: '#999'
+                }}>
+                  暂无数据
+                </div>
+              )}
+            </Card>
+          </Col>
+        </Row>
+
+        <Row gutter={[16, 16]}>
+          {/* 最近操作 */}
+          <Col xs={24} lg={12}>
+            <Card 
+              title="最近操作" 
+              extra={<Button type="link">查看全部</Button>}
+              bodyStyle={{ padding: '20px', height: '360px', overflow: 'auto' }}
+            >
+              <List
+                dataSource={recentActivities}
+                renderItem={(item) => (
+                  <List.Item>
+                    <List.Item.Meta
+                      avatar={getTypeIcon(item.type)}
+                      title={
+                        <Space>
+                          <Text strong>{item.action}</Text>
+                          <Text type="secondary">{item.target}</Text>
+                        </Space>
+                      }
+                      description={
+                        <Space>
+                          <Text type="secondary">操作人: {item.user}</Text>
+                          <Text type="secondary">{item.time}</Text>
+                        </Space>
+                      }
+                    />
+                  </List.Item>
+                )}
               />
             </Card>
           </Col>
-        ))}
-      </Row>
 
-      <Row gutter={[16, 16]}>
-        {/* 最近操作 */}
-        <Col xs={24} lg={12}>
-          <Card 
-            title="最近操作" 
-            extra={<Button type="link">查看全部</Button>}
-            style={{ height: '400px' }}
-          >
-            <List
-              dataSource={recentActivities}
-              renderItem={(item) => (
-                <List.Item>
-                  <List.Item.Meta
-                    avatar={getTypeIcon(item.type)}
-                    title={
-                      <Space>
-                        <Text strong>{item.action}</Text>
-                        <Text type="secondary">{item.target}</Text>
-                      </Space>
-                    }
-                    description={
-                      <Space>
-                        <Text type="secondary">操作人: {item.user}</Text>
-                        <Text type="secondary">{item.time}</Text>
-                      </Space>
-                    }
-                  />
-                </List.Item>
-              )}
-            />
-          </Card>
-        </Col>
-
-        {/* 待办事项 */}
-        <Col xs={24} lg={12}>
-          <Card 
-            title="待办事项" 
-            extra={<Button type="link">查看全部</Button>}
-            style={{ height: '400px' }}
-          >
-            <List
-              dataSource={todoList}
-              renderItem={(item) => (
-                <List.Item
-                  actions={[
-                    <Button type="link" href={item.link}>
-                      处理
-                    </Button>
-                  ]}
-                >
-                  <List.Item.Meta
-                    title={
-                      <Space>
-                        <Text strong>{item.title}</Text>
-                        <Tag color={getPriorityColor(item.priority)}>
-                          {item.priority === 'high' ? '高' : 
-                           item.priority === 'medium' ? '中' : '低'}
-                        </Tag>
-                      </Space>
-                    }
-                    description={
-                      <Text type="secondary">
-                        待处理数量: {item.count}
-                      </Text>
-                    }
-                  />
-                </List.Item>
-              )}
-            />
-          </Card>
-        </Col>
-      </Row>
+          {/* 待办事项 */}
+          <Col xs={24} lg={12}>
+            <Card 
+              title="待办事项" 
+              extra={<Button type="link">查看全部</Button>}
+              bodyStyle={{ padding: '20px', height: '360px', overflow: 'auto' }}
+            >
+              <List
+                dataSource={todoList}
+                renderItem={(item) => (
+                  <List.Item
+                    actions={[
+                      <Button type="link" href={item.link}>
+                        处理
+                      </Button>
+                    ]}
+                  >
+                    <List.Item.Meta
+                      title={
+                        <Space>
+                          <Text strong>{item.title}</Text>
+                          <Tag color={getPriorityColor(item.priority)}>
+                            {item.priority === 'high' ? '高' : 
+                             item.priority === 'medium' ? '中' : '低'}
+                          </Tag>
+                        </Space>
+                      }
+                      description={
+                        <Text type="secondary">
+                          待处理数量: {item.count}
+                        </Text>
+                      }
+                    />
+                  </List.Item>
+                )}
+              />
+            </Card>
+          </Col>
+        </Row>
+      </div>
     </div>
   );
 };

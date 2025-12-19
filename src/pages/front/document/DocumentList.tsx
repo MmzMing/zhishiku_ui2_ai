@@ -16,7 +16,14 @@ import {
   Empty,
   Spin,
   Avatar,
-  Typography
+  Typography,
+  Drawer,
+  Form,
+  DatePicker,
+  Slider,
+  Checkbox,
+  Divider,
+  Radio
 } from 'antd';
 import { 
   SearchOutlined, 
@@ -26,13 +33,14 @@ import {
   DownloadOutlined,
   ClockCircleOutlined,
   FilterOutlined,
-  StarOutlined
+  StarOutlined,
+  CloseOutlined
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
 const { Search } = Input;
-const { Option } = Select;
 const { Text, Paragraph } = Typography;
+const { RangePicker } = DatePicker;
 
 interface DocumentItem {
   id: string;
@@ -52,13 +60,24 @@ interface DocumentItem {
   rating: number;
 }
 
+interface FilterValues {
+  dateRange?: [any, any];
+  priceType?: 'all' | 'free' | 'paid';
+  pointsRange?: [number, number];
+  ratingRange?: number;
+  selectedTags?: string[];
+  authors?: string[];
+}
+
 const DocumentList: React.FC = () => {
-  const [loading, setLoading] = useState(false);
-  const [searchKeyword, setSearchKeyword] = useState('');
+  const [loading] = useState(false);
   const [sortBy, setSortBy] = useState('latest');
   const [category, setCategory] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(12);
+  const [pageSize, setPageSize] = useState(12);
+  const [filterVisible, setFilterVisible] = useState(false);
+  const [filterValues, setFilterValues] = useState<FilterValues>({});
+  const [form] = Form.useForm();
 
   // 模拟文档数据
   const mockDocuments: DocumentItem[] = [
@@ -66,7 +85,7 @@ const DocumentList: React.FC = () => {
       id: '1',
       title: 'JavaScript异步编程详解',
       description: '深入理解Promise、async/await、事件循环等异步编程概念，包含大量实战案例和最佳实践。',
-      thumbnail: 'public/default/fileDefaultPc.jpg',
+      thumbnail: '/default/fileDefaultPc.jpg',
       views: 2580,
       likes: 156,
       downloads: 89,
@@ -82,7 +101,7 @@ const DocumentList: React.FC = () => {
       id: '2',
       title: 'React Hooks 完全指南',
       description: '从基础到高级，全面掌握React Hooks的使用方法和设计模式。',
-      thumbnail: 'public/default/fileDefaultPc.jpg',
+      thumbnail: '/default/fileDefaultPc.jpg',
       views: 1890,
       likes: 234,
       downloads: 156,
@@ -99,7 +118,7 @@ const DocumentList: React.FC = () => {
       id: '3',
       title: 'Node.js 微服务架构实战',
       description: '构建可扩展的微服务系统，包含服务发现、负载均衡、监控等核心技术。',
-      thumbnail: 'public/default/fileDefaultPc.jpg',
+      thumbnail: '/default/fileDefaultPc.jpg',
       views: 3200,
       likes: 298,
       downloads: 201,
@@ -131,22 +150,46 @@ const DocumentList: React.FC = () => {
     { value: 'downloads', label: '下载最多' },
   ];
 
+  const allTags = ['JavaScript', 'TypeScript', 'React', 'Vue', 'Node.js', 'Python', 'Java', 'Go', '微服务', '架构设计', '数据库', 'DevOps'];
+  const allAuthors = ['前端专家', 'React大师', '架构师', 'AI研究员', '全栈工程师', '数据库专家'];
+
   const handleSearch = (value: string) => {
-    setSearchKeyword(value);
     setCurrentPage(1);
-    // TODO: 实际搜索逻辑
+    console.log('搜索:', value);
   };
 
   const handleSortChange = (value: string) => {
     setSortBy(value);
     setCurrentPage(1);
-    // TODO: 排序逻辑
   };
 
   const handleCategoryChange = (value: string) => {
     setCategory(value);
     setCurrentPage(1);
-    // TODO: 分类筛选逻辑
+  };
+
+  const handleFilterApply = () => {
+    const values = form.getFieldsValue();
+    setFilterValues(values);
+    setFilterVisible(false);
+    setCurrentPage(1);
+    console.log('筛选条件:', values);
+  };
+
+  const handleFilterReset = () => {
+    form.resetFields();
+    setFilterValues({});
+  };
+
+  const getActiveFilterCount = () => {
+    let count = 0;
+    if (filterValues.dateRange) count++;
+    if (filterValues.priceType && filterValues.priceType !== 'all') count++;
+    if (filterValues.pointsRange && (filterValues.pointsRange[0] > 0 || filterValues.pointsRange[1] < 50)) count++;
+    if (filterValues.ratingRange && filterValues.ratingRange > 0) count++;
+    if (filterValues.selectedTags && filterValues.selectedTags.length > 0) count++;
+    if (filterValues.authors && filterValues.authors.length > 0) count++;
+    return count;
   };
 
   const formatNumber = (num: number) => {
@@ -154,6 +197,12 @@ const DocumentList: React.FC = () => {
       return `${(num / 10000).toFixed(1)}万`;
     }
     return num.toString();
+  };
+
+  const handlePageChange = (page: number, size: number) => {
+    setCurrentPage(page);
+    setPageSize(size);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const renderStars = (rating: number) => {
@@ -228,15 +277,15 @@ const DocumentList: React.FC = () => {
         </div>
       }
       actions={[
-        <Space key="views" size="small">
+        <Space key="views">
           <EyeOutlined />
           <Text type="secondary">{formatNumber(document.views)}</Text>
         </Space>,
-        <Space key="likes" size="small">
+        <Space key="likes">
           <LikeOutlined />
           <Text type="secondary">{formatNumber(document.likes)}</Text>
         </Space>,
-        <Space key="downloads" size="small">
+        <Space key="downloads">
           <DownloadOutlined />
           <Text type="secondary">{formatNumber(document.downloads)}</Text>
         </Space>
@@ -273,7 +322,7 @@ const DocumentList: React.FC = () => {
             
             {/* 评分 */}
             <div style={{ marginBottom: '8px' }}>
-              <Space size="small">
+              <Space>
                 {renderStars(document.rating)}
                 <Text type="secondary" style={{ fontSize: '12px' }}>
                   {document.rating}
@@ -283,9 +332,9 @@ const DocumentList: React.FC = () => {
 
             {/* 标签 */}
             <div style={{ marginBottom: '8px' }}>
-              <Space wrap size="small">
+              <Space wrap>
                 {document.tags.map(tag => (
-                  <Tag key={tag} size="small" color="blue">
+                  <Tag key={tag} color="blue">
                     {tag}
                   </Tag>
                 ))}
@@ -299,7 +348,7 @@ const DocumentList: React.FC = () => {
               alignItems: 'center',
               marginTop: '12px'
             }}>
-              <Space size="small">
+              <Space>
                 <Avatar 
                   size="small" 
                   src={document.authorAvatar}
@@ -309,7 +358,7 @@ const DocumentList: React.FC = () => {
                   {document.author}
                 </Text>
               </Space>
-              <Space size="small">
+              <Space>
                 <ClockCircleOutlined style={{ fontSize: '12px', color: '#999' }} />
                 <Text type="secondary" style={{ fontSize: '12px' }}>
                   {document.publishTime}
@@ -344,9 +393,9 @@ const DocumentList: React.FC = () => {
               size="large"
             >
               {categories.map(cat => (
-                <Option key={cat.value} value={cat.value}>
+                <Select.Option key={cat.value} value={cat.value}>
                   {cat.label}
-                </Option>
+                </Select.Option>
               ))}
             </Select>
           </Col>
@@ -358,26 +407,135 @@ const DocumentList: React.FC = () => {
               size="large"
             >
               {sortOptions.map(option => (
-                <Option key={option.value} value={option.value}>
+                <Select.Option key={option.value} value={option.value}>
                   {option.label}
-                </Option>
+                </Select.Option>
               ))}
             </Select>
           </Col>
           <Col xs={24} md={8}>
             <div style={{ textAlign: 'right' }}>
-              <Space>
-                <Button icon={<FilterOutlined />}>
-                  高级筛选
-                </Button>
-                <Text type="secondary">
-                  共找到 {mockDocuments.length} 篇文档
-                </Text>
-              </Space>
+              <Button 
+                icon={<FilterOutlined />}
+                onClick={() => setFilterVisible(true)}
+              >
+                高级筛选
+                {getActiveFilterCount() > 0 && (
+                  <Tag color="blue" style={{ marginLeft: 8 }}>
+                    {getActiveFilterCount()}
+                  </Tag>
+                )}
+              </Button>
             </div>
           </Col>
         </Row>
       </Card>
+
+      {/* 高级筛选抽屉 */}
+      <Drawer
+        title="高级筛选"
+        placement="right"
+        onClose={() => setFilterVisible(false)}
+        open={filterVisible}
+        width={360}
+        extra={
+          <Button 
+            type="text" 
+            icon={<CloseOutlined />} 
+            onClick={() => setFilterVisible(false)}
+          />
+        }
+        footer={
+          <div style={{ display: 'flex', gap: 8 }}>
+            <Button onClick={handleFilterReset} style={{ flex: 1 }}>
+              重置
+            </Button>
+            <Button type="primary" onClick={handleFilterApply} style={{ flex: 1 }}>
+              应用筛选
+            </Button>
+          </div>
+        }
+      >
+        <Form form={form} layout="vertical">
+          <Form.Item name="dateRange" label="发布时间">
+            <RangePicker style={{ width: '100%' }} />
+          </Form.Item>
+
+          <Divider />
+
+          <Form.Item name="priceType" label="价格类型">
+            <Radio.Group>
+              <Radio value="all">全部</Radio>
+              <Radio value="free">免费</Radio>
+              <Radio value="paid">付费</Radio>
+            </Radio.Group>
+          </Form.Item>
+
+          <Divider />
+
+          <Form.Item name="pointsRange" label="积分范围">
+            <Slider
+              range
+              min={0}
+              max={50}
+              defaultValue={[0, 50]}
+              marks={{
+                0: '0',
+                10: '10',
+                20: '20',
+                30: '30',
+                40: '40',
+                50: '50+'
+              }}
+            />
+          </Form.Item>
+
+          <Divider />
+
+          <Form.Item name="ratingRange" label="最低评分">
+            <Slider
+              min={0}
+              max={5}
+              step={0.5}
+              defaultValue={0}
+              marks={{
+                0: '不限',
+                3: '3星',
+                4: '4星',
+                5: '5星'
+              }}
+            />
+          </Form.Item>
+
+          <Divider />
+
+          <Form.Item name="selectedTags" label="标签筛选">
+            <Checkbox.Group style={{ width: '100%' }}>
+              <Row gutter={[8, 8]}>
+                {allTags.map(tag => (
+                  <Col span={12} key={tag}>
+                    <Checkbox value={tag}>{tag}</Checkbox>
+                  </Col>
+                ))}
+              </Row>
+            </Checkbox.Group>
+          </Form.Item>
+
+          <Divider />
+
+          <Form.Item name="authors" label="作者筛选">
+            <Checkbox.Group style={{ width: '100%' }}>
+              <Row gutter={[8, 8]}>
+                {allAuthors.map(author => (
+                  <Col span={24} key={author}>
+                    <Checkbox value={author}>{author}</Checkbox>
+                  </Col>
+                ))}
+              </Row>
+            </Checkbox.Group>
+          </Form.Item>
+        </Form>
+      </Drawer>
 
       {/* 文档列表 */}
       <Spin spinning={loading}>
@@ -391,21 +549,26 @@ const DocumentList: React.FC = () => {
               ))}
             </Row>
 
-            {/* 分页 */}
-            <div style={{ textAlign: 'center', marginTop: '32px' }}>
+            {/* 分页 - 放在底部 */}
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'center', 
+              marginTop: '32px',
+              paddingTop: '24px',
+              borderTop: '1px solid #f0f0f0'
+            }}>
               <Pagination
                 current={currentPage}
                 pageSize={pageSize}
-                total={100} // 模拟总数
+                total={100}
                 showSizeChanger
                 showQuickJumper
+                pageSizeOptions={['12', '24', '36', '48']}
                 showTotal={(total, range) =>
                   `第 ${range[0]}-${range[1]} 条，共 ${total} 条`
                 }
-                onChange={(page, size) => {
-                  setCurrentPage(page);
-                  // TODO: 分页逻辑
-                }}
+                onChange={handlePageChange}
+                onShowSizeChange={handlePageChange}
               />
             </div>
           </>

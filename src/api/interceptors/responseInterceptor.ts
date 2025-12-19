@@ -5,7 +5,14 @@
 import { AxiosResponse, AxiosError } from 'axios';
 import { message, notification } from 'antd';
 import { removeToken, removeUserInfo, removePermissions } from '../../utils/storage';
-import { ResponseData } from '../../utils/request';
+
+// 响应数据类型定义
+interface ResponseData {
+  code: number;
+  message: string;
+  data?: any;
+  success?: boolean;
+}
 
 // 响应成功拦截器
 export const responseInterceptor = (response: AxiosResponse<ResponseData>): any => {

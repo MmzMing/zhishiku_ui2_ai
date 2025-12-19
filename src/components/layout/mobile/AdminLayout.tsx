@@ -225,10 +225,18 @@ const AdminLayoutMobile: React.FC = () => {
           {/* 用户操作 */}
           <Space size="small">
             <Button 
+              shape="circle"
               type="text"
               icon={<BgColorsOutlined />} 
               onClick={() => setThemeSettingsVisible(true)}
               size="small"
+              style={{ 
+                width: '24px',
+                height: '24px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
             />
             <Dropdown 
               menu={{ items: userMenuItems }} 

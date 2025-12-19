@@ -3,7 +3,7 @@
  */
 
 import Cookies from 'js-cookie';
-import { APP_CONFIG } from '../config/app';
+import { appConfig } from '../config/app';
 
 // 存储类型
 type StorageType = 'localStorage' | 'sessionStorage' | 'cookie';
@@ -152,11 +152,11 @@ export const cookieStorage = new Storage('cookie');
 
 // Token相关操作
 export const getToken = (): string | null => {
-  return cookieStorage.get(APP_CONFIG.CACHE.TOKEN_KEY);
+  return cookieStorage.get(appConfig.cacheKeys.token);
 };
 
 export const setToken = (token: string, expires?: number): void => {
-  cookieStorage.set(APP_CONFIG.CACHE.TOKEN_KEY, token, {
+  cookieStorage.set(appConfig.cacheKeys.token, token, {
     expires: expires || 7,
     secure: location.protocol === 'https:',
     sameSite: 'lax',
@@ -164,51 +164,51 @@ export const setToken = (token: string, expires?: number): void => {
 };
 
 export const removeToken = (): void => {
-  cookieStorage.remove(APP_CONFIG.CACHE.TOKEN_KEY);
+  cookieStorage.remove(appConfig.cacheKeys.token);
 };
 
 // 用户信息相关操作
 export const getUserInfo = (): any => {
-  return localStorageUtil.get(APP_CONFIG.CACHE.USER_INFO_KEY);
+  return localStorageUtil.get(appConfig.cacheKeys.userInfo);
 };
 
 export const setUserInfo = (userInfo: any): void => {
-  localStorageUtil.set(APP_CONFIG.CACHE.USER_INFO_KEY, userInfo);
+  localStorageUtil.set(appConfig.cacheKeys.userInfo, userInfo);
 };
 
 export const removeUserInfo = (): void => {
-  localStorageUtil.remove(APP_CONFIG.CACHE.USER_INFO_KEY);
+  localStorageUtil.remove(appConfig.cacheKeys.userInfo);
 };
 
 // 主题相关操作
 export const getTheme = (): string => {
-  return localStorageUtil.get(APP_CONFIG.CACHE.THEME_KEY) || 'light';
+  return localStorageUtil.get(appConfig.cacheKeys.theme) || 'light';
 };
 
 export const setTheme = (theme: string): void => {
-  localStorageUtil.set(APP_CONFIG.CACHE.THEME_KEY, theme);
+  localStorageUtil.set(appConfig.cacheKeys.theme, theme);
 };
 
 // 语言相关操作
 export const getLanguage = (): string => {
-  return localStorageUtil.get(APP_CONFIG.CACHE.LANGUAGE_KEY) || 'zh-CN';
+  return localStorageUtil.get('app_language') || 'zh-CN';
 };
 
 export const setLanguage = (language: string): void => {
-  localStorageUtil.set(APP_CONFIG.CACHE.LANGUAGE_KEY, language);
+  localStorageUtil.set('app_language', language);
 };
 
 // 权限相关操作
 export const getPermissions = (): string[] => {
-  return localStorageUtil.get(APP_CONFIG.CACHE.PERMISSIONS_KEY) || [];
+  return localStorageUtil.get('user_permissions') || [];
 };
 
 export const setPermissions = (permissions: string[]): void => {
-  localStorageUtil.set(APP_CONFIG.CACHE.PERMISSIONS_KEY, permissions);
+  localStorageUtil.set('user_permissions', permissions);
 };
 
 export const removePermissions = (): void => {
-  localStorageUtil.remove(APP_CONFIG.CACHE.PERMISSIONS_KEY);
+  localStorageUtil.remove('user_permissions');
 };
 
 // 搜索历史相关操作

@@ -19,6 +19,7 @@ import {
 import { Outlet, useNavigate, Link, useLocation } from 'react-router-dom';
 import type { MenuProps } from 'antd';
 import ThemeSettings from '../../common/ThemeSettings';
+import { useTheme } from '../../../contexts/ThemeContext';
 import './FrontLayout.less';
 
 const { Content, Footer } = Layout;
@@ -27,6 +28,7 @@ const { Search } = Input;
 const FrontLayout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { config: themeConfig } = useTheme();
   const [themeSettingsVisible, setThemeSettingsVisible] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   
@@ -156,36 +158,40 @@ const FrontLayout: React.FC = () => {
         <div className="header-inner">
           <div className="header-content">
             {/* Logo */}
-            <div className="header-logo">
-              <Link to="/home">
-                <h1>个人知识库</h1>
-              </Link>
-            </div>
+            {themeConfig.showLogo && (
+              <div className="header-logo">
+                <Link to="/home">
+                  <h1>个人知识库</h1>
+                </Link>
+              </div>
+            )}
 
             {/* 导航按钮 */}
-            <Space size="middle" className="header-nav">
-              <Button 
-                type="text" 
-                icon={<HomeOutlined />}
-                onClick={() => navigate('/home')}
-              >
-                首页
-              </Button>
-              <Button 
-                type="text" 
-                icon={<PlayCircleOutlined />}
-                onClick={() => navigate('/video')}
-              >
-                视频
-              </Button>
-              <Button 
-                type="text" 
-                icon={<FileTextOutlined />}
-                onClick={() => navigate('/document')}
-              >
-                文档
-              </Button>
-            </Space>
+            {themeConfig.showNavButtons && (
+              <Space size="middle" className="header-nav">
+                <Button 
+                  type="text" 
+                  icon={<HomeOutlined />}
+                  onClick={() => navigate('/home')}
+                >
+                  首页
+                </Button>
+                <Button 
+                  type="text" 
+                  icon={<PlayCircleOutlined />}
+                  onClick={() => navigate('/video')}
+                >
+                  视频
+                </Button>
+                <Button 
+                  type="text" 
+                  icon={<FileTextOutlined />}
+                  onClick={() => navigate('/document')}
+                >
+                  文档
+                </Button>
+              </Space>
+            )}
 
             {/* 搜索和用户操作 */}
             <Space size="middle" className="header-actions">
@@ -198,9 +204,17 @@ const FrontLayout: React.FC = () => {
               />
               
               <Button 
+                shape="circle"
                 icon={<BgColorsOutlined />} 
                 onClick={() => setThemeSettingsVisible(true)}
                 title="主题设置"
+                style={{ 
+                  width: '32px',
+                  height: '32px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
               />
               
               {isLoggedIn ? (
@@ -234,23 +248,25 @@ const FrontLayout: React.FC = () => {
         <Outlet />
       </Content>
 
-      <Footer className="front-footer">
-        <div className="footer-links">
-          <Space size="large">
-            <Link to="/about">关于我们</Link>
-            <Link to="/contact">联系方式</Link>
-            <Link to="/privacy">隐私政策</Link>
-            <Link to="/terms">用户协议</Link>
-            <Link to="/feedback">意见反馈</Link>
-          </Space>
-        </div>
-        <div className="footer-copyright">
-          个人管理知识库 ©2024 Created by Knowledge Base Team
-        </div>
-        <div className="footer-stats">
-          📅 运行 365 天 | 👥 累计用户 1,328 | 📊 累计访问 15,680 次
-        </div>
-      </Footer>
+      {themeConfig.showFooter && (
+        <Footer className="front-footer">
+          <div className="footer-links">
+            <Space size="large">
+              <Link to="/about">关于我们</Link>
+              <Link to="/contact">联系方式</Link>
+              <Link to="/privacy">隐私政策</Link>
+              <Link to="/terms">用户协议</Link>
+              <Link to="/feedback">意见反馈</Link>
+            </Space>
+          </div>
+          <div className="footer-copyright">
+            个人管理知识库 ©2024 Created by Knowledge Base Team
+          </div>
+          <div className="footer-stats">
+            📅 运行 365 天 | 👥 累计用户 1,328 | 📊 累计访问 15,680 次
+          </div>
+        </Footer>
+      )}
 
       {/* 主题设置抽屉 */}
       <ThemeSettings 

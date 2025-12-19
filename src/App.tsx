@@ -5,7 +5,11 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { ConfigProvider, theme as antdTheme } from 'antd';
 import zhCN from 'antd/locale/zh_CN';
+import enUS from 'antd/locale/en_US';
+import jaJP from 'antd/locale/ja_JP';
 import AppRouter from './router';
+import { ThemeProvider } from './contexts/ThemeContext';
+import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 
 // 主题配置接口
 interface ThemeConfig {
@@ -14,6 +18,11 @@ interface ThemeConfig {
   fontSize: 'small' | 'medium' | 'large';
   spacing: 'compact' | 'normal' | 'loose';
   sidebarCollapsed: boolean;
+  showTopLoadingBar: boolean;
+  showLogo: boolean;
+  showNavButtons: boolean;
+  showBreadcrumb: boolean;
+  keepTabsAlive: boolean;
   showFooter: boolean;
   enablePageTransition: boolean;
   allowTextSelection: boolean;
@@ -26,14 +35,32 @@ const DEFAULT_THEME_CONFIG: ThemeConfig = {
   fontSize: 'medium',
   spacing: 'normal',
   sidebarCollapsed: false,
+  showTopLoadingBar: true,
+  showLogo: true,
+  showNavButtons: true,
+  showBreadcrumb: true,
+  keepTabsAlive: false,
   showFooter: true,
   enablePageTransition: true,
   allowTextSelection: true,
 };
 
-// 根应用组件
-const App: React.FC = () => {
+// 主应用内容组件
+const AppContent: React.FC = () => {
   const [themeConfig, setThemeConfig] = useState<ThemeConfig>(DEFAULT_THEME_CONFIG);
+  const { currentLanguage } = useLanguage();
+
+  // 获取Ant Design语言包
+  const getAntdLocale = () => {
+    switch (currentLanguage) {
+      case 'en-US':
+        return enUS;
+      case 'ja-JP':
+        return jaJP;
+      default:
+        return zhCN;
+    }
+  };
 
   // 获取实际主题模式（处理auto模式）
   const actualMode = useMemo(() => {
@@ -133,6 +160,12 @@ const App: React.FC = () => {
     root.classList.toggle('sidebar-collapsed', config.sidebarCollapsed);
     root.classList.toggle('no-text-selection', !config.allowTextSelection);
     root.classList.toggle('page-transition-enabled', config.enablePageTransition);
+    root.classList.toggle('hide-top-loading-bar', !config.showTopLoadingBar);
+    root.classList.toggle('hide-logo', !config.showLogo);
+    root.classList.toggle('hide-nav-buttons', !config.showNavButtons);
+    root.classList.toggle('hide-breadcrumb', !config.showBreadcrumb);
+    root.classList.toggle('keep-tabs-alive', config.keepTabsAlive);
+    root.classList.toggle('hide-footer', !config.showFooter);
   };
 
   // 调整颜色亮度
@@ -156,11 +189,22 @@ const App: React.FC = () => {
 
   return (
     <ConfigProvider 
-      locale={zhCN}
+      locale={getAntdLocale()}
       theme={antdThemeConfig}
     >
       <AppRouter />
     </ConfigProvider>
+  );
+};
+
+// 根应用组件
+const App: React.FC = () => {
+  return (
+    <ThemeProvider>
+      <LanguageProvider>
+        <AppContent />
+      </LanguageProvider>
+    </ThemeProvider>
   );
 };
 

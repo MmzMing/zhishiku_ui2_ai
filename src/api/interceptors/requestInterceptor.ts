@@ -45,7 +45,7 @@ class RequestQueue {
 const requestQueue = new RequestQueue();
 
 // 请求拦截器配置
-export const requestInterceptor = (config: AxiosRequestConfig): AxiosRequestConfig => {
+export const requestInterceptor = (config: AxiosRequestConfig): AxiosRequestConfig | Promise<never> => {
   // 防重复请求检查
   if (requestQueue.isDuplicate(config)) {
     console.warn('Duplicate request detected:', config.url);
@@ -77,7 +77,7 @@ export const requestInterceptor = (config: AxiosRequestConfig): AxiosRequestConf
   config.headers = {
     ...config.headers,
     'X-Request-ID': generateRequestId(),
-    'X-Client-Version': appConfig.APP_VERSION,
+    'X-Client-Version': appConfig.appVersion,
     'X-Client-Platform': 'web',
   };
   

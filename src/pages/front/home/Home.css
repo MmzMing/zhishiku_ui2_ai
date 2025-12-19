@@ -1,0 +1,387 @@
+/**
+ * 首页样式 - 毛玻璃效果
+ */
+
+/* 主页透明背景 */
+.home-page {
+  background: transparent !important;
+  position: relative;
+}
+
+/* 首页时，body 和 root 也要透明 */
+body[data-route="/home"],
+body[data-route="/"] {
+  background: transparent !important;
+}
+
+body[data-route="/home"] #root,
+body[data-route="/"] #root {
+  background: transparent !important;
+}
+
+/* 背景图片扩展到整个页面 */
+.home-page::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/home/preview.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  z-index: -1;
+  opacity: 0.3;
+}
+
+.home-content {
+  background: transparent !important;
+}
+
+/* 主内容区域透明背景 */
+.main-content-area {
+  background: transparent !important;
+}
+
+/* 确保所有容器都透明 */
+.home-page .ant-row {
+  background: transparent !important;
+}
+
+.home-page .ant-col {
+  background: transparent !important;
+}
+
+/* 确保布局容器透明 */
+.home-page .ant-layout {
+  background: transparent !important;
+}
+
+.home-page .ant-layout-content {
+  background: transparent !important;
+}
+
+/* 首页时整个前台布局透明 */
+body[data-route="/home"] .front-layout,
+body[data-route="/"] .front-layout {
+  background: transparent !important;
+}
+
+body[data-route="/home"] .front-content,
+body[data-route="/"] .front-content {
+  background: transparent !important;
+}
+
+/* 毛玻璃卡片效果 */
+.glass-card {
+  background: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* 深色主题下的毛玻璃效果 */
+[data-theme="dark"] .glass-card {
+  background: rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 分类卡片毛玻璃效果 */
+.category-card {
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 12px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.category-card:hover {
+  background: rgba(255, 255, 255, 0.18) !important;
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.2) !important;
+}
+
+[data-theme="dark"] .category-card {
+  background: rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .category-card:hover {
+  background: rgba(0, 0, 0, 0.3) !important;
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 内容卡片毛玻璃效果 */
+.content-card {
+  background: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 14px !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.content-card:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+}
+
+[data-theme="dark"] .content-card {
+  background: rgba(0, 0, 0, 0.25) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .content-card:hover {
+  background: rgba(0, 0, 0, 0.35) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* 侧边栏卡片毛玻璃效果 */
+.sidebar-card {
+  background: rgba(255, 255, 255, 0.06) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 14px !important;
+  transition: all 0.3s ease;
+}
+
+.sidebar-card:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+[data-theme="dark"] .sidebar-card {
+  background: rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .sidebar-card:hover {
+  background: rgba(0, 0, 0, 0.25) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 评价区域卡片 - 深色不透明背景圆角 */
+.review-card.ant-card {
+  background: #0F1318 !important;
+  background-color: #0F1318 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 16px !important;
+  overflow: hidden;
+}
+
+.review-card.ant-card .ant-card-body {
+  background: #0F1318 !important;
+  background-color: #0F1318 !important;
+  border-radius: 16px !important;
+}
+
+.review-card.ant-card:hover {
+  background: #0F1318 !important;
+  background-color: #0F1318 !important;
+}
+
+/* 标签毛玻璃效果 */
+.glass-tag {
+  background: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease;
+}
+
+.glass-tag:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+  transform: scale(1.05);
+}
+
+[data-theme="dark"] .glass-tag {
+  background: rgba(0, 0, 0, 0.25) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+[data-theme="dark"] .glass-tag:hover {
+  background: rgba(0, 0, 0, 0.35) !important;
+}
+
+/* 搜索框毛玻璃效果 */
+.glass-search {
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 12px !important;
+}
+
+[data-theme="dark"] .glass-search {
+  background: rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 按钮毛玻璃效果 */
+.glass-button {
+  background: rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 10px !important;
+  transition: all 0.3s ease;
+}
+
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+[data-theme="dark"] .glass-button {
+  background: rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+[data-theme="dark"] .glass-button:hover {
+  background: rgba(0, 0, 0, 0.3) !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 列表项毛玻璃效果 */
+.glass-list-item {
+  background: rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 8px !important;
+  margin-bottom: 8px !important;
+  transition: all 0.3s ease;
+}
+
+.glass-list-item:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  transform: translateX(4px);
+}
+
+[data-theme="dark"] .glass-list-item {
+  background: rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+[data-theme="dark"] .glass-list-item:hover {
+  background: rgba(0, 0, 0, 0.25) !important;
+}
+
+/* 确保所有Ant Design组件透明 */
+.home-page .ant-card {
+  background: transparent !important;
+}
+
+.home-page .ant-card-head {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.home-page .ant-card-body {
+  background: transparent !important;
+}
+
+.home-page .ant-list-item {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.home-page .ant-tag {
+  background: transparent !important;
+}
+
+.home-page .ant-input-search {
+  background: transparent !important;
+}
+
+.home-page .ant-input-search .ant-input {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #fff !important;
+}
+
+.home-page .ant-input-search .ant-input::placeholder {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.home-page .ant-input-search .ant-btn {
+  background: rgba(24, 144, 255, 0.8) !important;
+  border: 1px solid rgba(24, 144, 255, 0.8) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* 深色主题下的特殊处理 */
+[data-theme="dark"] .home-page .ant-card-head {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+[data-theme="dark"] .home-page .ant-list-item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important;
+}
+
+[data-theme="dark"] .home-page .ant-input-search .ant-input {
+  background: rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+[data-theme="dark"] .home-page .ant-input-search .ant-input::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* 增强毛玻璃效果的动画 */
+.glass-card,
+.category-card,
+.content-card,
+.sidebar-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card::before,
+.category-card::before,
+.content-card::before,
+.sidebar-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+  pointer-events: none;
+}
+
+.glass-card:hover::before,
+.category-card:hover::before,
+.content-card:hover::before,
+.sidebar-card:hover::before {
+  left: 100%;
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+  .glass-card,
+  .category-card,
+  .content-card,
+  .sidebar-card {
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+  }
+}

@@ -1,0 +1,257 @@
+/**
+ * 全局变量定义
+ */
+
+// 颜色变量
+@primary-color: #1890ff;
+@success-color: #52c41a;
+@warning-color: #faad14;
+@error-color: #f5222d;
+@info-color: #1890ff;
+
+// 中性色
+@white: #ffffff;
+@black: #000000;
+@gray-1: #f7f8fa;
+@gray-2: #f2f3f5;
+@gray-3: #e5e6eb;
+@gray-4: #bbbfc4;
+@gray-5: #969799;
+@gray-6: #646566;
+@gray-7: #323233;
+
+// 背景色
+@body-background: #f0f2f5;
+@component-background: #ffffff;
+@popover-background: #ffffff;
+@layout-body-background: #f0f2f5;
+@layout-header-background: #ffffff;
+@layout-footer-background: #f0f2f5;
+@layout-sider-background: #ffffff;
+
+// 文字颜色
+@text-color: rgba(0, 0, 0, 0.85);
+@text-color-secondary: rgba(0, 0, 0, 0.65);
+@text-color-tertiary: rgba(0, 0, 0, 0.45);
+@heading-color: rgba(0, 0, 0, 0.85);
+@disabled-color: rgba(0, 0, 0, 0.25);
+
+// 边框颜色
+@border-color-base: #d9d9d9;
+@border-color-split: #f0f0f0;
+@border-color-inverse: #ffffff;
+
+// 阴影
+@shadow-color: rgba(0, 0, 0, 0.15);
+@box-shadow-base: 0 2px 8px rgba(0, 0, 0, 0.15);
+@box-shadow-card: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 0 3px 6px 0 rgba(0, 0, 0, 0.12), 0 5px 12px 4px rgba(0, 0, 0, 0.09);
+
+// 字体
+@font-size-base: 14px;
+@font-size-lg: 16px;
+@font-size-sm: 12px;
+@font-size-xl: 20px;
+@font-size-xxl: 24px;
+
+@font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+@font-family-code: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+
+@font-weight-light: 300;
+@font-weight-normal: 400;
+@font-weight-medium: 500;
+@font-weight-bold: 600;
+
+// 行高
+@line-height-base: 1.5714285714285714;
+@line-height-lg: 1.5;
+@line-height-sm: 1.6666666666666667;
+
+// 圆角
+@border-radius-base: 4px;
+@border-radius-sm: 2px;
+@border-radius-lg: 8px;
+
+// 间距
+@padding-xs: 8px;
+@padding-sm: 12px;
+@padding-md: 16px;
+@padding-lg: 24px;
+@padding-xl: 32px;
+
+@margin-xs: 8px;
+@margin-sm: 12px;
+@margin-md: 16px;
+@margin-lg: 24px;
+@margin-xl: 32px;
+
+// 高度
+@height-base: 32px;
+@height-lg: 40px;
+@height-sm: 24px;
+
+// 宽度
+@width-xs: 480px;
+@width-sm: 576px;
+@width-md: 768px;
+@width-lg: 992px;
+@width-xl: 1200px;
+@width-xxl: 1600px;
+
+// 链接颜色
+@link-color: @primary-color;
+@link-hover-color: #40a9ff;
+@link-active-color: #096dd9;
+
+// 动画
+@ease-base-out: cubic-bezier(0.7, 0.3, 0.1, 1);
+@ease-base-in: cubic-bezier(0.9, 0, 0.3, 0.7);
+@ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+@ease-in: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+@ease-in-out: cubic-bezier(0.645, 0.045, 0.355, 1);
+@ease-out-back: cubic-bezier(0.12, 0.4, 0.29, 1.46);
+@ease-in-back: cubic-bezier(0.71, -0.46, 0.88, 0.6);
+@ease-in-out-back: cubic-bezier(0.71, -0.46, 0.29, 1.46);
+@ease-out-circ: cubic-bezier(0.08, 0.82, 0.17, 1);
+@ease-in-circ: cubic-bezier(0.6, 0.04, 0.98, 0.34);
+@ease-in-out-circ: cubic-bezier(0.78, 0.14, 0.15, 0.86);
+@ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
+@ease-in-quint: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+@ease-in-out-quint: cubic-bezier(0.86, 0, 0.07, 1);
+
+@animation-duration-slow: 0.3s;
+@animation-duration-base: 0.2s;
+@animation-duration-fast: 0.1s;
+
+// Z-index
+@zindex-base: 0;
+@zindex-affix: 10;
+@zindex-back-top: 10;
+@zindex-picker-panel: 10;
+@zindex-popup-close: 10;
+@zindex-modal: 1000;
+@zindex-notification: 1010;
+@zindex-message: 1010;
+@zindex-popover: 1030;
+@zindex-dropdown: 1050;
+@zindex-tooltip: 1060;
+
+// 屏幕断点
+@screen-xs: 480px;
+@screen-sm: 576px;
+@screen-md: 768px;
+@screen-lg: 992px;
+@screen-xl: 1200px;
+@screen-xxl: 1600px;
+
+@screen-xs-min: @screen-xs;
+@screen-sm-min: @screen-sm;
+@screen-md-min: @screen-md;
+@screen-lg-min: @screen-lg;
+@screen-xl-min: @screen-xl;
+@screen-xxl-min: @screen-xxl;
+
+@screen-xs-max: (@screen-sm-min - 1px);
+@screen-sm-max: (@screen-md-min - 1px);
+@screen-md-max: (@screen-lg-min - 1px);
+@screen-lg-max: (@screen-xl-min - 1px);
+@screen-xl-max: (@screen-xxl-min - 1px);
+
+// 网格系统
+@grid-columns: 24;
+@grid-gutter-width: 0;
+
+// 表单
+@form-item-margin-bottom: 24px;
+@form-item-trailing-colon: true;
+@form-vertical-label-padding: 0 0 8px;
+@form-vertical-label-margin: 0;
+
+// 输入框
+@input-height-base: @height-base;
+@input-height-lg: @height-lg;
+@input-height-sm: @height-sm;
+@input-padding-horizontal: 11px;
+@input-padding-horizontal-base: @input-padding-horizontal;
+@input-padding-horizontal-sm: 7px;
+@input-padding-horizontal-lg: 11px;
+@input-padding-vertical-base: 4px;
+@input-padding-vertical-sm: 1px;
+@input-padding-vertical-lg: 6px;
+
+// 按钮
+@btn-height-base: @height-base;
+@btn-height-lg: @height-lg;
+@btn-height-sm: @height-sm;
+@btn-padding-horizontal-base: 15px;
+@btn-padding-horizontal-lg: 15px;
+@btn-padding-horizontal-sm: 7px;
+@btn-font-weight: 400;
+@btn-border-radius-base: @border-radius-base;
+@btn-border-radius-sm: @border-radius-base;
+
+// 表格
+@table-header-bg: @gray-1;
+@table-header-color: @heading-color;
+@table-header-sort-bg: @gray-2;
+@table-body-sort-bg: rgba(0, 0, 0, 0.01);
+@table-row-hover-bg: @gray-1;
+@table-selected-row-color: inherit;
+@table-selected-row-bg: #ffeaa7;
+@table-body-selected-sort-bg: @table-selected-row-bg;
+@table-selected-row-hover-bg: darken(@table-selected-row-bg, 2%);
+@table-expanded-row-bg: #fbfbfb;
+@table-padding-vertical: 16px;
+@table-padding-horizontal: 16px;
+@table-padding-vertical-md: 12px;
+@table-padding-horizontal-md: 8px;
+@table-padding-vertical-sm: 8px;
+@table-padding-horizontal-sm: 8px;
+@table-border-color: @border-color-split;
+@table-border-radius-base: @border-radius-base;
+@table-footer-bg: @gray-1;
+@table-footer-color: @heading-color;
+
+// 卡片
+@card-head-color: @heading-color;
+@card-head-background: transparent;
+@card-head-font-size: @font-size-lg;
+@card-head-font-size-sm: @font-size-base;
+@card-head-padding: 16px;
+@card-head-padding-sm: 8px;
+@card-head-height: 48px;
+@card-head-height-sm: 36px;
+@card-inner-head-padding: 12px;
+@card-padding-base: 24px;
+@card-padding-base-sm: 12px;
+@card-actions-background: @gray-1;
+@card-actions-li-margin: 12px 0;
+@card-skeleton-bg: #cfd8dc;
+@card-background: @component-background;
+@card-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16), 0 3px 6px 0 rgba(0, 0, 0, 0.12), 0 5px 12px 4px rgba(0, 0, 0, 0.09);
+@card-radius: @border-radius-base;
+@card-head-tabs-margin-bottom: -17px;
+@card-head-extra-color: @text-color;
+
+// 模态框
+@modal-header-padding-vertical: 16px;
+@modal-header-padding-horizontal: 24px;
+@modal-body-padding: 24px;
+@modal-header-bg: @component-background;
+@modal-header-padding: @modal-header-padding-vertical @modal-header-padding-horizontal;
+@modal-header-border-width: 1px;
+@modal-header-border-style: solid;
+@modal-header-title-line-height: 22px;
+@modal-header-title-font-size: @font-size-lg;
+@modal-header-border-color-split: @border-color-split;
+@modal-header-close-size: 56px;
+@modal-content-bg: @component-background;
+@modal-heading-color: @heading-color;
+@modal-close-color: @text-color-secondary;
+@modal-footer-bg: transparent;
+@modal-footer-border-color-split: @border-color-split;
+@modal-footer-border-style: solid;
+@modal-footer-padding-vertical: 10px;
+@modal-footer-padding-horizontal: 16px;
+@modal-footer-border-width: 1px;
+@modal-mask-bg: rgba(0, 0, 0, 0.45);
+@modal-confirm-body-padding: 32px 32px 24px;

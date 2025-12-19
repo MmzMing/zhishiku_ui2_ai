@@ -1,0 +1,47 @@
+/**
+ * 通用按钮样式
+ */
+
+.common-button {
+  // 基础样式增强
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  
+  // 悬停效果
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  // 点击效果
+  &:active {
+    transform: translateY(0);
+  }
+  
+  // 禁用状态
+  &:disabled,
+  &.ant-btn-disabled {
+    transform: none;
+    box-shadow: none;
+  }
+  
+  // 加载状态
+  &.ant-btn-loading {
+    transform: none;
+  }
+  
+  // 响应式适配
+  @media (max-width: 768px) {
+    min-width: 44px;
+    min-height: 44px;
+    
+    &.ant-btn-sm {
+      min-width: 36px;
+      min-height: 36px;
+    }
+    
+    &.ant-btn-lg {
+      min-width: 52px;
+      min-height: 52px;
+    }
+  }
+}

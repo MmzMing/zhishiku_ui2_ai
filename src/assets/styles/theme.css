@@ -1,0 +1,523 @@
+/**
+ * 全局主题样式
+ * 定义CSS变量和主题相关样式
+ */
+
+/* ==================== CSS变量定义 ==================== */
+:root {
+  /* 主色调 */
+  --primary-color: #1890ff;
+  --primary-color-hover: #40a9ff;
+  --primary-color-active: #096dd9;
+  
+  /* 字体大小 */
+  --base-font-size: 16px;
+  --font-size-sm: 14px;
+  --font-size-lg: 18px;
+  
+  /* 间距比例 */
+  --spacing-scale: 1;
+  --spacing-xs: calc(4px * var(--spacing-scale));
+  --spacing-sm: calc(8px * var(--spacing-scale));
+  --spacing-md: calc(16px * var(--spacing-scale));
+  --spacing-lg: calc(24px * var(--spacing-scale));
+  --spacing-xl: calc(32px * var(--spacing-scale));
+  
+  /* 圆角 */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  
+  /* 阴影 */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
+  
+  /* 过渡动画 */
+  --transition-fast: 0.2s;
+  --transition-normal: 0.3s;
+  --transition-slow: 0.5s;
+}
+
+/* ==================== 浅色主题（默认） ==================== */
+[data-theme="light"],
+.theme-light {
+  --bg-color-primary: #ffffff;
+  --bg-color-secondary: #f0f2f5;
+  --bg-color-tertiary: #fafafa;
+  
+  --text-color-primary: rgba(0, 0, 0, 0.85);
+  --text-color-secondary: rgba(0, 0, 0, 0.65);
+  --text-color-tertiary: rgba(0, 0, 0, 0.45);
+  --text-color-disabled: rgba(0, 0, 0, 0.25);
+  
+  --border-color-base: #d9d9d9;
+  --border-color-light: #e8e8e8;
+  --border-color-split: #f0f0f0;
+  
+  --link-color: var(--primary-color);
+  --link-hover-color: var(--primary-color-hover);
+  --link-active-color: var(--primary-color-active);
+  
+  --success-color: #52c41a;
+  --warning-color: #faad14;
+  --error-color: #ff4d4f;
+  --info-color: #1890ff;
+}
+
+/* ==================== 深色主题 ==================== */
+[data-theme="dark"],
+.theme-dark {
+  --bg-color-primary: #141414;
+  --bg-color-secondary: #1f1f1f;
+  --bg-color-tertiary: #2a2a2a;
+  
+  --text-color-primary: rgba(255, 255, 255, 0.85);
+  --text-color-secondary: rgba(255, 255, 255, 0.65);
+  --text-color-tertiary: rgba(255, 255, 255, 0.45);
+  --text-color-disabled: rgba(255, 255, 255, 0.25);
+  
+  --border-color-base: #434343;
+  --border-color-light: #303030;
+  --border-color-split: #262626;
+  
+  --link-color: #177ddc;
+  --link-hover-color: #3c9ae8;
+  --link-active-color: #095cb5;
+  
+  --success-color: #49aa19;
+  --warning-color: #d89614;
+  --error-color: #d32029;
+  --info-color: #177ddc;
+  
+  /* 深色主题下的阴影 */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* ==================== 全局样式应用 ==================== */
+html, body, #root {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-size: var(--base-font-size);
+  color: var(--text-color-primary);
+  background-color: var(--bg-color-secondary);
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+/* 确保整个应用背景色正确 */
+#root {
+  background-color: var(--bg-color-secondary);
+}
+
+.ant-layout {
+  background-color: var(--bg-color-secondary) !important;
+}
+
+.ant-layout-content {
+  background-color: var(--bg-color-secondary) !important;
+}
+
+/* 链接样式 */
+a {
+  color: var(--link-color);
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--link-hover-color);
+}
+
+a:active {
+  color: var(--link-active-color);
+}
+
+/* ==================== 布局相关样式 ==================== */
+
+/* 侧边栏折叠状态 */
+.sidebar-collapsed .ant-layout-sider {
+  flex: 0 0 80px !important;
+  max-width: 80px !important;
+  min-width: 80px !important;
+  width: 80px !important;
+}
+
+/* 紧凑模式 */
+.compact-mode {
+  --spacing-scale: 0.8;
+}
+
+.compact-mode .ant-btn {
+  padding: 4px 12px;
+  font-size: 14px;
+}
+
+.compact-mode .ant-input {
+  padding: 4px 11px;
+}
+
+/* ==================== 页面过渡动画 ==================== */
+.page-transition-enabled .ant-layout-content {
+  animation: fadeIn var(--transition-normal) ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==================== 文字选中控制 ==================== */
+.no-text-selection {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.no-text-selection input,
+.no-text-selection textarea {
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+}
+
+/* ==================== 响应式断点 ==================== */
+
+/* 移动端 ≤768px */
+@media (max-width: 768px) {
+  :root {
+    --base-font-size: 14px;
+    --spacing-scale: 0.9;
+  }
+  
+  body {
+    font-size: 14px;
+  }
+}
+
+/* 平板端 769px-1024px */
+@media (min-width: 769px) and (max-width: 1024px) {
+  :root {
+    --base-font-size: 15px;
+    --spacing-scale: 0.95;
+  }
+}
+
+/* PC端 ≥1025px */
+@media (min-width: 1025px) {
+  :root {
+    --base-font-size: 16px;
+    --spacing-scale: 1;
+  }
+}
+
+/* ==================== 滚动条样式 ==================== */
+
+/* 浅色主题滚动条 */
+[data-theme="light"] ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+[data-theme="light"] ::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: #bfbfbf;
+  border-radius: 4px;
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* 深色主题滚动条 */
+[data-theme="dark"] ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: #2a2a2a;
+  border-radius: 4px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #434343;
+  border-radius: 4px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: #595959;
+}
+
+/* ==================== 卡片和容器样式 ==================== */
+.theme-card {
+  background: var(--bg-color-primary);
+  border: 1px solid var(--border-color-base);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.theme-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* ==================== 按钮样式增强 ==================== */
+.ant-btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.ant-btn-primary:hover {
+  background-color: var(--primary-color-hover);
+  border-color: var(--primary-color-hover);
+}
+
+.ant-btn-primary:active {
+  background-color: var(--primary-color-active);
+  border-color: var(--primary-color-active);
+}
+
+/* ==================== 深色主题下的Ant Design组件适配 ==================== */
+[data-theme="dark"] .ant-layout {
+  background: var(--bg-color-secondary);
+}
+
+[data-theme="dark"] .ant-layout-header {
+  background: var(--bg-color-primary);
+  border-bottom: 1px solid var(--border-color-base);
+}
+
+[data-theme="dark"] .ant-layout-footer {
+  background: var(--bg-color-primary);
+  color: var(--text-color-secondary);
+}
+
+[data-theme="dark"] .ant-layout-sider {
+  background: var(--bg-color-primary);
+}
+
+[data-theme="dark"] .ant-menu-dark {
+  background: var(--bg-color-primary);
+}
+
+[data-theme="dark"] .ant-card {
+  background: var(--bg-color-primary);
+  border: none !important;
+}
+
+[data-theme="dark"] .ant-table {
+  background: var(--bg-color-primary);
+  color: var(--text-color-primary);
+}
+
+[data-theme="dark"] .ant-table-thead > tr > th {
+  background: var(--bg-color-secondary);
+  color: var(--text-color-primary);
+  border-color: var(--border-color-base);
+}
+
+[data-theme="dark"] .ant-table-tbody > tr > td {
+  border-color: var(--border-color-base);
+}
+
+[data-theme="dark"] .ant-table-tbody > tr:hover > td {
+  background: var(--bg-color-tertiary);
+}
+
+[data-theme="dark"] .ant-input,
+[data-theme="dark"] .ant-input-number,
+[data-theme="dark"] .ant-select-selector {
+  background: var(--bg-color-secondary);
+  border-color: var(--border-color-base);
+  color: var(--text-color-primary);
+}
+
+[data-theme="dark"] .ant-input:hover,
+[data-theme="dark"] .ant-input-number:hover,
+[data-theme="dark"] .ant-select-selector:hover {
+  border-color: var(--primary-color);
+}
+
+[data-theme="dark"] .ant-modal-content {
+  background: var(--bg-color-primary);
+}
+
+[data-theme="dark"] .ant-modal-header {
+  background: var(--bg-color-primary);
+  border-color: var(--border-color-base);
+}
+
+[data-theme="dark"] .ant-modal-footer {
+  border-color: var(--border-color-base);
+}
+
+[data-theme="dark"] .ant-drawer-content {
+  background: var(--bg-color-primary);
+}
+
+[data-theme="dark"] .ant-drawer-header {
+  background: var(--bg-color-primary);
+  border-color: var(--border-color-base);
+}
+
+/* 深色主题下的列表和其他组件 */
+[data-theme="dark"] .ant-list-item {
+  border-color: var(--border-color-base);
+}
+
+[data-theme="dark"] .ant-list-item:hover {
+  background: var(--bg-color-tertiary);
+}
+
+[data-theme="dark"] .ant-tag {
+  background: var(--bg-color-tertiary);
+  border-color: var(--border-color-base);
+}
+
+[data-theme="dark"] .ant-divider {
+  border-color: var(--border-color-base);
+}
+
+[data-theme="dark"] .ant-skeleton-content .ant-skeleton-title,
+[data-theme="dark"] .ant-skeleton-content .ant-skeleton-paragraph > li {
+  background: linear-gradient(90deg, var(--bg-color-tertiary) 25%, var(--bg-color-secondary) 37%, var(--bg-color-tertiary) 63%);
+}
+
+/* 确保所有页面内容区域背景正确 */
+[data-theme="dark"] {
+  background-color: var(--bg-color-secondary);
+}
+
+[data-theme="dark"] .ant-layout,
+[data-theme="dark"] .ant-layout-content {
+  background-color: var(--bg-color-secondary) !important;
+}
+
+/* 全局隐藏卡片边框 */
+.ant-card {
+  border: none !important;
+}
+
+/* 深色主题下的Typography组件 */
+[data-theme="dark"] .ant-typography {
+  color: var(--text-color-primary);
+}
+
+[data-theme="dark"] .ant-typography.ant-typography-secondary {
+  color: var(--text-color-secondary);
+}
+
+[data-theme="dark"] .ant-typography h1,
+[data-theme="dark"] .ant-typography h2,
+[data-theme="dark"] .ant-typography h3,
+[data-theme="dark"] .ant-typography h4,
+[data-theme="dark"] .ant-typography h5 {
+  color: var(--text-color-primary);
+}
+
+/* 深色主题下的搜索框 */
+[data-theme="dark"] .ant-input-search .ant-input-group-addon {
+  background: transparent;
+  border-color: var(--border-color-base);
+}
+
+[data-theme="dark"] .ant-input-search .ant-input {
+  background: var(--bg-color-tertiary);
+  border-color: var(--border-color-base);
+  color: var(--text-color-primary);
+}
+
+[data-theme="dark"] .ant-input-search .ant-input:hover,
+[data-theme="dark"] .ant-input-search .ant-input:focus {
+  border-color: var(--primary-color);
+}
+
+[data-theme="dark"] .ant-input-search .ant-input::placeholder {
+  color: var(--text-color-tertiary);
+}
+
+/* 深色主题下搜索框整体边框 */
+[data-theme="dark"] .ant-input-search .ant-input-wrapper {
+  background: transparent;
+}
+
+[data-theme="dark"] .ant-input-search .ant-input-affix-wrapper {
+  background: var(--bg-color-tertiary);
+  border-color: var(--border-color-base);
+}
+
+[data-theme="dark"] .ant-input-search .ant-input-affix-wrapper:hover,
+[data-theme="dark"] .ant-input-search .ant-input-affix-wrapper-focused {
+  border-color: var(--primary-color);
+}
+
+/* 深色主题下的Menu */
+[data-theme="dark"] .ant-menu-horizontal {
+  background: transparent;
+  border-bottom: none;
+}
+
+[data-theme="dark"] .ant-menu-horizontal > .ant-menu-item,
+[data-theme="dark"] .ant-menu-horizontal > .ant-menu-submenu {
+  color: var(--text-color-primary);
+}
+
+[data-theme="dark"] .ant-menu-horizontal > .ant-menu-item:hover,
+[data-theme="dark"] .ant-menu-horizontal > .ant-menu-submenu:hover {
+  color: var(--primary-color);
+}
+
+/* 深色主题下的下拉菜单 */
+[data-theme="dark"] .ant-dropdown-menu {
+  background: var(--bg-color-primary);
+}
+
+[data-theme="dark"] .ant-dropdown-menu-item {
+  color: var(--text-color-primary);
+}
+
+[data-theme="dark"] .ant-dropdown-menu-item:hover {
+  background: var(--bg-color-tertiary);
+}
+
+/* ==================== 自适应主题（跟随系统） ==================== */
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] {
+    --bg-color-primary: #141414;
+    --bg-color-secondary: #1f1f1f;
+    --bg-color-tertiary: #2a2a2a;
+    --text-color-primary: rgba(255, 255, 255, 0.85);
+    --text-color-secondary: rgba(255, 255, 255, 0.65);
+    --text-color-tertiary: rgba(255, 255, 255, 0.45);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  [data-theme="auto"] {
+    --bg-color-primary: #ffffff;
+    --bg-color-secondary: #f0f2f5;
+    --bg-color-tertiary: #fafafa;
+    --text-color-primary: rgba(0, 0, 0, 0.85);
+    --text-color-secondary: rgba(0, 0, 0, 0.65);
+    --text-color-tertiary: rgba(0, 0, 0, 0.45);
+  }
+}

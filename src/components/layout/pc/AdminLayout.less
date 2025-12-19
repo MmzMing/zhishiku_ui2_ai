@@ -1,0 +1,75 @@
+/**
+ * 后台布局样式 - 支持主题切换
+ */
+
+.admin-layout {
+  min-height: 100vh;
+}
+
+/* 侧边栏 */
+.admin-sider {
+  background: var(--bg-color-primary);
+  
+  .admin-logo {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    a {
+      color: #fff;
+      font-size: 18px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+  }
+}
+
+/* 页头 */
+.admin-header {
+  background: var(--bg-color-primary) !important;
+  padding: 0 24px !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color-light);
+  height: 64px;
+  line-height: 64px;
+
+  h2 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--text-color-primary);
+  }
+}
+
+/* 内容区域 */
+.admin-content {
+  margin: 0;
+  background: var(--bg-color-secondary) !important;
+  min-height: calc(100vh - 64px);
+}
+
+/* 深色主题适配 */
+[data-theme="dark"] {
+  .admin-header {
+    border-bottom-color: var(--border-color-base);
+  }
+
+  .admin-sider {
+    .ant-menu-dark {
+      background: #001529;
+    }
+  }
+}
+
+/* 浅色主题下的侧边栏保持深色 */
+[data-theme="light"] {
+  .admin-sider {
+    background: #001529;
+    
+    .ant-menu-dark {
+      background: #001529;
+    }
+  }
+}

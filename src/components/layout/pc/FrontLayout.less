@@ -1,0 +1,256 @@
+/**
+ * 前台布局样式 - 支持主题切换和滚动效果
+ */
+
+.front-layout {
+  min-height: 100vh;
+  background-color: var(--bg-color-secondary);
+}
+
+/* 页头样式 */
+.front-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: 64px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  .header-inner {
+    height: 100%;
+    background: var(--bg-color-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 0;
+    margin: 0;
+    padding: 0 24px;
+  }
+
+  .header-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  .header-logo {
+    display: flex;
+    align-items: center;
+
+    a {
+      text-decoration: none;
+    }
+
+    h1 {
+      color: var(--primary-color);
+      margin: 0;
+      font-size: 20px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+  }
+
+  .header-nav {
+    display: flex;
+    align-items: center;
+
+    .ant-btn-text {
+      color: var(--text-color-primary);
+      font-size: 15px;
+
+      &:hover {
+        color: var(--primary-color);
+        background: transparent;
+      }
+    }
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* 滚动后的页头样式 - 毛玻璃效果 */
+.front-header-scrolled {
+  .header-inner {
+    margin: 12px auto;
+    max-width: 1200px;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0 32px;
+    height: 52px;
+  }
+
+  .header-content {
+    height: 52px;
+  }
+
+  .header-logo h1 {
+    font-size: 18px;
+    color: var(--text-color-primary);
+  }
+
+  .header-nav .ant-btn-text {
+    font-size: 14px;
+    padding: 4px 12px;
+    color: var(--text-color-primary);
+  }
+
+  .header-actions {
+    .ant-input-search {
+      width: 180px !important;
+    }
+  }
+}
+
+/* 内容区域 */
+.front-content {
+  padding: 0;
+  padding-top: 64px;
+  min-height: calc(100vh - 64px - 150px);
+  background-color: var(--bg-color-secondary);
+}
+
+/* 首页内容区域透明背景 */
+.front-content:has(.home-page) {
+  background: transparent !important;
+}
+
+/* 为了兼容性，也可以通过路径判断 */
+body[data-route="/home"] .front-content,
+body[data-route="/"] .front-content {
+  background: transparent !important;
+}
+
+/* 页脚样式 */
+.front-footer {
+  text-align: center;
+  background: var(--bg-color-primary) !important;
+  padding: 24px 50px;
+  border-top: 1px solid var(--border-color-light);
+
+  .footer-links {
+    margin-bottom: 16px;
+
+    a {
+      color: var(--text-color-secondary);
+      transition: color 0.3s;
+
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
+  }
+
+  .footer-copyright {
+    color: var(--text-color-secondary);
+  }
+
+  .footer-stats {
+    color: var(--text-color-tertiary);
+    font-size: 12px;
+    margin-top: 8px;
+  }
+}
+
+/* 深色主题适配 */
+[data-theme="dark"] {
+  .front-header {
+    .header-inner {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* 搜索框深色主题样式 */
+    .ant-input-search {
+      .ant-input-wrapper {
+        .ant-input {
+          background: var(--bg-color-tertiary);
+          border-color: var(--border-color-base);
+          color: var(--text-color-primary);
+
+          &::placeholder {
+            color: var(--text-color-tertiary);
+          }
+
+          &:hover,
+          &:focus {
+            border-color: var(--primary-color);
+          }
+        }
+
+        .ant-input-group-addon {
+          background: transparent;
+          border-color: var(--border-color-base);
+        }
+      }
+    }
+  }
+
+  /* 深色主题下的毛玻璃效果 */
+  .front-header-scrolled {
+    .header-inner {
+      background: rgba(20, 20, 20, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .header-logo h1 {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .header-nav .ant-btn-text {
+      color: rgba(255, 255, 255, 0.9);
+
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
+  }
+
+  .front-footer {
+    border-top-color: var(--border-color-base);
+  }
+}
+
+/* 浅色主题下滚动后的样式微调 */
+[data-theme="light"] {
+  .front-header-scrolled {
+    .header-inner {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+  .front-header {
+    .header-inner {
+      padding: 0 16px;
+    }
+
+    .header-nav {
+      display: none;
+    }
+
+    .header-actions {
+      .ant-input-search {
+        width: 150px !important;
+      }
+    }
+  }
+
+  .front-header-scrolled {
+    .header-inner {
+      margin: 8px 16px;
+      max-width: calc(100% - 32px);
+      padding: 0 16px;
+    }
+  }
+}

@@ -1,0 +1,105 @@
+/**
+ * 通用输入框样式
+ */
+
+.common-input-wrapper {
+  position: relative;
+  
+  .common-input {
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    
+    &:focus {
+      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+    }
+    
+    // 响应式适配
+    @media (max-width: 768px) {
+      min-height: 44px;
+      font-size: 16px; // 防止iOS缩放
+    }
+  }
+  
+  .input-count {
+    position: absolute;
+    right: 8px;
+    bottom: -20px;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.45);
+  }
+  
+  .input-error {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #f5222d;
+  }
+  
+  &.has-error {
+    .common-input {
+      border-color: #f5222d;
+      
+      &:focus {
+        box-shadow: 0 0 0 2px rgba(245, 34, 45, 0.2);
+      }
+    }
+  }
+}
+
+.common-textarea-wrapper {
+  position: relative;
+  
+  .common-textarea {
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    
+    &:focus {
+      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+    }
+    
+    // 响应式适配
+    @media (max-width: 768px) {
+      font-size: 16px; // 防止iOS缩放
+    }
+  }
+  
+  .textarea-count {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.45);
+    background: rgba(255, 255, 255, 0.8);
+    padding: 2px 4px;
+    border-radius: 2px;
+  }
+}
+
+.common-password {
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  
+  &:focus {
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  }
+  
+  // 响应式适配
+  @media (max-width: 768px) {
+    min-height: 44px;
+    font-size: 16px; // 防止iOS缩放
+  }
+}
+
+.common-search {
+  .ant-input-search-button {
+    // 响应式适配
+    @media (max-width: 768px) {
+      min-width: 44px;
+      min-height: 44px;
+    }
+  }
+  
+  .ant-input {
+    // 响应式适配
+    @media (max-width: 768px) {
+      min-height: 44px;
+      font-size: 16px; // 防止iOS缩放
+    }
+  }
+}

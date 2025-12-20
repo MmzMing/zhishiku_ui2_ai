@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { Form, Input, Button, Steps, message, Card } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { MailOutlined, LockOutlined, SafetyOutlined } from '@ant-design/icons';
+import * as authApi from '../../api/auth/authApi';
 
 const { Step } = Steps;
 

@@ -17,6 +17,7 @@ import {
   ReloadOutlined
 } from '@ant-design/icons';
 import { useDashboardData } from '../../../hooks/admin/useDashboardData';
+import * as dashboardApi from '../../../api/admin/dashboardApi';
 import dayjs from 'dayjs';
 
 const { Title, Text } = Typography;
@@ -28,10 +29,10 @@ const Dashboard: React.FC = () => {
     dayjs().subtract(30, 'day'),
     dayjs()
   ]);
+  const [loading, setLoading] = useState(false);
 
   // 使用Dashboard数据Hook
   const {
-    loading,
     visitTrendData,
     categoryData,
     statsOverview,
@@ -39,6 +40,45 @@ const Dashboard: React.FC = () => {
     todoList,
     refreshData
   } = useDashboardData(dateRange[1].diff(dateRange[0], 'day'));
+
+  // 手动刷新数据
+  const handleRefresh = async () => {
+    setLoading(true);
+    try {
+      await Promise.all([
+        dashboardApi.getVisitTrend(),
+        dashboardApi.getCategoryStats(),
+        dashboardApi.getStatsOverview(),
+        dashboardApi.getRecentActivities(),
+        dashboardApi.getTodoList()
+      ]);
+      refreshData();
+    } catch (error) {
+      console.error('刷新数据失败:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 处理日期范围变化
+  const handleDateRangeChange = async (dates: any) => {
+    if (dates) {
+      setDateRange([dates[0]!, dates[1]!]);
+      setLoading(true);
+      try {
+        // 根据新的日期范围重新获取数据
+        await dashboardApi.getVisitTrend({
+          startDate: dates[0].format('YYYY-MM-DD'),
+          endDate: dates[1].format('YYYY-MM-DD')
+        });
+        refreshData();
+      } catch (error) {
+        console.error('获取数据失败:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
 
   // 访问趋势图表配置
   const visitTrendConfig = {
@@ -183,16 +223,12 @@ const Dashboard: React.FC = () => {
         <Space>
           <RangePicker
             value={dateRange}
-            onChange={(dates) => {
-              if (dates) {
-                setDateRange([dates[0]!, dates[1]!]);
-              }
-            }}
+            onChange={handleDateRangeChange}
             format="YYYY-MM-DD"
           />
           <Button 
             icon={<ReloadOutlined />} 
-            onClick={refreshData}
+            onClick={handleRefresh}
             loading={loading}
           >
             刷新

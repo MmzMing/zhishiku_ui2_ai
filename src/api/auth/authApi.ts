@@ -8,7 +8,9 @@ import { get, post } from '../../utils/request';
 export interface LoginParams {
   username: string;
   password: string;
-  remember?: boolean;
+  code: string;
+  uuid: string;
+  rememberMe?: boolean;
 }
 
 // 手机登录参数
@@ -47,6 +49,20 @@ export interface LoginResponse {
   user: UserInfo;
   expiresIn: number;
 }
+
+// 图形验证码响应
+export interface CaptchaResponse {
+  captchaOnOff: boolean;
+  uuid: string;
+  img: string;
+}
+
+/**
+ * 获取图形验证码
+ */
+export const getCaptcha = (): Promise<CaptchaResponse> => {
+  return get('/graph/code');
+};
 
 /**
  * 用户名密码登录

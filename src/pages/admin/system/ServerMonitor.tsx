@@ -6,6 +6,7 @@ import React from 'react';
 import { Card, Table, Progress, Tag, Button, Statistic, Row, Col, Space } from 'antd';
 import { CloudServerOutlined, ReloadOutlined, CheckCircleOutlined, WarningOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
+import * as systemApi from '../../../api/admin/systemApi';
 
 const ServerMonitor: React.FC = () => {
   const serverData = [

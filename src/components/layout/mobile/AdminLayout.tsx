@@ -134,6 +134,8 @@ const AdminLayoutMobile: React.FC = () => {
       label: '内容管理',
       children: [
         { key: '/admin/content/list', icon: <FileTextOutlined />, label: '文档管理' },
+        { key: '/admin/content/blog', icon: <FileTextOutlined />, label: '博客管理' },
+        { key: '/admin/content/comment', icon: <AuditOutlined />, label: '评论审核' },
         { key: '/admin/content/category', icon: <FolderOutlined />, label: '分类标签' },
         { key: '/admin/content/tag', icon: <TagOutlined />, label: '标签管理' },
         { key: '/admin/content/stats', icon: <BarChartOutlined />, label: '统计分析' },

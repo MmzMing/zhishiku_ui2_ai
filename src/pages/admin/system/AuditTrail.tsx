@@ -6,6 +6,7 @@ import React from 'react';
 import { Card, Table, Tag, Button, Statistic, Row, Col } from 'antd';
 import { AuditOutlined, DownloadOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
+import * as systemApi from '../../../api/admin/systemApi';
 
 const AuditTrail: React.FC = () => {
   const auditData = [

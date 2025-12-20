@@ -6,13 +6,105 @@ import React, { useState } from 'react';
 import { Card, Table, Button, Space, Tag, Statistic, Row, Col, Popconfirm, message, Modal, Form, Input, InputNumber, Select, Switch, Typography } from 'antd';
 import { SettingOutlined, PlusOutlined, EditOutlined, DeleteOutlined, ReloadOutlined, ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
+import * as pointApi from '../../../api/admin/pointApi';
 
 const { Text } = Typography;
 const { Option } = Select;
 
 const PointRules: React.FC = () => {
   const [addRuleModalVisible, setAddRuleModalVisible] = useState(false);
+  const [editRuleModalVisible, setEditRuleModalVisible] = useState(false);
+  const [selectedRule, setSelectedRule] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [form] = Form.useForm();
+  const [editForm] = Form.useForm();
 
+  // 刷新数据
+  const handleRefresh = async () => {
+    setLoading(true);
+    try {
+      await pointApi.getPointRules({ page: 1, pageSize: 100 });
+      message.success('刷新成功');
+    } catch (error) {
+      message.error('刷新失败');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 新增规则
+  const handleAddRule = async () => {
+    try {
+      const values = await form.validateFields();
+      await pointApi.createPointRule({
+        name: values.name,
+        code: values.name.toLowerCase().replace(/\s+/g, '_'),
+        description: values.remark || '',
+        actionType: values.type === 'earn' ? 'login' : 'download',
+        points: values.type === 'earn' ? values.points : -Math.abs(values.points),
+        maxDaily: values.limit ? parseInt(values.limit) : undefined
+      });
+      message.success('新增成功');
+      setAddRuleModalVisible(false);
+      form.resetFields();
+      handleRefresh();
+    } catch (error) {
+      message.error('新增失败');
+    }
+  };
+
+  // 编辑规则
+  const handleEditRule = async () => {
+    try {
+      const values = await editForm.validateFields();
+      await pointApi.updatePointRule(selectedRule.id, {
+        name: values.name,
+        description: values.remark || '',
+        points: values.type === 'earn' ? values.points : -Math.abs(values.points),
+        maxDaily: values.limit ? parseInt(values.limit) : undefined
+      });
+      message.success('保存成功');
+      setEditRuleModalVisible(false);
+      handleRefresh();
+    } catch (error) {
+      message.error('保存失败');
+    }
+  };
+
+  // 删除规则
+  const handleDeleteRule = async (id: number) => {
+    try {
+      await pointApi.deletePointRule(id);
+      message.success('删除成功');
+      handleRefresh();
+    } catch (error) {
+      message.error('删除失败');
+    }
+  };
+
+  // 切换规则状态
+  const handleToggleStatus = async (id: number, status: 'enabled' | 'disabled') => {
+    try {
+      await pointApi.updatePointRuleStatus(id, status);
+      message.success(status === 'enabled' ? '已启用' : '已禁用');
+      handleRefresh();
+    } catch (error) {
+      message.error('状态更新失败');
+    }
+  };
+
+  // 编辑按钮点击
+  const handleEditClick = (record: any) => {
+    setSelectedRule(record);
+    editForm.setFieldsValue({
+      name: record.name,
+      type: record.type,
+      points: Math.abs(record.points),
+      limit: record.limit,
+      remark: record.remark
+    });
+    setEditRuleModalVisible(true);
+  };
   const ruleData = [
     { id: 1, name: '每日签到', type: 'earn', points: 10, limit: '每日1次', status: 'enabled', remark: '每日首次登录奖励' },
     { id: 2, name: '上传文档', type: 'earn', points: 50, limit: '每日5次', status: 'enabled', remark: '上传文档审核通过后奖励' },
@@ -27,14 +119,16 @@ const PointRules: React.FC = () => {
     { title: '类型', dataIndex: 'type', key: 'type', render: (type) => type === 'earn' ? <Tag color="success" icon={<ArrowUpOutlined />}>获取</Tag> : <Tag color="error" icon={<ArrowDownOutlined />}>消耗</Tag> },
     { title: '积分值', dataIndex: 'points', key: 'points', render: (points) => <Text strong style={{ color: points > 0 ? '#52c41a' : '#ff4d4f' }}>{points > 0 ? `+${points}` : points}</Text> },
     { title: '限制', dataIndex: 'limit', key: 'limit' },
-    { title: '状态', dataIndex: 'status', key: 'status', render: (status) => <Switch checked={status === 'enabled'} checkedChildren="启用" unCheckedChildren="禁用" onChange={(checked) => message.success(checked ? '已启用' : '已禁用')} /> },
+    { title: '状态', dataIndex: 'status', key: 'status', render: (status, record) => <Switch checked={status === 'enabled'} checkedChildren="启用" unCheckedChildren="禁用" onChange={(checked) => handleToggleStatus(record.id, checked ? 'enabled' : 'disabled')} /> },
     { title: '备注', dataIndex: 'remark', key: 'remark', ellipsis: true },
     {
       title: '操作', key: 'action',
-      render: () => (
+      render: (_, record) => (
         <Space>
-          <Button type="text" size="small" icon={<EditOutlined />} />
-          <Popconfirm title="确定删除？" onConfirm={() => message.success('删除成功')}><Button type="text" size="small" danger icon={<DeleteOutlined />} /></Popconfirm>
+          <Button type="text" size="small" icon={<EditOutlined />} onClick={() => handleEditClick(record)} />
+          <Popconfirm title="确定删除？" onConfirm={() => handleDeleteRule(record.id)}>
+            <Button type="text" size="small" danger icon={<DeleteOutlined />} />
+          </Popconfirm>
         </Space>
       ),
     },
@@ -52,18 +146,66 @@ const PointRules: React.FC = () => {
       <Card>
         <Space style={{ marginBottom: 16 }}>
           <Button type="primary" icon={<PlusOutlined />} onClick={() => setAddRuleModalVisible(true)}>新增规则</Button>
-          <Button icon={<ReloadOutlined />}>刷新</Button>
+          <Button icon={<ReloadOutlined />} onClick={handleRefresh} loading={loading}>刷新</Button>
         </Space>
-        <Table columns={columns} dataSource={ruleData} rowKey="id" pagination={false} />
+        <Table columns={columns} dataSource={ruleData} rowKey="id" loading={loading} pagination={false} />
       </Card>
 
-      <Modal title="新增积分规则" open={addRuleModalVisible} onCancel={() => setAddRuleModalVisible(false)} onOk={() => { message.success('新增成功'); setAddRuleModalVisible(false); }}>
-        <Form layout="vertical">
-          <Form.Item label="规则名称" required><Input placeholder="请输入规则名称" /></Form.Item>
-          <Form.Item label="规则类型" required><Select placeholder="请选择类型"><Option value="earn">获取积分</Option><Option value="spend">消耗积分</Option></Select></Form.Item>
-          <Form.Item label="积分值" required><InputNumber style={{ width: '100%' }} placeholder="请输入积分值" /></Form.Item>
-          <Form.Item label="每日限制"><Input placeholder="如：每日5次，无限制" /></Form.Item>
-          <Form.Item label="备注"><Input.TextArea rows={3} placeholder="请输入备注" /></Form.Item>
+      <Modal 
+        title="新增积分规则" 
+        open={addRuleModalVisible} 
+        onCancel={() => setAddRuleModalVisible(false)} 
+        onOk={handleAddRule}
+        confirmLoading={loading}
+      >
+        <Form form={form} layout="vertical">
+          <Form.Item label="规则名称" name="name" rules={[{ required: true, message: '请输入规则名称' }]}>
+            <Input placeholder="请输入规则名称" />
+          </Form.Item>
+          <Form.Item label="规则类型" name="type" rules={[{ required: true, message: '请选择类型' }]}>
+            <Select placeholder="请选择类型">
+              <Option value="earn">获取积分</Option>
+              <Option value="spend">消耗积分</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item label="积分值" name="points" rules={[{ required: true, message: '请输入积分值' }]}>
+            <InputNumber style={{ width: '100%' }} placeholder="请输入积分值" min={1} />
+          </Form.Item>
+          <Form.Item label="每日限制" name="limit">
+            <Input placeholder="如：5（表示每日5次），留空表示无限制" />
+          </Form.Item>
+          <Form.Item label="备注" name="remark">
+            <Input.TextArea rows={3} placeholder="请输入备注" />
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      <Modal 
+        title="编辑积分规则" 
+        open={editRuleModalVisible} 
+        onCancel={() => setEditRuleModalVisible(false)} 
+        onOk={handleEditRule}
+        confirmLoading={loading}
+      >
+        <Form form={editForm} layout="vertical">
+          <Form.Item label="规则名称" name="name" rules={[{ required: true, message: '请输入规则名称' }]}>
+            <Input placeholder="请输入规则名称" />
+          </Form.Item>
+          <Form.Item label="规则类型" name="type" rules={[{ required: true, message: '请选择类型' }]}>
+            <Select placeholder="请选择类型">
+              <Option value="earn">获取积分</Option>
+              <Option value="spend">消耗积分</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item label="积分值" name="points" rules={[{ required: true, message: '请输入积分值' }]}>
+            <InputNumber style={{ width: '100%' }} placeholder="请输入积分值" min={1} />
+          </Form.Item>
+          <Form.Item label="每日限制" name="limit">
+            <Input placeholder="如：5（表示每日5次），留空表示无限制" />
+          </Form.Item>
+          <Form.Item label="备注" name="remark">
+            <Input.TextArea rows={3} placeholder="请输入备注" />
+          </Form.Item>
         </Form>
       </Modal>
     </div>

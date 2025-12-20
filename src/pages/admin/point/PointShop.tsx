@@ -6,13 +6,106 @@ import React, { useState } from 'react';
 import { Card, Table, Button, Space, Tag, Statistic, Row, Col, Popconfirm, message, Modal, Form, Input, InputNumber, Select, Upload, Image, Typography } from 'antd';
 import { GiftOutlined, PlusOutlined, EditOutlined, DeleteOutlined, ReloadOutlined, UploadOutlined, ShoppingOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
+import * as pointApi from '../../../api/admin/pointApi';
 
 const { Option } = Select;
 const { Text } = Typography;
 
 const PointShop: React.FC = () => {
   const [addGoodsModalVisible, setAddGoodsModalVisible] = useState(false);
+  const [editGoodsModalVisible, setEditGoodsModalVisible] = useState(false);
+  const [selectedGoods, setSelectedGoods] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [form] = Form.useForm();
+  const [editForm] = Form.useForm();
 
+  // 刷新数据
+  const handleRefresh = async () => {
+    setLoading(true);
+    try {
+      await pointApi.getPointProducts({ page: 1, pageSize: 100 });
+      message.success('刷新成功');
+    } catch (error) {
+      message.error('刷新失败');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 新增商品
+  const handleAddGoods = async () => {
+    try {
+      const values = await form.validateFields();
+      await pointApi.createPointProduct({
+        name: values.name,
+        description: values.description || '',
+        price: values.points,
+        stock: values.stock,
+        category: values.category,
+        type: values.category === 'virtual' ? 'virtual' : 'physical'
+      });
+      message.success('新增成功');
+      setAddGoodsModalVisible(false);
+      form.resetFields();
+      handleRefresh();
+    } catch (error) {
+      message.error('新增失败');
+    }
+  };
+
+  // 编辑商品
+  const handleEditGoods = async () => {
+    try {
+      const values = await editForm.validateFields();
+      await pointApi.updatePointProduct(selectedGoods.id, {
+        name: values.name,
+        description: values.description,
+        price: values.points,
+        stock: values.stock
+      });
+      message.success('保存成功');
+      setEditGoodsModalVisible(false);
+      handleRefresh();
+    } catch (error) {
+      message.error('保存失败');
+    }
+  };
+
+  // 删除商品
+  const handleDeleteGoods = async (id: number) => {
+    try {
+      await pointApi.deletePointProduct(id);
+      message.success('删除成功');
+      handleRefresh();
+    } catch (error) {
+      message.error('删除失败');
+    }
+  };
+
+  // 切换商品状态
+  const handleToggleStatus = async (record: any) => {
+    try {
+      const newStatus = record.status === 'online' ? 'soldout' : 'available';
+      await pointApi.updatePointProduct(record.id, { status: newStatus });
+      message.success(newStatus === 'available' ? '已上架' : '已下架');
+      handleRefresh();
+    } catch (error) {
+      message.error('状态更新失败');
+    }
+  };
+
+  // 编辑按钮点击
+  const handleEditClick = (record: any) => {
+    setSelectedGoods(record);
+    editForm.setFieldsValue({
+      name: record.name,
+      category: record.category,
+      points: record.points,
+      stock: record.stock,
+      description: record.description
+    });
+    setEditGoodsModalVisible(true);
+  };
   const goodsData = [
     { id: 1, name: 'VIP会员月卡', category: 'virtual', points: 500, stock: 999, exchanged: 156, status: 'online', image: 'https://via.placeholder.com/60' },
     { id: 2, name: '精品课程优惠券', category: 'virtual', points: 200, stock: 500, exchanged: 89, status: 'online', image: 'https://via.placeholder.com/60' },
@@ -33,9 +126,13 @@ const PointShop: React.FC = () => {
       title: '操作', key: 'action',
       render: (_, record) => (
         <Space>
-          <Button type="text" size="small" icon={<EditOutlined />} />
-          <Button type="text" size="small">{record.status === 'online' ? '下架' : '上架'}</Button>
-          <Popconfirm title="确定删除？" onConfirm={() => message.success('删除成功')}><Button type="text" size="small" danger icon={<DeleteOutlined />} /></Popconfirm>
+          <Button type="text" size="small" icon={<EditOutlined />} onClick={() => handleEditClick(record)} />
+          <Button type="text" size="small" onClick={() => handleToggleStatus(record)}>
+            {record.status === 'online' ? '下架' : '上架'}
+          </Button>
+          <Popconfirm title="确定删除？" onConfirm={() => handleDeleteGoods(record.id)}>
+            <Button type="text" size="small" danger icon={<DeleteOutlined />} />
+          </Popconfirm>
         </Space>
       ),
     },
@@ -61,21 +158,85 @@ const PointShop: React.FC = () => {
             <Option value="online">上架</Option>
             <Option value="offline">下架</Option>
           </Select>
-          <Button icon={<ReloadOutlined />}>刷新</Button>
+          <Button icon={<ReloadOutlined />} onClick={handleRefresh} loading={loading}>刷新</Button>
         </Space>
-        <Table columns={columns} dataSource={goodsData} rowKey="id" pagination={{ showSizeChanger: true, showTotal: (total) => `共 ${total} 件商品` }} />
+        <Table columns={columns} dataSource={goodsData} rowKey="id" loading={loading} pagination={{ showSizeChanger: true, showTotal: (total) => `共 ${total} 件商品` }} />
       </Card>
 
-      <Modal title="新增商品" open={addGoodsModalVisible} onCancel={() => setAddGoodsModalVisible(false)} onOk={() => { message.success('新增成功'); setAddGoodsModalVisible(false); }} width={600}>
-        <Form layout="vertical">
-          <Form.Item label="商品名称" required><Input placeholder="请输入商品名称" /></Form.Item>
-          <Form.Item label="商品分类" required><Select placeholder="请选择分类"><Option value="virtual">虚拟商品</Option><Option value="physical">实物商品</Option></Select></Form.Item>
+      <Modal 
+        title="新增商品" 
+        open={addGoodsModalVisible} 
+        onCancel={() => setAddGoodsModalVisible(false)} 
+        onOk={handleAddGoods}
+        confirmLoading={loading}
+        width={600}
+      >
+        <Form form={form} layout="vertical">
+          <Form.Item label="商品名称" name="name" rules={[{ required: true, message: '请输入商品名称' }]}>
+            <Input placeholder="请输入商品名称" />
+          </Form.Item>
+          <Form.Item label="商品分类" name="category" rules={[{ required: true, message: '请选择分类' }]}>
+            <Select placeholder="请选择分类">
+              <Option value="virtual">虚拟商品</Option>
+              <Option value="physical">实物商品</Option>
+            </Select>
+          </Form.Item>
           <Row gutter={16}>
-            <Col span={12}><Form.Item label="所需积分" required><InputNumber style={{ width: '100%' }} min={1} placeholder="请输入积分" /></Form.Item></Col>
-            <Col span={12}><Form.Item label="库存数量" required><InputNumber style={{ width: '100%' }} min={0} placeholder="请输入库存" /></Form.Item></Col>
+            <Col span={12}>
+              <Form.Item label="所需积分" name="points" rules={[{ required: true, message: '请输入积分' }]}>
+                <InputNumber style={{ width: '100%' }} min={1} placeholder="请输入积分" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item label="库存数量" name="stock" rules={[{ required: true, message: '请输入库存' }]}>
+                <InputNumber style={{ width: '100%' }} min={0} placeholder="请输入库存" />
+              </Form.Item>
+            </Col>
           </Row>
-          <Form.Item label="商品图片"><Upload listType="picture-card" maxCount={1}><div><UploadOutlined /><div style={{ marginTop: 8 }}>上传</div></div></Upload></Form.Item>
-          <Form.Item label="商品描述"><Input.TextArea rows={3} placeholder="请输入商品描述" /></Form.Item>
+          <Form.Item label="商品图片" name="image">
+            <Upload listType="picture-card" maxCount={1}>
+              <div><UploadOutlined /><div style={{ marginTop: 8 }}>上传</div></div>
+            </Upload>
+          </Form.Item>
+          <Form.Item label="商品描述" name="description">
+            <Input.TextArea rows={3} placeholder="请输入商品描述" />
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      <Modal 
+        title="编辑商品" 
+        open={editGoodsModalVisible} 
+        onCancel={() => setEditGoodsModalVisible(false)} 
+        onOk={handleEditGoods}
+        confirmLoading={loading}
+        width={600}
+      >
+        <Form form={editForm} layout="vertical">
+          <Form.Item label="商品名称" name="name" rules={[{ required: true, message: '请输入商品名称' }]}>
+            <Input placeholder="请输入商品名称" />
+          </Form.Item>
+          <Form.Item label="商品分类" name="category" rules={[{ required: true, message: '请选择分类' }]}>
+            <Select placeholder="请选择分类" disabled>
+              <Option value="virtual">虚拟商品</Option>
+              <Option value="physical">实物商品</Option>
+            </Select>
+          </Form.Item>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item label="所需积分" name="points" rules={[{ required: true, message: '请输入积分' }]}>
+                <InputNumber style={{ width: '100%' }} min={1} placeholder="请输入积分" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item label="库存数量" name="stock" rules={[{ required: true, message: '请输入库存' }]}>
+                <InputNumber style={{ width: '100%' }} min={0} placeholder="请输入库存" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Form.Item label="商品描述" name="description">
+            <Input.TextArea rows={3} placeholder="请输入商品描述" />
+          </Form.Item>
         </Form>
       </Modal>
     </div>

@@ -6,6 +6,7 @@ import React from 'react';
 import { Card, Row, Col, Tree, Table, Button, Space } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import type { DataNode } from 'antd/es/tree';
+import * as userApi from '../../../api/admin/userApi';
 
 const Department: React.FC = () => {
   const departmentTreeData: DataNode[] = [

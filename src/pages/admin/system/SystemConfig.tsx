@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { Card, Tabs, Form, Input, InputNumber, Switch, Button, message } from 'antd';
+import * as systemApi from '../../../api/admin/systemApi';
 
 const SystemConfig: React.FC = () => {
   return (

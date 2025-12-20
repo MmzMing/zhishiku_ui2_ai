@@ -32,6 +32,7 @@ import {
   CloseOutlined
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import * as videoApi from '../../../api/front/videoApi';
 
 const { Search } = Input;
 const { RangePicker } = DatePicker;
@@ -184,6 +185,13 @@ const VideoList: React.FC = () => {
   const VideoCard: React.FC<{ video: VideoItem }> = ({ video }) => (
     <Card
       hoverable
+      style={{ 
+        marginBottom: '16px',
+        cursor: 'pointer',
+        borderRadius: '16px',
+        overflow: 'hidden'
+      }}
+      onClick={() => window.location.href = `/video/${video.id}`}
       cover={
         <div style={{ position: 'relative' }}>
           <img
@@ -205,8 +213,8 @@ const VideoList: React.FC = () => {
             right: '8px',
             background: 'rgba(0,0,0,0.7)',
             color: 'white',
-            padding: '2px 6px',
-            borderRadius: '4px',
+            padding: '4px 8px',
+            borderRadius: '8px',
             fontSize: '12px'
           }}>
             {video.duration}
@@ -226,33 +234,22 @@ const VideoList: React.FC = () => {
         </div>
       }
       actions={[
-        <Space key="views">
+        <Space key="views" onClick={(e) => e.stopPropagation()}>
           <EyeOutlined />
           {formatNumber(video.views)}
         </Space>,
-        <Space key="likes">
+        <Space key="likes" onClick={(e) => e.stopPropagation()}>
           <LikeOutlined />
           {formatNumber(video.likes)}
         </Space>,
-        <Space key="time">
+        <Space key="time" onClick={(e) => e.stopPropagation()}>
           <ClockCircleOutlined />
           {video.publishTime}
         </Space>
       ]}
-      style={{ marginBottom: '16px' }}
     >
       <Card.Meta
-        title={
-          <Link 
-            to={`/video/${video.id}`}
-            style={{ 
-              color: 'inherit',
-              textDecoration: 'none'
-            }}
-          >
-            {video.title}
-          </Link>
-        }
+        title={video.title}
         description={
           <div>
             <p style={{ 
@@ -270,7 +267,18 @@ const VideoList: React.FC = () => {
             <div style={{ marginTop: '8px' }}>
               <Space wrap>
                 {video.tags.map(tag => (
-                  <Tag key={tag} color="blue">
+                  <Tag 
+                    key={tag} 
+                    color="blue"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSearch(tag);
+                    }}
+                    style={{ 
+                      cursor: 'pointer',
+                      borderRadius: '12px'
+                    }}
+                  >
                     {tag}
                   </Tag>
                 ))}
@@ -292,7 +300,7 @@ const VideoList: React.FC = () => {
   return (
     <div style={{ padding: '24px' }}>
       {/* 搜索和筛选区域 */}
-      <Card style={{ marginBottom: '24px' }}>
+      <Card style={{ marginBottom: '24px', borderRadius: '16px' }}>
         <Row gutter={[16, 16]} align="middle">
           <Col xs={24} sm={12} md={8}>
             <Search
@@ -301,6 +309,7 @@ const VideoList: React.FC = () => {
               enterButton={<SearchOutlined />}
               size="large"
               onSearch={handleSearch}
+              style={{ borderRadius: '12px' }}
             />
           </Col>
           <Col xs={12} sm={6} md={4}>
@@ -336,10 +345,11 @@ const VideoList: React.FC = () => {
               <Button 
                 icon={<FilterOutlined />}
                 onClick={() => setFilterVisible(true)}
+                style={{ borderRadius: '12px' }}
               >
                 高级筛选
                 {getActiveFilterCount() > 0 && (
-                  <Tag color="blue" style={{ marginLeft: 8 }}>
+                  <Tag color="blue" style={{ marginLeft: 8, borderRadius: '12px' }}>
                     {getActiveFilterCount()}
                   </Tag>
                 )}

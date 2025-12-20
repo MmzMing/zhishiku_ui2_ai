@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { Card, Table, Button, Space, Tag, Statistic, Row, Col, Popconfirm, message, Modal, Form, Input, Select, Upload, DatePicker, Typography } from 'antd';
 import { FileTextOutlined, PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined, SearchOutlined, ReloadOutlined, UploadOutlined, DownloadOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
+import * as contentApi from '../../../api/admin/contentApi';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;

@@ -13,7 +13,7 @@
 /* 搜索头部卡片 */
 .search-header-card {
   margin-bottom: 24px;
-  border-radius: 12px;
+  border-radius: 16px;
 }
 
 .search-header-card .ant-input-search-large .ant-input {
@@ -37,7 +37,7 @@
 
 /* 筛选侧边栏 */
 .filter-sidebar .ant-card {
-  border-radius: 12px;
+  border-radius: 16px;
   position: sticky;
   top: 80px;
 }
@@ -104,25 +104,38 @@
 
 /* 结果卡片 */
 .result-card {
-  border-radius: 12px;
+  border-radius: 16px;
   transition: all 0.3s ease;
   cursor: pointer;
+  user-select: none;
+  overflow: hidden;
 }
 
 .result-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: var(--primary-color, #1890ff);
+}
+
+.result-card:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.result-card .ant-card-body {
+  padding: 20px;
 }
 
 .result-card-content {
   display: flex;
   gap: 20px;
+  width: 100%;
 }
 
 .result-thumbnail {
   width: 180px;
   height: 120px;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
   flex-shrink: 0;
   position: relative;
@@ -153,7 +166,7 @@
   color: #fff;
   font-size: 12px;
   padding: 2px 8px;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .result-info {
@@ -192,6 +205,13 @@
 .result-tags .ant-tag {
   margin-right: 8px;
   margin-bottom: 4px;
+  transition: all 0.2s ease;
+  border-radius: 12px;
+}
+
+.result-tags .ant-tag:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.3);
 }
 
 .result-meta {
@@ -259,7 +279,7 @@
   margin-top: 32px;
   padding: 24px;
   background: var(--bg-color-tertiary, #fafafa);
-  border-radius: 12px;
+  border-radius: 16px;
 }
 
 .hot-keywords-section .ant-typography-h5 {

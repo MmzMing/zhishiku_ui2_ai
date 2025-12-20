@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { Card, Table, Button, Space, Tag, Select, Popconfirm, message, Modal, Form, Input, Switch, Typography } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, ReloadOutlined, DragOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
+import * as dictionaryApi from '../../../api/admin/dictionaryApi';
 
 const { Text } = Typography;
 const { Option } = Select;

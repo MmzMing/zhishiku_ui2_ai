@@ -46,6 +46,7 @@ import {
   ArrowDownOutlined
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import * as homeApi from '../../../api/front/homeApi';
 import './Home.css';
 
 const { Title, Paragraph, Text } = Typography;

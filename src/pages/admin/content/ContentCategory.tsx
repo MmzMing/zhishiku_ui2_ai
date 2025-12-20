@@ -7,6 +7,7 @@ import { Card, Table, Button, Space, Tag, Statistic, Row, Col, Popconfirm, messa
 import { FolderOutlined, PlusOutlined, EditOutlined, DeleteOutlined, ReloadOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 import type { DataNode } from 'antd/es/tree';
+import * as contentApi from '../../../api/admin/contentApi';
 
 const { Option } = Select;
 const { Text } = Typography;

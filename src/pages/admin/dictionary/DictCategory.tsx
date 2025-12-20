@@ -7,6 +7,7 @@ import { Card, Table, Button, Space, Tag, Statistic, Row, Col, Input, Select, Po
 import { FolderOutlined, FileTextOutlined, PlusOutlined, EditOutlined, DeleteOutlined, ReloadOutlined, UploadOutlined, DownloadOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import type { ColumnsType } from 'antd/es/table';
+import * as dictionaryApi from '../../../api/admin/dictionaryApi';
 
 const { Text } = Typography;
 const { Option } = Select;

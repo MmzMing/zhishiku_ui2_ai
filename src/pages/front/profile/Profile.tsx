@@ -26,6 +26,7 @@ import {
   Radio,
   Divider
 } from 'antd';
+import * as profileApi from '../../../api/front/profileApi';
 import {
   UserOutlined,
   EditOutlined,
@@ -100,7 +101,9 @@ const Profile: React.FC = () => {
   const [contentTab, setContentTab] = useState('documents');
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
+  const [passwordForm] = Form.useForm();
 
   // 设置状态
   const [settings, setSettings] = useState({
@@ -111,45 +114,106 @@ const Profile: React.FC = () => {
   });
 
   // 编辑个人信息
-  const handleEditInfo = () => {
-    form.setFieldsValue({
-      nickname: '技术达人',
-      phone: '13812341234',
-      email: 'test@example.com',
-    });
-    setEditModalVisible(true);
+  const handleEditInfo = async () => {
+    try {
+      const userInfo = await profileApi.getUserProfile();
+      form.setFieldsValue({
+        nickname: userInfo.nickname,
+        phone: userInfo.phone,
+        email: userInfo.email,
+      });
+      setEditModalVisible(true);
+    } catch (error) {
+      message.error('获取用户信息失败');
+    }
   };
 
   // 保存个人信息
   const handleSaveInfo = async () => {
     try {
-      await form.validateFields();
+      setLoading(true);
+      const values = await form.validateFields();
+      await profileApi.updateUserProfile(values);
       message.success('信息修改成功');
       setEditModalVisible(false);
     } catch (error) {
-      // 验证失败
+      message.error('保存失败');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 修改密码
+  const handleChangePassword = async () => {
+    try {
+      setLoading(true);
+      const values = await passwordForm.validateFields();
+      await profileApi.changePassword({
+        oldPassword: values.oldPassword,
+        newPassword: values.newPassword
+      });
+      message.success('密码修改成功');
+      setPasswordModalVisible(false);
+      passwordForm.resetFields();
+    } catch (error) {
+      message.error('密码修改失败');
+    } finally {
+      setLoading(false);
     }
   };
 
   // 删除内容
-  const handleDeleteContent = (id: number, type: string) => {
-    message.success('删除成功');
+  const handleDeleteContent = async (id: string, type: string) => {
+    try {
+      await profileApi.deleteUserContent(id);
+      message.success('删除成功');
+    } catch (error) {
+      message.error('删除失败');
+    }
   };
 
   // 下架/上架内容
-  const handleToggleStatus = (id: number, currentStatus: string) => {
-    const newStatus = currentStatus === 'online' ? '已下架' : '已上架';
-    message.success(newStatus);
+  const handleToggleStatus = async (id: string, currentStatus: string) => {
+    try {
+      const newStatus = currentStatus === 'online' ? 'draft' : 'published';
+      await profileApi.updateContentStatus(id, newStatus);
+      message.success(newStatus === 'published' ? '已上架' : '已下架');
+    } catch (error) {
+      message.error('状态更新失败');
+    }
   };
 
   // 清空浏览历史
-  const handleClearHistory = () => {
-    message.success('浏览历史已清空');
+  const handleClearHistory = async () => {
+    try {
+      await profileApi.clearBrowseHistory();
+      message.success('浏览历史已清空');
+    } catch (error) {
+      message.error('清空失败');
+    }
   };
 
   // 取消收藏
-  const handleCancelCollect = (id: number) => {
-    message.success('已取消收藏');
+  const handleCancelCollect = async (id: string) => {
+    try {
+      await profileApi.removeFavorite(id);
+      message.success('已取消收藏');
+    } catch (error) {
+      message.error('取消收藏失败');
+    }
+  };
+
+  // 上传头像
+  const handleUploadAvatar = async (file: File) => {
+    try {
+      setLoading(true);
+      await profileApi.uploadAvatar(file);
+      message.success('头像上传成功');
+    } catch (error) {
+      message.error('头像上传失败');
+    } finally {
+      setLoading(false);
+    }
   };
 
   // 渲染状态标签
@@ -264,14 +328,14 @@ const Profile: React.FC = () => {
                         <Button 
                           type="link" 
                           size="small"
-                          onClick={() => handleToggleStatus(item.id, item.status)}
+                          onClick={() => handleToggleStatus(item.id.toString(), item.status)}
                         >
                           {item.status === 'online' ? '下架' : '上架'}
                         </Button>,
                         <Popconfirm
                           title="确定删除该内容？"
                           description="删除后不可恢复"
-                          onConfirm={() => handleDeleteContent(item.id, contentTab)}
+                          onConfirm={() => handleDeleteContent(item.id.toString(), contentTab)}
                           okText="确定"
                           cancelText="取消"
                         >
@@ -330,7 +394,7 @@ const Profile: React.FC = () => {
                           title="确定取消收藏？"
                           onConfirm={(e) => {
                             e?.stopPropagation();
-                            handleCancelCollect(item.id);
+                            handleCancelCollect(item.id.toString());
                           }}
                           okText="确定"
                           cancelText="取消"
@@ -554,6 +618,7 @@ const Profile: React.FC = () => {
         open={editModalVisible}
         onOk={handleSaveInfo}
         onCancel={() => setEditModalVisible(false)}
+        confirmLoading={loading}
         okText="保存"
         cancelText="取消"
       >
@@ -592,15 +657,13 @@ const Profile: React.FC = () => {
       <Modal
         title="修改密码"
         open={passwordModalVisible}
-        onOk={() => {
-          message.success('密码修改成功');
-          setPasswordModalVisible(false);
-        }}
+        onOk={handleChangePassword}
         onCancel={() => setPasswordModalVisible(false)}
+        confirmLoading={loading}
         okText="确认修改"
         cancelText="取消"
       >
-        <Form layout="vertical">
+        <Form form={passwordForm} layout="vertical">
           <Form.Item
             name="oldPassword"
             label="原密码"

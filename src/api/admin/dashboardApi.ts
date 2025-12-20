@@ -57,11 +57,15 @@ export interface TodoItem {
 
 /**
  * 获取访问趋势数据
- * @param days 天数，默认30天
+ * @param params 查询参数
  */
-export const getVisitTrend = (days: number = 30): Promise<ApiResponse<VisitTrendData[]>> => {
+export const getVisitTrend = (params?: {
+  days?: number;
+  startDate?: string;
+  endDate?: string;
+}): Promise<ApiResponse<VisitTrendData[]>> => {
   return get('/api/admin/dashboard/visit-trend', {
-    params: { days }
+    params: params || { days: 30 }
   });
 };
 

@@ -1,0 +1,568 @@
+/**
+ * 登录页面样式 - 左右分栏布局
+ */
+
+.login-container {
+  display: flex;
+  min-height: 100vh;
+  background: #1a1a2e;
+}
+
+/* 左侧介绍区域 */
+.login-left {
+  flex: 1;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #6B8DD6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-left::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+}
+
+.login-left-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: white;
+}
+
+.logo-circle {
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  margin: 0 auto 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+}
+
+.logo-inner {
+  width: 60px;
+  height: 60px;
+  background: white;
+  border-radius: 50%;
+}
+
+.platform-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.platform-subtitle {
+  font-size: 16px;
+  opacity: 0.9;
+  margin-bottom: 40px;
+}
+
+.feature-list {
+  text-align: left;
+  display: inline-block;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  font-size: 15px;
+}
+
+.feature-dot {
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+/* 右侧登录区域 */
+.login-right {
+  flex: 1;
+  background: #16213e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.login-form-container {
+  width: 100%;
+  max-width: 420px;
+  padding: 40px;
+  background: #1f2b47;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.theme-toggle-placeholder {
+  height: 24px;
+  text-align: right;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.login-header h2 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.login-header p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+}
+
+/* Tabs 样式 */
+.login-tabs {
+  margin-bottom: 24px;
+}
+
+.login-tabs .ant-tabs-nav::before {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.login-tabs .ant-tabs-tab {
+  color: rgba(255, 255, 255, 0.5);
+  padding: 12px 20px;
+}
+
+.login-tabs .ant-tabs-tab:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.login-tabs .ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #1890ff !important;
+}
+
+.login-tabs .ant-tabs-ink-bar {
+  background: #1890ff;
+}
+
+.tab-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 表单样式 */
+.login-form .ant-input-affix-wrapper {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+.login-form .ant-input-affix-wrapper:hover,
+.login-form .ant-input-affix-wrapper:focus,
+.login-form .ant-input-affix-wrapper-focused {
+  border-color: #1890ff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.login-form .ant-input {
+  background: transparent;
+  color: #fff;
+}
+
+.login-form .ant-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.input-icon {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 16px;
+}
+
+/* 验证码行 */
+.captcha-row {
+  display: flex;
+  gap: 12px;
+}
+
+.captcha-input {
+  flex: 1;
+}
+
+.captcha-image {
+  width: 120px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.captcha-image:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.captcha-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.captcha-loading,
+.captcha-placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+}
+
+/* 短信验证码行 */
+.sms-code-row {
+  display: flex;
+  gap: 12px;
+}
+
+.sms-input {
+  flex: 1;
+}
+
+.sms-button {
+  width: 120px;
+  height: 48px;
+  border-radius: 8px;
+  background: rgba(24, 144, 255, 0.2);
+  border: 1px solid rgba(24, 144, 255, 0.3);
+  color: #1890ff;
+}
+
+.sms-button:hover:not(:disabled) {
+  background: rgba(24, 144, 255, 0.3);
+  border-color: #1890ff;
+  color: #1890ff;
+}
+
+.sms-button:disabled {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* 表单选项 */
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-options .ant-checkbox-wrapper {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.form-options .ant-checkbox-inner {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.form-options .ant-checkbox-checked .ant-checkbox-inner {
+  background: #1890ff;
+  border-color: #1890ff;
+}
+
+.forgot-link {
+  color: #1890ff;
+  font-size: 14px;
+}
+
+.forgot-link:hover {
+  color: #40a9ff;
+}
+
+/* 登录按钮 */
+.login-button {
+  height: 48px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+  border: none;
+  letter-spacing: 4px;
+}
+
+.login-button:hover {
+  background: linear-gradient(135deg, #40a9ff 0%, #1890ff 100%);
+}
+
+/* 注册链接 */
+.register-link {
+  text-align: center;
+  margin: 20px 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+}
+
+.register-link a {
+  color: #1890ff;
+  margin-left: 8px;
+  font-weight: 500;
+}
+
+.register-link a:hover {
+  color: #40a9ff;
+}
+
+/* 第三方登录 */
+.third-party-login {
+  margin-top: 20px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.divider span {
+  padding: 0 16px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 13px;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.social-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 22px;
+}
+
+.social-icon.wechat {
+  background: #07c160;
+  color: white;
+}
+
+.social-icon.wechat:hover {
+  background: #06ad56;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(7, 193, 96, 0.4);
+}
+
+.social-icon.qq {
+  background: #12b7f5;
+  color: white;
+}
+
+.social-icon.qq:hover {
+  background: #10a5de;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(18, 183, 245, 0.4);
+}
+
+.social-icon.github {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.social-icon.github:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+/* 响应式适配 */
+@media (max-width: 992px) {
+  .login-container {
+    flex-direction: column;
+  }
+
+  .login-left {
+    padding: 40px 20px;
+    min-height: 300px;
+  }
+
+  .platform-title {
+    font-size: 26px;
+  }
+
+  .feature-list {
+    display: none;
+  }
+
+  .login-right {
+    padding: 20px;
+  }
+
+  .login-form-container {
+    padding: 30px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-left {
+    min-height: 200px;
+    padding: 30px 16px;
+  }
+
+  .logo-circle {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 20px;
+  }
+
+  .logo-inner {
+    width: 40px;
+    height: 40px;
+  }
+
+  .platform-title {
+    font-size: 22px;
+  }
+
+  .platform-subtitle {
+    font-size: 14px;
+    margin-bottom: 0;
+  }
+
+  .login-form-container {
+    padding: 24px 20px;
+  }
+
+  .login-header h2 {
+    font-size: 24px;
+  }
+
+  .captcha-image {
+    width: 100px;
+  }
+
+  .sms-button {
+    width: 100px;
+    font-size: 12px;
+  }
+}
+
+/* 暗色主题已经是默认样式，亮色主题适配 */
+[data-theme='light'] .login-container {
+  background: #f0f2f5;
+}
+
+[data-theme='light'] .login-left {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #6B8DD6 100%);
+}
+
+[data-theme='light'] .login-right {
+  background: #fff;
+}
+
+[data-theme='light'] .login-form-container {
+  background: #fff;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='light'] .login-header h2 {
+  color: #1f2b47;
+}
+
+[data-theme='light'] .login-header p {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+[data-theme='light'] .login-tabs .ant-tabs-tab {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+[data-theme='light'] .login-tabs .ant-tabs-tab:hover {
+  color: rgba(0, 0, 0, 0.85);
+}
+
+[data-theme='light'] .login-form .ant-input-affix-wrapper {
+  background: #f5f5f5;
+  border-color: #d9d9d9;
+}
+
+[data-theme='light'] .login-form .ant-input-affix-wrapper:hover,
+[data-theme='light'] .login-form .ant-input-affix-wrapper:focus,
+[data-theme='light'] .login-form .ant-input-affix-wrapper-focused {
+  background: #fff;
+  border-color: #1890ff;
+}
+
+[data-theme='light'] .login-form .ant-input {
+  color: rgba(0, 0, 0, 0.85);
+}
+
+[data-theme='light'] .login-form .ant-input::placeholder {
+  color: rgba(0, 0, 0, 0.25);
+}
+
+[data-theme='light'] .input-icon {
+  color: rgba(0, 0, 0, 0.25);
+}
+
+[data-theme='light'] .captcha-image {
+  background: #f5f5f5;
+}
+
+[data-theme='light'] .captcha-loading,
+[data-theme='light'] .captcha-placeholder {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+[data-theme='light'] .form-options .ant-checkbox-wrapper {
+  color: rgba(0, 0, 0, 0.65);
+}
+
+[data-theme='light'] .form-options .ant-checkbox-inner {
+  background: #fff;
+  border-color: #d9d9d9;
+}
+
+[data-theme='light'] .register-link {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+[data-theme='light'] .divider span {
+  color: rgba(0, 0, 0, 0.25);
+}
+
+[data-theme='light'] .divider::before,
+[data-theme='light'] .divider::after {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme='light'] .social-icon.github {
+  background: #24292e;
+}

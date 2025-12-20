@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { Card, Table, Avatar, Tag, Statistic, Row, Col, Select, DatePicker, Space, Typography, Tabs } from 'antd';
 import { TrophyOutlined, CrownOutlined, UserOutlined, RiseOutlined, FireOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
+import * as pointApi from '../../../api/admin/pointApi';
 
 const { Option } = Select;
 const { Text } = Typography;

@@ -5,6 +5,7 @@
 import React from 'react';
 import { Card, Table, Statistic, Row, Col, Badge } from 'antd';
 import { EyeOutlined, LikeOutlined, StarOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import * as videoApi from '../../../api/admin/videoApi';
 
 const VideoStats: React.FC = () => {
   const videoData = [

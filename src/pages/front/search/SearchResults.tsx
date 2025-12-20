@@ -35,6 +35,7 @@ import {
   StarOutlined
 } from '@ant-design/icons';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import * as searchApi from '../../../api/front/searchApi';
 import './SearchResults.css';
 
 const { Search } = Input;
@@ -298,6 +299,7 @@ const SearchResults: React.FC = () => {
       className="result-card" 
       hoverable
       onClick={() => navigate(`/${result.type}/${result.id}`)}
+      style={{ cursor: 'pointer' }}
     >
       <div className="result-card-content">
         <div className="result-thumbnail">
@@ -330,7 +332,20 @@ const SearchResults: React.FC = () => {
           
           <div className="result-tags">
             {result.tags.slice(0, 3).map(tag => (
-              <Tag key={tag} color="blue">{tag}</Tag>
+              <Tag 
+                key={tag} 
+                color="blue"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleSearch(tag);
+                }}
+                style={{ 
+                  cursor: 'pointer',
+                  borderRadius: '12px'
+                }}
+              >
+                {tag}
+              </Tag>
             ))}
           </div>
           

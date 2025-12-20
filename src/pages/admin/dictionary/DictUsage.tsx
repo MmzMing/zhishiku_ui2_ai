@@ -6,6 +6,7 @@ import React from 'react';
 import { Card, Table, Button, Statistic, Row, Col, Typography } from 'antd';
 import { BarChartOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
+import * as dictionaryApi from '../../../api/admin/dictionaryApi';
 
 const { Text } = Typography;
 

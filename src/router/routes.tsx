@@ -5,6 +5,7 @@
 import React from 'react';
 import type { RouteObject } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
+import { AdminGuard } from './guard';
 
 // 懒加载组件
 const Home = React.lazy(() => import('../pages/front/home/Home'));
@@ -38,6 +39,9 @@ const AdminContentList = React.lazy(() => import('../pages/admin/content/Content
 const AdminContentCategory = React.lazy(() => import('../pages/admin/content/ContentCategory'));
 const AdminContentTag = React.lazy(() => import('../pages/admin/content/ContentTag'));
 const AdminContentStats = React.lazy(() => import('../pages/admin/content/ContentStats'));
+const AdminBlogList = React.lazy(() => import('../pages/admin/content/BlogList'));
+const AdminBlogEdit = React.lazy(() => import('../pages/admin/content/BlogEdit'));
+const AdminCommentAudit = React.lazy(() => import('../pages/admin/content/CommentAudit'));
 
 // 后台管理 - 字典管理子页面
 const AdminDictCategory = React.lazy(() => import('../pages/admin/dictionary/DictCategory'));
@@ -57,8 +61,8 @@ const AdminLogManage = React.lazy(() => import('../pages/admin/system/LogManage'
 const AdminAuditTrail = React.lazy(() => import('../pages/admin/system/AuditTrail'));
 const AdminSystemConfig = React.lazy(() => import('../pages/admin/system/SystemConfig'));
 
-// 布局组件
-const LayoutProvider = React.lazy(() => import('../components/layout/LayoutProvider'));
+// 布局组件 - 不使用懒加载，避免 Suspense 问题
+import LayoutProvider from '../components/layout/LayoutProvider';
 
 // 登录注册页面
 const Login = React.lazy(() => import('../pages/auth/Login'));
@@ -66,6 +70,15 @@ const Register = React.lazy(() => import('../pages/auth/Register'));
 
 // 错误页面
 const NotFound = React.lazy(() => import('../pages/error/NotFound'));
+
+// 后台管理布局包装器（带路由守卫）
+const AdminLayoutWithGuard: React.FC = () => {
+  return (
+    <AdminGuard>
+      <LayoutProvider type="admin" />
+    </AdminGuard>
+  );
+};
 
 // 路由配置
 export const routes: RouteObject[] = [
@@ -100,10 +113,10 @@ export const routes: RouteObject[] = [
     ],
   },
   
-  // 后台管理路由
+  // 后台管理路由（需要登录）
   {
     path: '/admin',
-    element: <LayoutProvider type="admin" />,
+    element: <AdminLayoutWithGuard />,
     children: [
       { index: true, element: <Navigate to="/admin/dashboard" replace /> },
       { path: 'dashboard', element: <AdminDashboard /> },
@@ -123,6 +136,10 @@ export const routes: RouteObject[] = [
       
       // 内容管理子路由
       { path: 'content/list', element: <AdminContentList /> },
+      { path: 'content/blog', element: <AdminBlogList /> },
+      { path: 'content/blog/edit', element: <AdminBlogEdit /> },
+      { path: 'content/blog/edit/:id', element: <AdminBlogEdit /> },
+      { path: 'content/comment', element: <AdminCommentAudit /> },
       { path: 'content/category', element: <AdminContentCategory /> },
       { path: 'content/tag', element: <AdminContentTag /> },
       { path: 'content/stats', element: <AdminContentStats /> },
@@ -171,6 +188,9 @@ export const routeMeta = {
   '/admin/video/stats': { title: '统计分析', icon: 'BarChartOutlined', breadcrumb: ['后台管理', '视频管理', '统计分析'] },
   // 内容管理
   '/admin/content/list': { title: '文档管理', icon: 'FileTextOutlined', breadcrumb: ['后台管理', '内容管理', '文档管理'] },
+  '/admin/content/blog': { title: '博客管理', icon: 'EditOutlined', breadcrumb: ['后台管理', '内容管理', '博客管理'] },
+  '/admin/content/blog/edit': { title: '写博客', icon: 'EditOutlined', breadcrumb: ['后台管理', '内容管理', '写博客'] },
+  '/admin/content/comment': { title: '评论审核', icon: 'MessageOutlined', breadcrumb: ['后台管理', '内容管理', '评论审核'] },
   '/admin/content/category': { title: '分类标签', icon: 'FolderOutlined', breadcrumb: ['后台管理', '内容管理', '分类标签'] },
   '/admin/content/tag': { title: '标签管理', icon: 'TagOutlined', breadcrumb: ['后台管理', '内容管理', '标签管理'] },
   '/admin/content/stats': { title: '统计分析', icon: 'BarChartOutlined', breadcrumb: ['后台管理', '内容管理', '统计分析'] },

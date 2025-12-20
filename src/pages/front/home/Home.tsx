@@ -145,7 +145,7 @@ const hotContents = [
     id: 1,
     title: 'Spring Boot 3.0 完整教程：从入门到精通',
     type: 'document',
-    cover: 'public/default/fileDefaultPc.jpg',
+    cover: '/default/fileDefaultPc.jpg',
     author: '技术达人',
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=1',
     views: 12580,
@@ -157,7 +157,7 @@ const hotContents = [
     id: 2,
     title: 'React 18 新特性详解与实战应用',
     type: 'video',
-    cover: 'public/default/fileDefaultPc.jpg',
+    cover: '/default/fileDefaultPc.jpg',
     author: '前端工程师',
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=2',
     views: 9876,
@@ -169,7 +169,7 @@ const hotContents = [
     id: 3,
     title: 'MySQL 性能优化实战指南',
     type: 'document',
-    cover: 'public/default/fileDefaultPc.jpg',
+    cover: '/default/fileDefaultPc.jpg',
     author: 'DBA专家',
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=3',
     views: 8765,
@@ -181,7 +181,7 @@ const hotContents = [
     id: 4,
     title: 'Docker + Kubernetes 容器化部署实战',
     type: 'video',
-    cover: 'public/default/fileDefaultPc.jpg',
+    cover: '/default/fileDefaultPc.jpg',
     author: '运维大师',
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=4',
     views: 7654,
@@ -193,7 +193,7 @@ const hotContents = [
     id: 5,
     title: 'Vue 3 组合式API深度解析',
     type: 'document',
-    cover: 'public/default/fileDefaultPc.jpg',
+    cover: '/default/fileDefaultPc.jpg',
     author: '全栈开发者',
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=5',
     views: 6543,
@@ -205,7 +205,7 @@ const hotContents = [
     id: 6,
     title: 'Python 数据分析与可视化教程',
     type: 'video',
-    cover: 'public/default/fileDefaultPc.jpg',
+    cover: '/default/fileDefaultPc.jpg',
     author: '数据分析师',
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=6',
     views: 5432,
@@ -436,7 +436,7 @@ const Home: React.FC = () => {
                 }}
                 onError={(e) => {
                   // 如果图片加载失败，显示默认头像
-                  (e.target as HTMLImageElement).src = 'public/headPic/55b6284ecdf362e87d33791b23c6950b_720.jpg';
+                  (e.target as HTMLImageElement).src = '/headPic/55b6284ecdf362e87d33791b23c6950b_720.jpg';
                 }}
               />
             </div>

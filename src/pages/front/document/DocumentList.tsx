@@ -36,7 +36,7 @@ interface DocumentItem {
   rating: number;
 }
 
-const DEFAULT_THUMBNAIL = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjE2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjE2MCIgZmlsbD0iI0YwRjBGMCIvPjxwYXRoIGQ9Ik0xMjAgNjBIMTgwVjEwMEgxMjBWNjBaIiBmaWxsPSIjOTk5Ii8+PC9zdmc+';
+const DEFAULT_THUMBNAIL = 'default/fileDefaultPc.jpg';
 
 const DocumentList: React.FC = () => {
   const navigate = useNavigate();

@@ -1,0 +1,674 @@
+[
+  {
+    "key": "api/admin/contentApi.ts-getBlogList",
+    "file": "api/admin/contentApi.ts",
+    "description": "内容管理相关API",
+    "name": "getBlogList",
+    "method": "GET",
+    "path": "/admin/content/blog/list"
+  },
+  {
+    "key": "api/admin/contentApi.ts-getCommentAuditStats",
+    "file": "api/admin/contentApi.ts",
+    "description": "获取博客详情",
+    "name": "getCommentAuditStats",
+    "method": "GET",
+    "path": "/admin/content/comment/stats"
+  },
+  {
+    "key": "api/admin/contentApi.ts-getCommentList",
+    "file": "api/admin/contentApi.ts",
+    "description": "获取评论列表",
+    "name": "getCommentList",
+    "method": "GET",
+    "path": "/admin/content/comment/list"
+  },
+  {
+    "key": "api/admin/dashboardApi.ts-getVisitTrend",
+    "file": "api/admin/dashboardApi.ts",
+    "description": "后台控制台相关API",
+    "name": "getVisitTrend",
+    "method": "GET",
+    "path": "/api/admin/dashboard/visit-trend"
+  },
+  {
+    "key": "api/admin/dashboardApi.ts-getCategoryStats",
+    "file": "api/admin/dashboardApi.ts",
+    "description": "获取观看分类占比数据",
+    "name": "getCategoryStats",
+    "method": "GET",
+    "path": "/api/admin/dashboard/category-stats"
+  },
+  {
+    "key": "api/admin/dashboardApi.ts-getStatsOverview",
+    "file": "api/admin/dashboardApi.ts",
+    "description": "获取统计概览数据",
+    "name": "getStatsOverview",
+    "method": "GET",
+    "path": "/api/admin/dashboard/stats-overview"
+  },
+  {
+    "key": "api/admin/dashboardApi.ts-getRecentActivities",
+    "file": "api/admin/dashboardApi.ts",
+    "description": "获取最近活动数据",
+    "name": "getRecentActivities",
+    "method": "GET",
+    "path": "/api/admin/dashboard/recent-activities"
+  },
+  {
+    "key": "api/admin/dashboardApi.ts-getTodoList",
+    "file": "api/admin/dashboardApi.ts",
+    "description": "获取待办事项数据",
+    "name": "getTodoList",
+    "method": "GET",
+    "path": "/api/admin/dashboard/todo-list"
+  },
+  {
+    "key": "api/admin/dictionaryApi.ts-getDictCategories",
+    "file": "api/admin/dictionaryApi.ts",
+    "description": "字典管理相关API",
+    "name": "getDictCategories",
+    "method": "GET",
+    "path": "/admin/dict/categories"
+  },
+  {
+    "key": "api/admin/dictionaryApi.ts-getDictItems",
+    "file": "api/admin/dictionaryApi.ts",
+    "description": "获取字典分类详情",
+    "name": "getDictItems",
+    "method": "GET",
+    "path": "/admin/dict/items"
+  },
+  {
+    "key": "api/admin/dictionaryApi.ts-getDictUsageStats",
+    "file": "api/admin/dictionaryApi.ts",
+    "description": "获取字典项详情",
+    "name": "getDictUsageStats",
+    "method": "GET",
+    "path": "/admin/dict/usage-stats"
+  },
+  {
+    "key": "api/admin/monitorApi.ts-getWebVitals",
+    "file": "api/admin/monitorApi.ts",
+    "description": "应用监控相关API",
+    "name": "getWebVitals",
+    "method": "GET",
+    "path": "/admin/monitor/web-vitals"
+  },
+  {
+    "key": "api/admin/monitorApi.ts-getApiMonitorList",
+    "file": "api/admin/monitorApi.ts",
+    "description": "获取 Web Vitals 历史趋势",
+    "name": "getApiMonitorList",
+    "method": "GET",
+    "path": "/admin/monitor/api/list"
+  },
+  {
+    "key": "api/admin/monitorApi.ts-getErrorList",
+    "file": "api/admin/monitorApi.ts",
+    "description": "获取API详细统计",
+    "name": "getErrorList",
+    "method": "GET",
+    "path": "/admin/monitor/errors"
+  },
+  {
+    "key": "api/admin/monitorApi.ts-getSessionList",
+    "file": "api/admin/monitorApi.ts",
+    "description": "获取错误详情",
+    "name": "getSessionList",
+    "method": "GET",
+    "path": "/admin/monitor/sessions"
+  },
+  {
+    "key": "api/admin/monitorApi.ts-getMonitorStatistics",
+    "file": "api/admin/monitorApi.ts",
+    "description": "获取会话详情",
+    "name": "getMonitorStatistics",
+    "method": "GET",
+    "path": "/admin/monitor/statistics"
+  },
+  {
+    "key": "api/admin/pointApi.ts-getPointRules",
+    "file": "api/admin/pointApi.ts",
+    "description": "积分管理相关API",
+    "name": "getPointRules",
+    "method": "GET",
+    "path": "/admin/point/rules"
+  },
+  {
+    "key": "api/admin/pointApi.ts-getPointRecords",
+    "file": "api/admin/pointApi.ts",
+    "description": "获取积分规则详情",
+    "name": "getPointRecords",
+    "method": "GET",
+    "path": "/admin/point/records"
+  },
+  {
+    "key": "api/admin/pointApi.ts-getPointProducts",
+    "file": "api/admin/pointApi.ts",
+    "description": "手动调整用户积分",
+    "name": "getPointProducts",
+    "method": "GET",
+    "path": "/admin/point/products"
+  },
+  {
+    "key": "api/admin/pointApi.ts-getPointExchanges",
+    "file": "api/admin/pointApi.ts",
+    "description": "获取积分商品详情",
+    "name": "getPointExchanges",
+    "method": "GET",
+    "path": "/admin/point/exchanges"
+  },
+  {
+    "key": "api/admin/pointApi.ts-getPointRanking",
+    "file": "api/admin/pointApi.ts",
+    "description": "处理兑换订单",
+    "name": "getPointRanking",
+    "method": "GET",
+    "path": "/admin/point/ranking"
+  },
+  {
+    "key": "api/admin/pointApi.ts-getPointStatistics",
+    "file": "api/admin/pointApi.ts",
+    "description": "刷新排行榜",
+    "name": "getPointStatistics",
+    "method": "GET",
+    "path": "/admin/point/statistics"
+  },
+  {
+    "key": "api/admin/roleApi.ts-getRoleList",
+    "file": "api/admin/roleApi.ts",
+    "description": "角色权限管理相关API",
+    "name": "getRoleList",
+    "method": "GET",
+    "path": "/admin/role/list"
+  },
+  {
+    "key": "api/admin/roleApi.ts-getPermissionTree",
+    "file": "api/admin/roleApi.ts",
+    "description": "获取角色详情",
+    "name": "getPermissionTree",
+    "method": "GET",
+    "path": "/admin/permission/tree"
+  },
+  {
+    "key": "api/admin/roleApi.ts-getPermissionChangeLogs",
+    "file": "api/admin/roleApi.ts",
+    "description": "获取角色已分配的权限",
+    "name": "getPermissionChangeLogs",
+    "method": "GET",
+    "path": "/admin/permission/change-logs"
+  },
+  {
+    "key": "api/admin/statisticsApi.ts-getUserStats",
+    "file": "api/admin/statisticsApi.ts",
+    "description": "后台统计分析相关API",
+    "name": "getUserStats",
+    "method": "GET",
+    "path": "/api/admin/statistics/users"
+  },
+  {
+    "key": "api/admin/statisticsApi.ts-getContentStats",
+    "file": "api/admin/statisticsApi.ts",
+    "description": "获取内容统计数据",
+    "name": "getContentStats",
+    "method": "GET",
+    "path": "/api/admin/statistics/content"
+  },
+  {
+    "key": "api/admin/statisticsApi.ts-getVisitStats",
+    "file": "api/admin/statisticsApi.ts",
+    "description": "获取访问统计数据",
+    "name": "getVisitStats",
+    "method": "GET",
+    "path": "/api/admin/statistics/visits"
+  },
+  {
+    "key": "api/admin/statisticsApi.ts-getPopularContent",
+    "file": "api/admin/statisticsApi.ts",
+    "description": "获取热门内容数据",
+    "name": "getPopularContent",
+    "method": "GET",
+    "path": "/api/admin/statistics/popular-content"
+  },
+  {
+    "key": "api/admin/systemApi.ts-getSystemConfigs",
+    "file": "api/admin/systemApi.ts",
+    "description": "系统管理相关API",
+    "name": "getSystemConfigs",
+    "method": "GET",
+    "path": "/admin/system/configs"
+  },
+  {
+    "key": "api/admin/systemApi.ts-getSystemLogs",
+    "file": "api/admin/systemApi.ts",
+    "description": "获取系统配置分类",
+    "name": "getSystemLogs",
+    "method": "GET",
+    "path": "/admin/system/logs"
+  },
+  {
+    "key": "api/admin/systemApi.ts-getAuditTrails",
+    "file": "api/admin/systemApi.ts",
+    "description": "获取日志统计",
+    "name": "getAuditTrails",
+    "method": "GET",
+    "path": "/admin/system/audit-trails"
+  },
+  {
+    "key": "api/admin/systemApi.ts-getServerInfo",
+    "file": "api/admin/systemApi.ts",
+    "description": "获取审计统计",
+    "name": "getServerInfo",
+    "method": "GET",
+    "path": "/admin/system/server-info"
+  },
+  {
+    "key": "api/admin/userApi.ts-getBehaviorStatistics",
+    "file": "api/admin/userApi.ts",
+    "description": "用户行为管理相关API",
+    "name": "getBehaviorStatistics",
+    "method": "GET",
+    "path": "/admin/user/behavior/statistics"
+  },
+  {
+    "key": "api/admin/userApi.ts-getOperationLogs",
+    "file": "api/admin/userApi.ts",
+    "description": "获取操作日志列表",
+    "name": "getOperationLogs",
+    "method": "GET",
+    "path": "/admin/user/behavior/logs"
+  },
+  {
+    "key": "api/admin/userApi.ts-getAbnormalBehaviors",
+    "file": "api/admin/userApi.ts",
+    "description": "获取异常行为列表",
+    "name": "getAbnormalBehaviors",
+    "method": "GET",
+    "path": "/admin/user/behavior/abnormal"
+  },
+  {
+    "key": "api/admin/userApi.ts-getLoginRanking",
+    "file": "api/admin/userApi.ts",
+    "description": "获取异常行为详情",
+    "name": "getLoginRanking",
+    "method": "GET",
+    "path": "/admin/user/behavior/login-ranking"
+  },
+  {
+    "key": "api/admin/userApi.ts-getUserList",
+    "file": "api/admin/userApi.ts",
+    "description": "获取用户登录历史",
+    "name": "getUserList",
+    "method": "GET",
+    "path": "/admin/user/list"
+  },
+  {
+    "key": "api/admin/userApi.ts-getUserStatistics",
+    "file": "api/admin/userApi.ts",
+    "description": "获取用户详情",
+    "name": "getUserStatistics",
+    "method": "GET",
+    "path": "/admin/user/statistics"
+  },
+  {
+    "key": "api/admin/videoApi.ts-getDraftList",
+    "file": "api/admin/videoApi.ts",
+    "description": "视频管理相关API",
+    "name": "getDraftList",
+    "method": "GET",
+    "path": "/admin/video/drafts"
+  },
+  {
+    "key": "api/admin/videoApi.ts-getVideoTags",
+    "file": "api/admin/videoApi.ts",
+    "description": "删除草稿",
+    "name": "getVideoTags",
+    "method": "GET",
+    "path": "/admin/video/tags"
+  },
+  {
+    "key": "api/admin/videoApi.ts-generateChaptersAI",
+    "file": "api/admin/videoApi.ts",
+    "description": "AI生成章节标记",
+    "name": "generateChaptersAI",
+    "method": "POST",
+    "path": "/admin/video/chapters/generate"
+  },
+  {
+    "key": "api/admin/videoApi.ts-generateSubtitleAI",
+    "file": "api/admin/videoApi.ts",
+    "description": "AI生成字幕",
+    "name": "generateSubtitleAI",
+    "method": "POST",
+    "path": "/admin/video/subtitle/generate"
+  },
+  {
+    "key": "api/admin/videoApi.ts-getAuditStatistics",
+    "file": "api/admin/videoApi.ts",
+    "description": "从视频截取封面",
+    "name": "getAuditStatistics",
+    "method": "GET",
+    "path": "/admin/video/audit/statistics"
+  },
+  {
+    "key": "api/admin/videoApi.ts-getAuditQueue",
+    "file": "api/admin/videoApi.ts",
+    "description": "获取审核队列列表",
+    "name": "getAuditQueue",
+    "method": "GET",
+    "path": "/admin/video/audit/queue"
+  },
+  {
+    "key": "api/admin/videoApi.ts-getAllAuditLogs",
+    "file": "api/admin/videoApi.ts",
+    "description": "获取单个视频审核详情",
+    "name": "getAllAuditLogs",
+    "method": "GET",
+    "path": "/admin/video/audit/logs"
+  },
+  {
+    "key": "api/admin/videoApi.ts-getViolationRecords",
+    "file": "api/admin/videoApi.ts",
+    "description": "获取违规记录列表",
+    "name": "getViolationRecords",
+    "method": "GET",
+    "path": "/admin/video/audit/violations"
+  },
+  {
+    "key": "api/admin/videoApi.ts-getVideoList",
+    "file": "api/admin/videoApi.ts",
+    "description": "获取违规记录详情",
+    "name": "getVideoList",
+    "method": "GET",
+    "path": "/admin/video/list"
+  },
+  {
+    "key": "api/admin/videoApi.ts-searchVideos",
+    "file": "api/admin/videoApi.ts",
+    "description": "搜索视频",
+    "name": "searchVideos",
+    "method": "GET",
+    "path": "/admin/video/search"
+  },
+  {
+    "key": "api/auth/authApi.ts-getCaptcha",
+    "file": "api/auth/authApi.ts",
+    "description": "认证相关API",
+    "name": "getCaptcha",
+    "method": "GET",
+    "path": "/graph/code"
+  },
+  {
+    "key": "api/auth/authApi.ts-login",
+    "file": "api/auth/authApi.ts",
+    "description": "用户名密码登录",
+    "name": "login",
+    "method": "POST",
+    "path": "/auth/login"
+  },
+  {
+    "key": "api/auth/authApi.ts-phoneLogin",
+    "file": "api/auth/authApi.ts",
+    "description": "手机号验证码登录",
+    "name": "phoneLogin",
+    "method": "POST",
+    "path": "/auth/phone-login"
+  },
+  {
+    "key": "api/auth/authApi.ts-register",
+    "file": "api/auth/authApi.ts",
+    "description": "用户注册",
+    "name": "register",
+    "method": "POST",
+    "path": "/auth/register"
+  },
+  {
+    "key": "api/auth/authApi.ts-sendSmsCode",
+    "file": "api/auth/authApi.ts",
+    "description": "发送短信验证码",
+    "name": "sendSmsCode",
+    "method": "POST",
+    "path": "/auth/send-sms-code"
+  },
+  {
+    "key": "api/auth/authApi.ts-sendEmailCode",
+    "file": "api/auth/authApi.ts",
+    "description": "发送邮箱验证码",
+    "name": "sendEmailCode",
+    "method": "POST",
+    "path": "/auth/send-email-code"
+  },
+  {
+    "key": "api/auth/authApi.ts-logout",
+    "file": "api/auth/authApi.ts",
+    "description": "退出登录",
+    "name": "logout",
+    "method": "POST",
+    "path": "/auth/logout"
+  },
+  {
+    "key": "api/auth/authApi.ts-getCurrentUser",
+    "file": "api/auth/authApi.ts",
+    "description": "刷新token",
+    "name": "getCurrentUser",
+    "method": "GET",
+    "path": "/auth/current-user"
+  },
+  {
+    "key": "api/auth/authApi.ts-changePassword",
+    "file": "api/auth/authApi.ts",
+    "description": "修改密码",
+    "name": "changePassword",
+    "method": "POST",
+    "path": "/auth/change-password"
+  },
+  {
+    "key": "api/auth/authApi.ts-forgotPassword",
+    "file": "api/auth/authApi.ts",
+    "description": "忘记密码",
+    "name": "forgotPassword",
+    "method": "POST",
+    "path": "/auth/forgot-password"
+  },
+  {
+    "key": "api/auth/authApi.ts-updateProfile",
+    "file": "api/auth/authApi.ts",
+    "description": "更新用户信息",
+    "name": "updateProfile",
+    "method": "POST",
+    "path": "/auth/update-profile"
+  },
+  {
+    "key": "api/front/documentApi.ts-getDocumentList",
+    "file": "api/front/documentApi.ts",
+    "description": "文档相关API",
+    "name": "getDocumentList",
+    "method": "GET",
+    "path": "/document/list"
+  },
+  {
+    "key": "api/front/documentApi.ts-searchDocuments",
+    "file": "api/front/documentApi.ts",
+    "description": "获取文档详情",
+    "name": "searchDocuments",
+    "method": "GET",
+    "path": "/document/search"
+  },
+  {
+    "key": "api/front/homeApi.ts-getSiteStats",
+    "file": "api/front/homeApi.ts",
+    "description": "首页相关API",
+    "name": "getSiteStats",
+    "method": "GET",
+    "path": "/home/stats"
+  },
+  {
+    "key": "api/front/homeApi.ts-getCategories",
+    "file": "api/front/homeApi.ts",
+    "description": "获取分类列表",
+    "name": "getCategories",
+    "method": "GET",
+    "path": "/home/categories"
+  },
+  {
+    "key": "api/front/homeApi.ts-getRecommendContent",
+    "file": "api/front/homeApi.ts",
+    "description": "获取推荐内容",
+    "name": "getRecommendContent",
+    "method": "GET",
+    "path": "/home/recommend"
+  },
+  {
+    "key": "api/front/homeApi.ts-getLatestUpdates",
+    "file": "api/front/homeApi.ts",
+    "description": "获取最新更新",
+    "name": "getLatestUpdates",
+    "method": "GET",
+    "path": "/home/latest"
+  },
+  {
+    "key": "api/front/homeApi.ts-getHotTags",
+    "file": "api/front/homeApi.ts",
+    "description": "获取热门标签",
+    "name": "getHotTags",
+    "method": "GET",
+    "path": "/home/hot-tags"
+  },
+  {
+    "key": "api/front/homeApi.ts-getSearchSuggestions",
+    "file": "api/front/homeApi.ts",
+    "description": "获取轮播图",
+    "name": "getSearchSuggestions",
+    "method": "GET",
+    "path": "/home/search-suggestions"
+  },
+  {
+    "key": "api/front/profileApi.ts-getUserProfile",
+    "file": "api/front/profileApi.ts",
+    "description": "个人中心相关API",
+    "name": "getUserProfile",
+    "method": "GET",
+    "path": "/profile/info"
+  },
+  {
+    "key": "api/front/profileApi.ts-getUserContents",
+    "file": "api/front/profileApi.ts",
+    "description": "更新用户个人信息",
+    "name": "getUserContents",
+    "method": "GET",
+    "path": "/profile/contents"
+  },
+  {
+    "key": "api/front/profileApi.ts-getUserFavorites",
+    "file": "api/front/profileApi.ts",
+    "description": "删除用户内容",
+    "name": "getUserFavorites",
+    "method": "GET",
+    "path": "/profile/favorites"
+  },
+  {
+    "key": "api/front/profileApi.ts-getBrowseHistory",
+    "file": "api/front/profileApi.ts",
+    "description": "取消收藏",
+    "name": "getBrowseHistory",
+    "method": "GET",
+    "path": "/profile/browse-history"
+  },
+  {
+    "key": "api/front/profileApi.ts-getUserPointRecords",
+    "file": "api/front/profileApi.ts",
+    "description": "清空浏览历史",
+    "name": "getUserPointRecords",
+    "method": "GET",
+    "path": "/profile/point-records"
+  },
+  {
+    "key": "api/front/profileApi.ts-getUserNotifications",
+    "file": "api/front/profileApi.ts",
+    "description": "获取积分统计",
+    "name": "getUserNotifications",
+    "method": "GET",
+    "path": "/profile/notifications"
+  },
+  {
+    "key": "api/front/searchApi.ts-search",
+    "file": "api/front/searchApi.ts",
+    "description": "搜索相关API",
+    "name": "search",
+    "method": "GET",
+    "path": "/search"
+  },
+  {
+    "key": "api/front/searchApi.ts-getSearchSuggestions",
+    "file": "api/front/searchApi.ts",
+    "description": "获取搜索建议",
+    "name": "getSearchSuggestions",
+    "method": "GET",
+    "path": "/search/suggestions"
+  },
+  {
+    "key": "api/front/searchApi.ts-saveSearchHistory",
+    "file": "api/front/searchApi.ts",
+    "description": "获取热门搜索词",
+    "name": "saveSearchHistory",
+    "method": "POST",
+    "path": "/search/history"
+  },
+  {
+    "key": "api/front/searchApi.ts-clearSearchHistory",
+    "file": "api/front/searchApi.ts",
+    "description": "清空搜索历史",
+    "name": "clearSearchHistory",
+    "method": "POST",
+    "path": "/search/history/clear"
+  },
+  {
+    "key": "api/front/searchApi.ts-deleteSearchHistory",
+    "file": "api/front/searchApi.ts",
+    "description": "删除单条搜索历史",
+    "name": "deleteSearchHistory",
+    "method": "POST",
+    "path": "/search/history/delete"
+  },
+  {
+    "key": "api/front/searchApi.ts-advancedSearch",
+    "file": "api/front/searchApi.ts",
+    "description": "高级搜索",
+    "name": "advancedSearch",
+    "method": "POST",
+    "path": "/search/advanced"
+  },
+  {
+    "key": "api/front/searchApi.ts-getSimilarContent",
+    "file": "api/front/searchApi.ts",
+    "description": "搜索自动完成",
+    "name": "getSimilarContent",
+    "method": "GET",
+    "path": "/search/similar"
+  },
+  {
+    "key": "api/front/searchApi.ts-reportSearchResult",
+    "file": "api/front/searchApi.ts",
+    "description": "搜索统计",
+    "name": "reportSearchResult",
+    "method": "POST",
+    "path": "/search/report"
+  },
+  {
+    "key": "api/front/videoApi.ts-getVideoList",
+    "file": "api/front/videoApi.ts",
+    "description": "视频相关API",
+    "name": "getVideoList",
+    "method": "GET",
+    "path": "/video/list"
+  },
+  {
+    "key": "api/front/videoApi.ts-searchVideos",
+    "file": "api/front/videoApi.ts",
+    "description": "获取视频详情",
+    "name": "searchVideos",
+    "method": "GET",
+    "path": "/video/search"
+  }
+]

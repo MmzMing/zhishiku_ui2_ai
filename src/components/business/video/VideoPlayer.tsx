@@ -2,7 +2,7 @@
  * 视频播放器组件
  */
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { 
   Button, 
   Slider, 
@@ -37,6 +37,12 @@ interface VideoPlayerProps {
   onPointsDeduct?: (points: number) => Promise<boolean>; // 积分扣除回调
 }
 
+export interface VideoPlayerRef {
+  play: () => Promise<void>;
+  pause: () => void;
+  video: HTMLVideoElement | null;
+}
+
 interface VideoState {
   playing: boolean;
   currentTime: number;
@@ -50,7 +56,7 @@ interface VideoState {
   quality: string;
 }
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({
+const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(({
   src,
   poster,
   title,
@@ -60,7 +66,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   controls = true,
   needPoints = 0,
   onPointsDeduct,
-}) => {
+}, ref) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [pointsModalVisible, setPointsModalVisible] = useState(false);
@@ -78,6 +84,20 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     playbackRate: 1,
     quality: 'auto',
   });
+
+  useImperativeHandle(ref, () => ({
+    play: async () => {
+      if (videoRef.current) {
+        return videoRef.current.play();
+      }
+    },
+    pause: () => {
+      if (videoRef.current) {
+        videoRef.current.pause();
+      }
+    },
+    video: videoRef.current
+  }));
 
   // 播放速度选项
   const playbackRates = [
@@ -120,7 +140,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const handleLoadStart = () => setState(prev => ({ ...prev, loading: true }));
     const handleCanPlay = () => setState(prev => ({ ...prev, loading: false }));
     const handleWaiting = () => setState(prev => ({ ...prev, loading: true }));
-    const handlePlaying = () => setState(prev => ({ ...prev, loading: false }));
+    const handlePlaying = () => setState(prev => ({ ...prev, loading: false, playing: true }));
+    const handlePause = () => setState(prev => ({ ...prev, playing: false }));
 
     video.addEventListener('timeupdate', updateTime);
     video.addEventListener('progress', updateBuffer);
@@ -128,6 +149,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     video.addEventListener('canplay', handleCanPlay);
     video.addEventListener('waiting', handleWaiting);
     video.addEventListener('playing', handlePlaying);
+    video.addEventListener('pause', handlePause);
 
     return () => {
       video.removeEventListener('timeupdate', updateTime);
@@ -136,6 +158,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       video.removeEventListener('canplay', handleCanPlay);
       video.removeEventListener('waiting', handleWaiting);
       video.removeEventListener('playing', handlePlaying);
+      video.removeEventListener('pause', handlePause);
     };
   }, []);
 
@@ -443,6 +466,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       </Modal>
     </div>
   );
-};
+});
 
 export default VideoPlayer;

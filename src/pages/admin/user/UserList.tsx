@@ -34,6 +34,12 @@ const UserList: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<UserInfo | null>(null);
   const [form] = Form.useForm();
   const [editForm] = Form.useForm();
+  
+  // 搜索和筛选状态
+  const [searchText, setSearchText] = useState('');
+  const [roleFilter, setRoleFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [loading, setLoading] = useState(false);
 
   // 模拟用户数据
   const [userData, setUserData] = useState<UserInfo[]>([
@@ -161,6 +167,23 @@ const UserList: React.FC = () => {
     setLoginLogDrawerVisible(true);
   };
 
+  // 刷新数据
+  const handleRefresh = async () => {
+    setLoading(true);
+    try {
+      // 模拟API调用延迟
+      await new Promise(resolve => setTimeout(resolve, 500));
+      // 实际项目中这里会调用API重新获取数据
+      // const data = await userApi.getUserList();
+      // setUserData(data);
+    } catch (error) {
+      console.error('刷新失败:', error);
+      message.error('刷新失败');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // 表格行选择配置
   const rowSelection: TableRowSelection<UserInfo> = {
     selectedRowKeys,
@@ -226,6 +249,16 @@ const UserList: React.FC = () => {
     },
   ];
 
+  // 筛选数据
+  const filteredData = userData.filter(user => {
+    const matchSearch = 
+      user.username.toLowerCase().includes(searchText.toLowerCase()) || 
+      (user.phone && user.phone.includes(searchText));
+    const matchRole = roleFilter === 'all' || user.roleId === Number(roleFilter);
+    const matchStatus = statusFilter === 'all' || user.status === statusFilter;
+    return matchSearch && matchRole && matchStatus;
+  });
+
   return (
     <div style={{ padding: 24 }}>
       {/* 统计卡片 */}
@@ -240,17 +273,34 @@ const UserList: React.FC = () => {
       <Card>
         <Space style={{ marginBottom: 16, width: '100%', justifyContent: 'space-between' }} wrap>
           <Space wrap>
-            <Input.Search placeholder="搜索用户名/手机号" style={{ width: 200 }} />
-            <Select defaultValue="all" style={{ width: 120 }}>
+            <Input.Search 
+              placeholder="搜索用户名/手机号" 
+              style={{ width: 200 }} 
+              value={searchText}
+              onChange={e => setSearchText(e.target.value)}
+              onSearch={val => setSearchText(val)}
+              allowClear
+            />
+            <Select 
+              defaultValue="all" 
+              style={{ width: 120 }} 
+              value={roleFilter}
+              onChange={val => setRoleFilter(val)}
+            >
               <Option value="all">全部角色</Option>
               {roleOptions.map(r => <Option key={r.id} value={r.id}>{r.name}</Option>)}
             </Select>
-            <Select defaultValue="all" style={{ width: 100 }}>
+            <Select 
+              defaultValue="all" 
+              style={{ width: 100 }}
+              value={statusFilter}
+              onChange={val => setStatusFilter(val)}
+            >
               <Option value="all">全部状态</Option>
               <Option value="active">正常</Option>
               <Option value="disabled">禁用</Option>
             </Select>
-            <Button icon={<ReloadOutlined />}>刷新</Button>
+            <Button icon={<ReloadOutlined spin={loading} />} onClick={handleRefresh}>刷新</Button>
           </Space>
           <Space>
             <Button type="primary" icon={<PlusOutlined />} onClick={() => setAddUserModalVisible(true)}>新增用户</Button>
@@ -267,8 +317,9 @@ const UserList: React.FC = () => {
         </Space>
         <Table 
           columns={columns} 
-          dataSource={userData} 
+          dataSource={filteredData} 
           rowKey="id" 
+          loading={loading}
           rowSelection={rowSelection}
           pagination={{ 
             pageSize: 10, 

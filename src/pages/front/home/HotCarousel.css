@@ -1,0 +1,241 @@
+/* 3D轮播容器 */
+.hot-carousel-3d-container {
+  width: 100%;
+  height: 90vh;
+  min-height: 800px;
+  margin-top: 10px;
+  background-color: var(--bg-color-base);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.5s ease;
+}
+
+.hot-carousel-3d-container.expanded-mode {
+  background-color: var(--bg-color-base);
+}
+
+.carousel-stage {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  perspective: 1000px;
+  max-width: 1400px;
+}
+
+.carousel-card-3d {
+  background-color: var(--bg-color-container);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  transform-style: preserve-3d;
+}
+
+.video-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: var(--bg-color-container);
+}
+
+.carousel-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 覆盖层样式 */
+.card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.8) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 24px;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.play-button-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: all 0.3s ease;
+  z-index: 20;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.play-button-wrapper:hover {
+  background: var(--primary-color-hover);
+  transform: translate(-50%, -50%) scale(1.1);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
+}
+
+.play-icon {
+  font-size: 40px;
+  color: #fff;
+  opacity: 0.9;
+}
+
+.card-info {
+  z-index: 10;
+}
+
+/* 展开状态UI */
+.expanded-detail-link {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 110;
+  color: #fff;
+  background: rgba(0,0,0,0.5);
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: all 0.3s ease;
+}
+
+.expanded-detail-link:hover {
+  background: var(--primary-color);
+  transform: scale(1.05);
+}
+
+.expanded-back-button {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  z-index: 110;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: all 0.3s ease;
+}
+
+.expanded-back-button:hover {
+  background: rgba(255,255,255,0.2);
+  transform: scale(1.1);
+}
+
+/* 打字机样式 */
+.typewriter-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc((100% - 500px) / 2); /* 500px 是卡片高度 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  text-align: center;
+  pointer-events: none;
+}
+
+.typewriter-text {
+  color: var(--text-color-primary) !important;
+  font-family: "PingFang SC", "Microsoft YaHei", "STKaiti", serif !important;
+  font-size: 64px !important;
+  font-weight: bold !important;
+  letter-spacing: 6px;
+  margin: 0 !important;
+  text-shadow: 0 2px 15px rgba(0,0,0,0.2);
+}
+
+.typewriter-cursor {
+  animation: blink 1s infinite;
+  margin-left: 12px;
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* 底部描述样式 */
+.description-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: calc((100% - 500px) / 2); /* 500px 是卡片高度 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  pointer-events: none;
+  padding: 0 40px;
+}
+
+.description-text-wrapper {
+  max-width: 800px;
+  text-align: center;
+  animation: fadeUp 0.5s ease-out;
+  background: rgba(0, 0, 0, 0.4); /* 轻微背景增强可读性 */
+  padding: 24px 40px;
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.description-text {
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-size: 18px !important;
+  line-height: 1.8 !important;
+  display: block;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .hot-carousel-3d-container {
+    height: 400px;
+  }
+  
+  .play-button-wrapper {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .play-icon {
+    font-size: 30px;
+  }
+}

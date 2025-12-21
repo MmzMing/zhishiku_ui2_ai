@@ -3,268 +3,143 @@
  */
 
 .home-page {
-  // Banner区域 - 打字机效果和毛玻璃背景
+  // Banner区域 - 这里的样式主要由内联样式控制，保留以防万一
   .banner-section {
     margin-bottom: 48px;
     position: relative;
+  }
 
-    .home-carousel {
-      .carousel-item {
-        .carousel-content {
-          height: 500px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          position: relative;
-          background-size: cover;
-          background-position: center;
-          background-attachment: fixed;
-          border-radius: 12px;
-          overflow: hidden;
+  // 分类卡片
+  .category-card {
+    text-align: center;
+    border-radius: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    border: 1px solid #d9d9d9;
 
-          .carousel-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+      border-color: #1890ff;
+    }
 
-            .carousel-text {
-              text-align: center;
-              max-width: 600px;
-              padding: 0 24px;
+    .ant-card-body {
+      padding: 24px 16px;
+    }
 
-              h1 {
-                animation: typewriter 2s steps(20) 1s both;
-                overflow: hidden;
-                white-space: nowrap;
-                border-right: 2px solid white;
-                margin: 0 auto;
-                width: fit-content;
-              }
+    .category-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
 
-              p {
-                animation: fadeInUp 1s ease-out 3s both;
-                opacity: 0;
-              }
+    .category-name {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: rgba(0, 0, 0, 0.85);
+    }
 
-              .ant-input-search {
-                animation: fadeInUp 1s ease-out 4s both;
-                opacity: 0;
-                transition: transform 0.3s ease;
-
-                &:focus-within {
-                  transform: scale(1.02);
-                }
-
-                .ant-input-search-button {
-                  height: 48px;
-                  border-radius: 0 8px 8px 0;
-                }
-
-                .ant-input {
-                  height: 48px;
-                  border-radius: 8px 0 0 8px;
-                  font-size: 16px;
-                  backdrop-filter: blur(10px);
-                  background: rgba(255, 255, 255, 0.9);
-                }
-              }
-            }
-          }
-        }
-      }
+    .category-count {
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.45);
     }
   }
 
-  // 分类导航 - 卡片设计和hover效果
-  .categories-section {
-    margin-bottom: 48px;
+  // 内容卡片 (热门推荐)
+  .content-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 12px;
+    overflow: hidden;
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 24px;
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+    }
 
-      .category-card {
-        text-align: center;
-        border-radius: 12px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        cursor: pointer;
-        border: 1px solid #d9d9d9;
+    .content-cover {
+      position: relative;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+      }
+
+      .content-type {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 16px;
+        // 移除磨砂效果，使用半透明黑底保证可读性
+      }
+
+      &:hover img {
+        transform: scale(1.1);
+      }
+    }
+
+    .ant-card-actions {
+      border-top: 1px solid #f0f0f0;
+
+      li {
+        margin: 8px 0;
+        color: rgba(0, 0, 0, 0.45);
+        font-size: 13px;
 
         &:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
-          border-color: #1890ff;
-        }
-
-        .ant-card-body {
-          padding: 24px 16px;
-        }
-
-        .category-icon {
-          font-size: 32px;
-          margin-bottom: 12px;
-          display: block;
-        }
-
-        .category-name {
-          font-size: 16px;
-          font-weight: 600;
-          margin-bottom: 8px;
-          color: rgba(0, 0, 0, 0.85);
-        }
-
-        .category-count {
-          font-size: 14px;
-          color: rgba(0, 0, 0, 0.45);
+          color: #1890ff;
         }
       }
     }
   }
 
-  // 推荐内容 - 瀑布流布局和卡片交互
-  .recommended-section {
-    margin-bottom: 48px;
+  // 侧边栏卡片
+  .sidebar-card {
+    // 基础样式跟随 Ant Design Card
+  }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 24px;
-
-      .section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 24px;
-
-        h2 {
-          margin: 0;
-          position: relative;
-
-          &::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            width: 40px;
-            height: 3px;
-            background: #1890ff;
-            border-radius: 2px;
-          }
-        }
-      }
-
-      .ant-card {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        border-radius: 12px;
-        overflow: hidden;
-
-        &:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
-        }
-
-        .content-cover {
-          position: relative;
-          overflow: hidden;
-
-          img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-          }
-
-          .content-type {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 16px;
-            backdrop-filter: blur(10px);
-          }
-
-          &:hover img {
-            transform: scale(1.1);
-          }
-        }
-
-        .ant-card-actions {
-          border-top: 1px solid #f0f0f0;
-
-          li {
-            margin: 8px 0;
-            color: rgba(0, 0, 0, 0.45);
-            font-size: 13px;
-
-            &:hover {
-              color: #1890ff;
-            }
-          }
-        }
-      }
+  // 用户评价卡片
+  .review-card {
+    background: var(--bg-color-primary);
+    border: 1px solid var(--border-color-base);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+    
+    &:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
     }
   }
 
-  // 热门标签 - 标签云设计
-  .tags-section {
-    margin-bottom: 48px;
+  // 热门标签
+  .hot-tag {
+    margin: 6px 12px 6px 0;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid #d9d9d9;
+    color: rgba(0, 0, 0, 0.65);
+    display: inline-block;
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 24px;
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+      border-color: #1890ff;
+      color: #1890ff;
+      background: rgba(24, 144, 255, 0.05);
+    }
 
-      h2 {
-        position: relative;
-        margin-bottom: 24px;
-
-        &::after {
-          content: '';
-          position: absolute;
-          bottom: -8px;
-          left: 0;
-          width: 40px;
-          height: 3px;
-          background: #1890ff;
-          border-radius: 2px;
-        }
-      }
-
-      .tags-container {
-        .hot-tag {
-          margin: 6px 12px 6px 0;
-          padding: 8px 16px;
-          font-size: 14px;
-          border-radius: 20px;
-          cursor: pointer;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          border: 1px solid #d9d9d9;
-          color: rgba(0, 0, 0, 0.65);
-
-          &:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-            border-color: #1890ff;
-            color: #1890ff;
-            background: rgba(24, 144, 255, 0.05);
-          }
-
-          &:active {
-            transform: translateY(0);
-          }
-        }
-      }
+    &:active {
+      transform: translateY(0);
     }
   }
 }
@@ -290,86 +165,39 @@
   }
 }
 
-// 响应式适配 - 按照技术文档断点要求
+// 响应式适配
 @media (max-width: 768px) {
   .home-page {
-    .banner-section {
-      .home-carousel {
-        .carousel-item {
-          .carousel-content {
-            height: 60vh;
-            min-height: 300px;
+    .category-card {
+      .ant-card-body {
+        padding: 16px 12px;
+      }
 
-            .carousel-overlay {
-              .carousel-text {
-                padding: 0 16px;
+      .category-icon {
+        font-size: 24px;
+      }
 
-                h1 {
-                  font-size: 20px !important;
-                  animation-duration: 1.5s;
-                }
+      .category-name {
+        font-size: 14px;
+      }
 
-                p {
-                  font-size: 14px !important;
-                  margin-bottom: 20px !important;
-                }
+      .category-count {
+        font-size: 12px;
+      }
+    }
 
-                .ant-input-search {
-                  max-width: 100%;
-
-                  .ant-input {
-                    font-size: 16px; // 移动端最小字体要求
-                  }
-                }
-              }
-            }
-          }
+    .content-card {
+      .content-cover {
+        img {
+          height: 150px;
         }
       }
     }
 
-    .container {
-      padding: 0 16px !important;
-    }
-
-    .categories-section {
-      .category-card {
-        .ant-card-body {
-          padding: 16px 12px;
-        }
-
-        .category-icon {
-          font-size: 24px;
-        }
-
-        .category-name {
-          font-size: 14px;
-        }
-
-        .category-count {
-          font-size: 12px;
-        }
-      }
-    }
-
-    .recommended-section {
-      .ant-card {
-        .content-cover {
-          img {
-            height: 150px;
-          }
-        }
-      }
-    }
-
-    .tags-section {
-      .tags-container {
-        .hot-tag {
-          margin: 4px 8px 4px 0;
-          padding: 6px 12px;
-          font-size: 12px;
-        }
-      }
+    .hot-tag {
+      margin: 4px 8px 4px 0;
+      padding: 6px 12px;
+      font-size: 12px;
     }
   }
 }
@@ -377,24 +205,10 @@
 // 平板端适配 (769px-1024px)
 @media (min-width: 769px) and (max-width: 1024px) {
   .home-page {
-    .banner-section {
-      .home-carousel {
-        .carousel-item {
-          .carousel-content {
-            height: 400px;
-          }
-        }
-      }
-    }
-
-    .recommended-section {
-      .container {
-        .ant-card {
-          .content-cover {
-            img {
-              height: 180px;
-            }
-          }
+    .content-card {
+      .content-cover {
+        img {
+          height: 180px;
         }
       }
     }
@@ -404,25 +218,24 @@
 // PC端优化 (≥1025px)
 @media (min-width: 1025px) {
   .home-page {
-    .banner-section {
-      .home-carousel {
-        .carousel-item {
-          .carousel-content {
-            height: 500px;
-          }
+    .content-card {
+      .content-cover {
+        img {
+          height: 220px;
         }
       }
     }
+  }
+}
 
-    .recommended-section {
-      .container {
-        .ant-card {
-          .content-cover {
-            img {
-              height: 220px;
-            }
-          }
-        }
+// 深色主题适配
+[data-theme="dark"] {
+  .home-page {
+    .review-card {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      
+      &:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
       }
     }
   }

@@ -6,8 +6,6 @@
 
 ![前台1](documents/image/README.assets/前台1.png)
 
-![前台2](documents/image/README.assets/前台2.png)
-
 后台
 
 ![后台1](documents/image/README.assets/后台1.png)

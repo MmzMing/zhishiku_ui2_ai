@@ -1,0 +1,361 @@
+.article-showcase-container {
+  width: 100%;
+  min-height: 100vh; /* 改为min-height，允许内容撑开 */
+  height: auto; /* 自动高度 */
+  background-color: var(--bg-color-container);
+  color: var(--text-color-primary);
+  overflow: visible; /* 允许内容溢出 */
+  padding: 50px 46px 0; /* 顶部增加10px间隙，左右46px */
+  position: relative;
+}
+
+/* 顶部分界线 */
+.article-showcase-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 46px; /* 调整分界线位置 */
+  right: 46px;
+  height: 1px;
+  background: var(--border-color-split);
+  z-index: 1;
+}
+
+.showcase-content {
+  display: flex;
+  width: calc(100% - 12px); /* 减去左右各6px */
+  max-width: 1400px; /* 限制最大宽度，确保内容居中 */
+  min-height: calc(100vh - 6px); /* 减去顶部6px */
+  height: auto; /* 自动高度 */
+  border-radius: 20px; /* 添加圆角 */
+  overflow: visible; /* 允许内容溢出 */
+  background-color: var(--bg-color-container);
+  gap: 0; /* 确保左右之间没有间隙 */
+  margin: 0 auto 0; /* 顶部6px间距，左右居中 */
+  align-items: stretch; /* 让两侧高度相同 */
+}
+
+/* Left Panel */
+.showcase-left {
+  width: 50%;
+  position: relative;
+  background-color: var(--bg-color-container);
+  /* 不设置align-self，让它自然拉伸到与右侧相同高度 */
+}
+
+/* 左侧内容使用sticky定位 */
+.detail-wrapper {
+  position: sticky;
+  top: 64px; /* 页头高度 */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 0 40px 0 60px; /* 移除底部内边距 */
+  gap: 40px;
+}
+
+/* 卡片形式的图片 */
+.detail-image-card {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  height: 360px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+  margin: 0 0 0 auto; /* 改为右对齐，向右贴合 */
+}
+
+.detail-image-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.detail-image-card:hover .card-image {
+  transform: scale(1.05);
+}
+
+/* 移除旧的背景图样式 */
+.detail-image-bg {
+  display: none;
+}
+
+.bg-image {
+  display: none;
+}
+
+.bg-overlay {
+  display: none;
+}
+
+.detail-content {
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
+  margin: 0 0 0 auto; /* 改为右对齐，与图片保持一致 */
+  text-align: left; /* 改为左对齐 */
+}
+
+.detail-category {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.detail-title {
+  color: var(--text-color-primary) !important;
+  font-size: 3rem !important; /* 稍微减小字体 */
+  line-height: 1.2 !important;
+  margin-bottom: 24px !important;
+  font-weight: 700 !important;
+}
+
+.detail-desc {
+  color: var(--text-color-secondary) !important;
+  font-size: 1.1rem !important;
+  line-height: 1.6;
+  margin-bottom: 32px !important;
+  text-align: left; /* 描述文字左对齐 */
+}
+
+.detail-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color-split);
+  padding-top: 24px;
+}
+
+.detail-meta .ant-typography {
+  color: var(--text-color-tertiary) !important;
+}
+
+.detail-meta .ant-btn-link {
+  color: var(--primary-color) !important;
+}
+
+/* Right Panel */
+.showcase-right {
+  width: 50%;
+  padding: 0 60px 60px 40px;
+  background-color: var(--bg-color-container);
+  min-height: 100%; /* 确保右侧至少和左侧一样高 */
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.list-header h2 {
+  color: var(--text-color-primary) !important;
+}
+
+.list-header .ant-btn-link {
+  color: var(--text-color-primary) !important;
+}
+
+.list-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0; /* 移除卡片间隙，使用分界线 */
+}
+
+.article-list-item {
+  display: flex;
+  padding: 32px 16px; /* 增加垂直高度，减少水平宽度 */
+  background: transparent; /* 移除背景颜色 */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none; /* 移除边框 */
+  border-bottom: 1px solid var(--border-color-split); /* 使用主题边框颜色 */
+  min-height: 120px; /* 增加最小高度 */
+}
+
+.article-list-item:last-child {
+  border-bottom: none; /* 最后一个项目不显示分界线 */
+}
+
+.article-list-item:hover,
+.article-list-item.active {
+  background: var(--bg-color-elevated); /* 使用主题悬停背景 */
+  border-bottom-color: var(--border-color-base);
+  transform: translateX(8px); /* 减少移动距离 */
+}
+
+.list-item-image {
+  width: 100px; /* 减少图片宽度 */
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  margin-right: 20px; /* 减少右边距 */
+}
+
+.list-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.list-item-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.list-item-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.item-category {
+  font-weight: 600;
+}
+
+.item-date {
+  color: var(--text-color-tertiary);
+}
+
+.item-title {
+  color: var(--text-color-primary) !important;
+  font-size: 1.25rem !important;
+  margin: 0 !important;
+  line-height: 1.4 !important;
+}
+
+/* Animations */
+.fade-in-key {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 移除旧的滚动条样式，因为现在隐藏滚动条 */
+/* .showcase-right::-webkit-scrollbar {
+  width: 8px;
+}
+
+.showcase-right::-webkit-scrollbar-track {
+  background: #101010;
+}
+
+.showcase-right::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+
+.showcase-right::-webkit-scrollbar-thumb:hover {
+  background: #555;
+} */
+
+@media (max-width: 1024px) {
+  .article-showcase-container {
+    padding: 0 26px; /* 移动端减少间隙 (20px + 6px) */
+  }
+  
+  /* 移动端分界线调整 */
+  .article-showcase-container::before {
+    left: 26px;
+    right: 26px;
+  }
+  
+  .showcase-content {
+    flex-direction: column;
+    overflow: visible;
+    border-radius: 16px;
+    height: auto; /* 移动端自适应高度 */
+    max-width: none; /* 移动端不限制宽度 */
+  }
+  
+  .showcase-left, .showcase-right {
+    width: 100%;
+    overflow: visible;
+  }
+  
+  .showcase-left {
+    height: 60vh;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  
+  .detail-wrapper {
+    position: sticky;
+    top: 64px;
+    padding: 0 30px 0 30px;
+    gap: 30px;
+  }
+  
+  .detail-image-card {
+    height: 280px;
+  }
+  
+  .detail-title {
+    font-size: 2.5rem !important;
+  }
+  
+  .showcase-right {
+    padding: 0 30px 40px 30px; /* 移除顶部内边距 */
+  }
+  
+  .article-showcase-container {
+    height: auto;
+    overflow: visible;
+  }
+}
+
+@media (max-width: 768px) {
+  .article-showcase-container {
+    padding: 0 22px; /* 小屏幕间隙 (16px + 6px) */
+  }
+  
+  /* 小屏幕分界线调整 */
+  .article-showcase-container::before {
+    left: 22px;
+    right: 22px;
+  }
+  
+  .detail-wrapper {
+    position: sticky;
+    top: 64px;
+    padding: 0 20px 0 20px;
+    gap: 24px;
+  }
+  
+  .detail-image-card {
+    height: 240px;
+  }
+  
+  .detail-title {
+    font-size: 2rem !important;
+  }
+  
+  .detail-desc {
+    font-size: 1rem !important;
+  }
+  
+  .showcase-right {
+    padding: 0 20px 30px 20px; /* 移除顶部内边距 */
+  }
+}

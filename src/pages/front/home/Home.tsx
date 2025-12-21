@@ -47,6 +47,8 @@ import {
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import * as homeApi from '../../../api/front/homeApi';
+import HotCarousel from './HotCarousel';
+import ArticleShowcase from './ArticleShowcase';
 import './Home.css';
 
 const { Title, Paragraph, Text } = Typography;
@@ -318,7 +320,7 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="home-page" style={{ minHeight: '100vh', background: 'transparent' }}>
+    <div className="home-page" style={{ minHeight: '100vh' }}>
       {/* Banner区域 - 全屏 */}
       <div style={{
         height: '100vh',
@@ -459,199 +461,23 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* 主体内容区 */}
-      <div className="home-content main-content-area" style={{ padding: '60px 24px', maxWidth: 1400, margin: '0 auto', background: 'transparent' }}>
-        <Row gutter={[24, 24]}>
-          {/* 左侧主内容区 */}
-          <Col xs={24} lg={18}>
-            {/* 分类导航 */}
-            <ScrollReveal>
-              <Card 
-                className="glass-card"
-                title={<><BookOutlined /> 分类导航</>}
-                extra={<Button type="link" onClick={() => navigate('/document')}>更多分类 <RightOutlined /></Button>}
-                style={{ marginBottom: 24 }}
-              >
-                <Row gutter={[16, 16]}>
-                  {categories.map((category, index) => (
-                    <Col xs={12} sm={8} md={6} key={category.id}>
-                      <ScrollReveal delay={index * 0.05}>
-                        <Card className="category-card" hoverable size="small" onClick={() => handleCategoryClick(category.id)} style={{ textAlign: 'center' }}>
-                          <div style={{ fontSize: 32, color: category.color, marginBottom: 8 }}>{category.icon}</div>
-                          <div style={{ fontWeight: 500 }}>{category.name}</div>
-                          <Text type="secondary" style={{ fontSize: 12 }}>{category.count}+ 内容</Text>
-                        </Card>
-                      </ScrollReveal>
-                    </Col>
-                  ))}
-                </Row>
-              </Card>
-            </ScrollReveal>
+      {/* 全屏轮播区域 */}
+      <div className="full-width-section">
+        <ScrollReveal>
+          <HotCarousel />
+        </ScrollReveal>
+      </div>
 
-            {/* 推荐内容 - 热门内容 */}
-            <ScrollReveal delay={0.1}>
-              <Card 
-                className="glass-card"
-                title={<><FireOutlined style={{ color: '#ff4d4f' }} /> 热门推荐</>}
-                extra={<Button type="link">查看更多 <RightOutlined /></Button>}
-                style={{ marginBottom: 24 }}
-              >
-                <Skeleton loading={loading} active>
-                  <Row gutter={[16, 16]}>
-                    {hotContents.map((content, index) => (
-                      <Col xs={24} sm={12} md={8} key={content.id}>
-                        <ScrollReveal delay={index * 0.08}>
-                          <Card
-                            className="content-card"
-                            hoverable
-                            cover={
-                              <div style={{ position: 'relative' }}>
-                                <img alt={content.title} src={content.cover} style={{ width: '100%', height: 160, objectFit: 'cover' }} />
-                                {content.type === 'video' && (
-                                  <>
-                                    <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', fontSize: 48, color: 'rgba(255,255,255,0.9)' }}>
-                                      <PlayCircleOutlined />
-                                    </div>
-                                    <Tag style={{ position: 'absolute', bottom: 8, right: 8, background: 'rgba(0,0,0,0.7)', border: 'none', color: '#fff' }}>
-                                      {content.duration}
-                                    </Tag>
-                                  </>
-                                )}
-                                <Tag color={content.type === 'video' ? 'orange' : 'blue'} style={{ position: 'absolute', top: 8, left: 8 }}>
-                                  {content.type === 'video' ? '视频' : '文档'}
-                                </Tag>
-                              </div>
-                            }
-                            onClick={() => handleContentClick(content)}
-                            bodyStyle={{ padding: 12 }}
-                          >
-                            <Card.Meta
-                              title={<Text ellipsis={{ tooltip: content.title }} style={{ fontSize: 14 }}>{content.title}</Text>}
-                              description={
-                                <div>
-                                  <Space style={{ marginBottom: 8 }}>
-                                    <Avatar src={content.avatar} size="small" />
-                                    <Text type="secondary" style={{ fontSize: 12 }}>{content.author}</Text>
-                                  </Space>
-                                  <div>
-                                    <Space split={<Divider type="vertical" />} size={0}>
-                                      <Text type="secondary" style={{ fontSize: 12 }}><EyeOutlined /> {formatNumber(content.views)}</Text>
-                                      <Text type="secondary" style={{ fontSize: 12 }}><LikeOutlined /> {formatNumber(content.likes)}</Text>
-                                      <Text type="secondary" style={{ fontSize: 12 }}><StarOutlined /> {formatNumber(content.stars)}</Text>
-                                    </Space>
-                                  </div>
-                                </div>
-                              }
-                            />
-                          </Card>
-                        </ScrollReveal>
-                      </Col>
-                    ))}
-                  </Row>
-                </Skeleton>
-              </Card>
-            </ScrollReveal>
-          </Col>
-
-          {/* 右侧侧边栏 */}
-          <Col xs={24} lg={6}>
-            {/* 热门标签 */}
-            <ScrollReveal delay={0.15}>
-              <Card className="sidebar-card" title={<><FireOutlined style={{ color: '#ff4d4f' }} /> 热门标签</>} style={{ marginBottom: 24 }}>
-                <div>
-                  {hotTags.map((tag, index) => (
-                    <Tag
-                      key={tag.name}
-                      style={{ marginBottom: 8, cursor: 'pointer', padding: '4px 12px' }}
-                      color={index < 3 ? 'red' : undefined}
-                      onClick={() => handleSearch(tag.name)}
-                    >
-                      {index < 3 && <FireOutlined />} {tag.name}
-                    </Tag>
-                  ))}
-                </div>
-              </Card>
-            </ScrollReveal>
-
-            {/* 最新更新 */}
-            <ScrollReveal delay={0.2}>
-              <Card className="sidebar-card" title={<><ClockCircleOutlined /> 最新更新</>} style={{ marginBottom: 24 }}>
-                <List
-                  size="small"
-                  dataSource={latestUpdates}
-                  renderItem={item => (
-                    <List.Item style={{ cursor: 'pointer', padding: '8px 0' }} onClick={() => navigate(item.type === 'video' ? `/video/${item.id}` : `/document/${item.id}`)}>
-                      <div style={{ width: '100%' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                          {item.type === 'video' ? <PlayCircleOutlined style={{ color: '#fa8c16' }} /> : <FileTextOutlined style={{ color: '#1890ff' }} />}
-                          <Text ellipsis style={{ flex: 1, fontSize: 13 }}>{item.title}</Text>
-                        </div>
-                        <Text type="secondary" style={{ fontSize: 12, marginLeft: 22 }}>{item.time}</Text>
-                      </div>
-                    </List.Item>
-                  )}
-                />
-              </Card>
-            </ScrollReveal>
-
-            {/* 推荐分类 */}
-            <ScrollReveal delay={0.25}>
-              <Card className="sidebar-card" title={<><BookOutlined /> 推荐分类</>} style={{ marginBottom: 24 }}>
-                <List
-                  size="small"
-                  dataSource={categories.slice(0, 5)}
-                  renderItem={item => (
-                    <List.Item style={{ cursor: 'pointer' }} onClick={() => handleCategoryClick(item.id)}>
-                      <Space>
-                        <span style={{ color: item.color }}>{item.icon}</span>
-                        <Text>{item.name}</Text>
-                      </Space>
-                      <Text type="secondary">{item.count}+</Text>
-                    </List.Item>
-                  )}
-                />
-              </Card>
-            </ScrollReveal>
-
-            {/* 站点统计 */}
-            <ScrollReveal delay={0.3}>
-              <Card className="sidebar-card" title="站点统计">
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <div style={{ textAlign: 'center' }}>
-                      <div style={{ fontSize: 24, fontWeight: 'bold', color: '#1890ff' }}>1,256</div>
-                      <Text type="secondary">文档总数</Text>
-                    </div>
-                  </Col>
-                  <Col span={12}>
-                    <div style={{ textAlign: 'center' }}>
-                      <div style={{ fontSize: 24, fontWeight: 'bold', color: '#52c41a' }}>892</div>
-                      <Text type="secondary">视频总数</Text>
-                    </div>
-                  </Col>
-                  <Col span={12}>
-                    <div style={{ textAlign: 'center' }}>
-                      <div style={{ fontSize: 24, fontWeight: 'bold', color: '#faad14' }}>1,328</div>
-                      <Text type="secondary">用户总数</Text>
-                    </div>
-                  </Col>
-                  <Col span={12}>
-                    <div style={{ textAlign: 'center' }}>
-                      <div style={{ fontSize: 24, fontWeight: 'bold', color: '#722ed1' }}>15,680</div>
-                      <Text type="secondary">访问总数</Text>
-                    </div>
-                  </Col>
-                </Row>
-              </Card>
-            </ScrollReveal>
-          </Col>
-        </Row>
+      {/* 文章展示区域 */}
+      <div className="full-width-section">
+        <ScrollReveal delay={0.2}>
+          <ArticleShowcase />
+        </ScrollReveal>
       </div>
 
       {/* 用户评价区域 - 瀑布流 */}
       <ScrollReveal>
         <div style={{ 
-          background: 'transparent',
           padding: '60px 24px',
         }}>
           <div style={{ maxWidth: 1400, margin: '0 auto' }}>
@@ -674,9 +500,9 @@ const Home: React.FC = () => {
                       >
                         <div style={{ display: 'flex', alignItems: 'center', marginBottom: 12 }}>
                           <Avatar size="small" icon={<UserOutlined />} style={{ backgroundColor: '#1890ff', marginRight: 8 }} />
-                          <Text strong style={{ color: 'rgba(255,255,255,0.9)' }}>{review.name}</Text>
+                          <Text strong style={{ color: 'var(--text-color-primary)' }}>{review.name}</Text>
                         </div>
-                        <Paragraph style={{ color: 'rgba(255,255,255,0.7)', margin: 0, fontSize: 13, lineHeight: 1.6 }}>
+                        <Paragraph style={{ color: 'var(--text-color-secondary)', margin: 0, fontSize: 13, lineHeight: 1.6 }}>
                           {review.content}
                         </Paragraph>
                       </Card>

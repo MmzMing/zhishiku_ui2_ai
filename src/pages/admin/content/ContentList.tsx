@@ -23,6 +23,62 @@ const ContentList: React.FC = () => {
     { id: 5, title: 'MySQL索引优化技巧', category: '数据库', author: '钱七', status: 'published', views: 2100, downloads: 156, createTime: '2024-01-08', fileType: 'pdf' },
   ];
 
+  const [data, setData] = useState(contentData);
+  const [form] = Form.useForm();
+  const [searchText, setSearchText] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState<string | undefined>(undefined);
+  const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined);
+  const [loading, setLoading] = useState(false);
+
+  const handleRefresh = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      message.success('刷新成功');
+    }, 1000);
+  };
+
+  const handleDelete = (id: number) => {
+    setData(prev => prev.filter(item => item.id !== id));
+    message.success('删除成功');
+  };
+
+  const handleAdd = async () => {
+    try {
+      const values = await form.validateFields();
+      const newId = Math.max(...data.map(d => d.id), 0) + 1;
+      const categoryMap: Record<string, string> = { frontend: '前端开发', backend: '后端开发', database: '数据库', devops: '运维' };
+      
+      const newItem = {
+        id: newId,
+        title: values.title,
+        category: categoryMap[values.category] || values.category,
+        author: '当前用户',
+        status: 'draft',
+        views: 0,
+        downloads: 0,
+        createTime: new Date().toISOString().split('T')[0],
+        fileType: 'md'
+      };
+      
+      setData([newItem, ...data]);
+      message.success('新增成功');
+      setAddModalVisible(false);
+      form.resetFields();
+    } catch (error) {
+      console.error('Validation failed:', error);
+    }
+  };
+
+  const filteredData = data.filter(item => {
+    const matchSearch = item.title.toLowerCase().includes(searchText.toLowerCase());
+    const catMap: Record<string, string> = { frontend: '前端', backend: '后端', database: '数据库', devops: '运维' };
+    const targetCat = categoryFilter ? catMap[categoryFilter] : null;
+    const matchCategory = !targetCat || item.category.includes(targetCat);
+    const matchStatus = !statusFilter || item.status === statusFilter;
+    return matchSearch && matchCategory && matchStatus;
+  });
+
   const statusMap: Record<string, { color: string; text: string }> = {
     published: { color: 'success', text: '已发布' },
     draft: { color: 'default', text: '草稿' },
@@ -40,12 +96,12 @@ const ContentList: React.FC = () => {
     { title: '创建时间', dataIndex: 'createTime', key: 'createTime' },
     {
       title: '操作', key: 'action', width: 180,
-      render: () => (
+      render: (_, record) => (
         <Space>
-          <Button type="text" size="small" icon={<EyeOutlined />} />
-          <Button type="text" size="small" icon={<EditOutlined />} />
-          <Button type="text" size="small" icon={<DownloadOutlined />} />
-          <Popconfirm title="确定删除？" onConfirm={() => message.success('删除成功')}><Button type="text" size="small" danger icon={<DeleteOutlined />} /></Popconfirm>
+          <Button type="text" size="small" icon={<EyeOutlined />} onClick={() => message.info(`预览: ${record.title}`)} />
+          <Button type="text" size="small" icon={<EditOutlined />} onClick={() => message.info(`编辑: ${record.title}`)} />
+          <Button type="text" size="small" icon={<DownloadOutlined />} onClick={() => message.success(`开始下载: ${record.title}.${record.fileType}`)} />
+          <Popconfirm title="确定删除？" onConfirm={() => handleDelete(record.id)}><Button type="text" size="small" danger icon={<DeleteOutlined />} /></Popconfirm>
         </Space>
       ),
     },
@@ -54,39 +110,73 @@ const ContentList: React.FC = () => {
   return (
     <div style={{ padding: 24 }}>
       <Row gutter={16} style={{ marginBottom: 24 }}>
-        <Col span={6}><Card><Statistic title="文档总数" value={contentData.length} prefix={<FileTextOutlined />} /></Card></Col>
-        <Col span={6}><Card><Statistic title="已发布" value={contentData.filter(c => c.status === 'published').length} valueStyle={{ color: '#52c41a' }} /></Card></Col>
-        <Col span={6}><Card><Statistic title="总浏览量" value={contentData.reduce((sum, c) => sum + c.views, 0)} /></Card></Col>
-        <Col span={6}><Card><Statistic title="总下载量" value={contentData.reduce((sum, c) => sum + c.downloads, 0)} /></Card></Col>
+        <Col span={6}><Card><Statistic title="文档总数" value={data.length} prefix={<FileTextOutlined />} /></Card></Col>
+        <Col span={6}><Card><Statistic title="已发布" value={data.filter(c => c.status === 'published').length} valueStyle={{ color: '#52c41a' }} /></Card></Col>
+        <Col span={6}><Card><Statistic title="总浏览量" value={data.reduce((sum, c) => sum + c.views, 0)} /></Card></Col>
+        <Col span={6}><Card><Statistic title="总下载量" value={data.reduce((sum, c) => sum + c.downloads, 0)} /></Card></Col>
       </Row>
 
       <Card>
         <Space style={{ marginBottom: 16 }} wrap>
           <Button type="primary" icon={<PlusOutlined />} onClick={() => setAddModalVisible(true)}>新增文档</Button>
-          <Input placeholder="搜索文档标题" style={{ width: 200 }} prefix={<SearchOutlined />} />
-          <Select placeholder="分类" style={{ width: 120 }} allowClear>
+          <Input 
+            placeholder="搜索文档标题" 
+            style={{ width: 200 }} 
+            prefix={<SearchOutlined />} 
+            value={searchText}
+            onChange={e => setSearchText(e.target.value)}
+            allowClear
+          />
+          <Select 
+            placeholder="分类" 
+            style={{ width: 120 }} 
+            allowClear 
+            value={categoryFilter}
+            onChange={val => setCategoryFilter(val)}
+          >
             <Option value="frontend">前端开发</Option>
             <Option value="backend">后端开发</Option>
             <Option value="database">数据库</Option>
             <Option value="devops">运维</Option>
           </Select>
-          <Select placeholder="状态" style={{ width: 100 }} allowClear>
+          <Select 
+            placeholder="状态" 
+            style={{ width: 100 }} 
+            allowClear 
+            value={statusFilter}
+            onChange={val => setStatusFilter(val)}
+          >
             <Option value="published">已发布</Option>
             <Option value="draft">草稿</Option>
             <Option value="pending">待审核</Option>
           </Select>
           <RangePicker placeholder={['开始日期', '结束日期']} />
-          <Button icon={<ReloadOutlined />}>刷新</Button>
+          <Button icon={<ReloadOutlined spin={loading} />} onClick={handleRefresh}>刷新</Button>
         </Space>
-        <Table columns={columns} dataSource={contentData} rowKey="id" pagination={{ showSizeChanger: true, showTotal: (total) => `共 ${total} 篇文档` }} />
+        <Table columns={columns} dataSource={filteredData} rowKey="id" loading={loading} pagination={{ showSizeChanger: true, showTotal: (total) => `共 ${total} 篇文档` }} />
       </Card>
 
-      <Modal title="新增文档" open={addModalVisible} onCancel={() => setAddModalVisible(false)} onOk={() => { message.success('新增成功'); setAddModalVisible(false); }} width={600}>
-        <Form layout="vertical">
-          <Form.Item label="文档标题" required><Input placeholder="请输入文档标题" /></Form.Item>
-          <Form.Item label="分类" required><Select placeholder="请选择分类"><Option value="frontend">前端开发</Option><Option value="backend">后端开发</Option><Option value="database">数据库</Option><Option value="devops">运维</Option></Select></Form.Item>
+      <Modal 
+        title="新增文档" 
+        open={addModalVisible} 
+        onCancel={() => { setAddModalVisible(false); form.resetFields(); }} 
+        onOk={handleAdd} 
+        width={600}
+      >
+        <Form form={form} layout="vertical">
+          <Form.Item name="title" label="文档标题" rules={[{ required: true, message: '请输入文档标题' }]}>
+            <Input placeholder="请输入文档标题" />
+          </Form.Item>
+          <Form.Item name="category" label="分类" rules={[{ required: true, message: '请选择分类' }]}>
+            <Select placeholder="请选择分类">
+              <Option value="frontend">前端开发</Option>
+              <Option value="backend">后端开发</Option>
+              <Option value="database">数据库</Option>
+              <Option value="devops">运维</Option>
+            </Select>
+          </Form.Item>
           <Form.Item label="上传文件"><Upload><Button icon={<UploadOutlined />}>选择文件</Button></Upload><Text type="secondary" style={{ marginLeft: 8 }}>支持 md, pdf, docx 格式</Text></Form.Item>
-          <Form.Item label="文档描述"><Input.TextArea rows={3} placeholder="请输入文档描述" /></Form.Item>
+          <Form.Item name="description" label="文档描述"><Input.TextArea rows={3} placeholder="请输入文档描述" /></Form.Item>
         </Form>
       </Modal>
     </div>

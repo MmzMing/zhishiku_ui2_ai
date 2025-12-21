@@ -20,3 +20,27 @@
   margin-top: 10px; /* 顶部间距 */
   margin-bottom: 60px; /* 与下面区域的距离 */
 }
+
+/* Banner 图标按钮悬停效果 */
+.banner-icon-btn {
+  transition: all 0.3s ease !important;
+  opacity: 0.85;
+}
+
+.banner-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  transform: translateY(-3px);
+  opacity: 1;
+}
+
+.banner-icon-btn.csdn-btn:hover .anticon {
+  color: #fc5531 !important;
+}
+
+.banner-icon-btn.github-btn:hover .anticon {
+  color: #fff !important;
+}
+
+.banner-icon-btn.bilibili-btn:hover .anticon {
+  color: #fb7299 !important;
+}

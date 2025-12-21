@@ -15,16 +15,20 @@
   right: 0;
   z-index: 1000;
   height: 64px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  // 优化过度属性，避免 all 导致的抖动
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: background-color, box-shadow, height;
 
   .header-inner {
     height: 100%;
     background: var(--bg-color-primary);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    // 明确指定过度属性
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 0;
     margin: 0;
-    padding: 0 24px;
+    padding: 0 var(--spacing-lg);
+    overflow: hidden; // 增加 overflow: hidden 解决渲染异常导致的黑条
   }
 
   .header-content {
@@ -34,11 +38,13 @@
     align-items: center;
     justify-content: space-between;
     height: 100%;
+    position: relative;
   }
 
   .header-logo {
     display: flex;
     align-items: center;
+    z-index: 10; // 确保在中间导航之上
 
     a {
       text-decoration: none;
@@ -47,19 +53,24 @@
     h1 {
       color: var(--primary-color);
       margin: 0;
-      font-size: 20px;
+      font-size: var(--font-size-xl);
       font-weight: bold;
       white-space: nowrap;
     }
   }
 
   .header-nav {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     align-items: center;
+    height: 100%;
+    z-index: 5;
 
     .ant-btn-text {
       color: var(--text-color-primary);
-      font-size: 15px;
+      font-size: var(--font-size-sm);
 
       &:hover {
         color: var(--primary-color);
@@ -71,6 +82,7 @@
   .header-actions {
     display: flex;
     align-items: center;
+    z-index: 10;
   }
 }
 
@@ -87,6 +99,8 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
     padding: 0 32px;
     height: 52px;
+    // 确保滚动状态下也不出现黑条
+    overflow: hidden;
   }
 
   .header-content {
@@ -104,11 +118,7 @@
     color: var(--text-color-primary);
   }
 
-  .header-actions {
-    .ant-input-search {
-      width: 180px !important;
-    }
-  }
+
 }
 
 /* 内容区域 */

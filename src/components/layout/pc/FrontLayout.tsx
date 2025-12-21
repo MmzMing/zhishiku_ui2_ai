@@ -130,17 +130,7 @@ const FrontLayout: React.FC = () => {
     },
   ];
 
-  // 搜索处理 - 空搜索也跳转到搜索页
-  const handleSearch = (value: string) => {
-    const query = value.trim();
-    if (query) {
-      navigate(`/search?q=${encodeURIComponent(query)}`);
-    } else {
-      navigate('/search');
-    }
-  };
-
-  // 页头类名 - 所有前台页面都支持滚动效果
+  // 导航处理
   const headerClassName = `front-header ${isScrolled ? 'front-header-scrolled' : ''}`;
 
   // 设置 body 的 data-route 属性
@@ -195,12 +185,18 @@ const FrontLayout: React.FC = () => {
 
             {/* 搜索和用户操作 */}
             <Space size="middle" className="header-actions">
-              <Search
-                placeholder="搜索文档/视频"
-                allowClear
-                onSearch={handleSearch}
-                style={{ width: 200 }}
-                enterButton={<SearchOutlined />}
+              <Button 
+                shape="circle"
+                icon={<SearchOutlined />} 
+                onClick={() => navigate('/search')}
+                title="搜索"
+                style={{ 
+                  width: '32px',
+                  height: '32px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
               />
               
               <Button 
@@ -221,7 +217,7 @@ const FrontLayout: React.FC = () => {
                 <Dropdown 
                   menu={{ items: loggedInMenuItems }} 
                   placement="bottomRight"
-                  trigger={['click']}
+                  trigger={['hover']}
                 >
                   <Avatar 
                     icon={<UserOutlined />} 
@@ -232,7 +228,7 @@ const FrontLayout: React.FC = () => {
                 <Dropdown 
                   menu={{ items: guestMenuItems }} 
                   placement="bottomRight"
-                  trigger={['click']}
+                  trigger={['hover']}
                 >
                   <Button type="primary">
                     登录

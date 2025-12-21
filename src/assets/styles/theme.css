@@ -12,8 +12,12 @@
   
   /* 字体大小 */
   --base-font-size: 16px;
-  --font-size-sm: 14px;
-  --font-size-lg: 18px;
+  --font-size-xs: calc(var(--base-font-size) * 0.75);
+  --font-size-sm: calc(var(--base-font-size) * 0.875);
+  --font-size-md: var(--base-font-size);
+  --font-size-lg: calc(var(--base-font-size) * 1.125);
+  --font-size-xl: calc(var(--base-font-size) * 1.25);
+  --font-size-xxl: calc(var(--base-font-size) * 1.5);
   
   /* 间距比例 */
   --spacing-scale: 1;
@@ -37,6 +41,24 @@
   --transition-fast: 0.2s;
   --transition-normal: 0.3s;
   --transition-slow: 0.5s;
+
+  /* 解决页面抖动：固定滚动条区域 */
+  scrollbar-gutter: stable;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+  font-size: var(--base-font-size);
+  color: var(--text-color-primary);
+  background-color: var(--bg-color-secondary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden; /* 解决横向异常黑条 */
 }
 
 /* ==================== 浅色主题（默认） ==================== */
@@ -152,13 +174,9 @@ a:active {
   --spacing-scale: 0.8;
 }
 
-.compact-mode .ant-btn {
-  padding: 4px 12px;
-  font-size: 14px;
-}
-
-.compact-mode .ant-input {
-  padding: 4px 11px;
+/* 宽松模式 */
+.loose-mode {
+  --spacing-scale: 1.2;
 }
 
 /* ==================== 页面过渡动画 ==================== */
@@ -197,29 +215,8 @@ a:active {
 
 /* 移动端 ≤768px */
 @media (max-width: 768px) {
-  :root {
-    --base-font-size: 14px;
-    --spacing-scale: 0.9;
-  }
-  
   body {
     font-size: 14px;
-  }
-}
-
-/* 平板端 769px-1024px */
-@media (min-width: 769px) and (max-width: 1024px) {
-  :root {
-    --base-font-size: 15px;
-    --spacing-scale: 0.95;
-  }
-}
-
-/* PC端 ≥1025px */
-@media (min-width: 1025px) {
-  :root {
-    --base-font-size: 16px;
-    --spacing-scale: 1;
   }
 }
 

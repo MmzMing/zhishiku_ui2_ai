@@ -43,8 +43,11 @@ import {
   ToolOutlined,
   MessageOutlined,
   UserOutlined,
-  ArrowDownOutlined
+  ArrowDownOutlined,
+  GithubOutlined,
+  BilibiliOutlined
 } from '@ant-design/icons';
+import Icon from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import * as homeApi from '../../../api/front/homeApi';
 import HotCarousel from './HotCarousel';
@@ -254,6 +257,15 @@ const userReviews = [
   { id: 12, name: '神秘人', content: '你这个水平，月薪过万很轻松的，加油！' },
 ];
 
+// CSDN 图标组件
+const CSDNIcon = (props: any) => (
+  <Icon component={() => (
+    <svg viewBox="0 0 1024 1024" width="1em" height="1em" fill="currentColor">
+      <path d="M512 1024C230.4 1024 0 793.6 0 512S230.4 0 512 0s512 230.4 512 512-230.4 512-512 512z m221.312-302.08a32.32 32.32 0 0 0-41.28-11.2 245.76 245.76 0 0 1-115.84 28.16c-112.96 0-204.8-91.84-204.8-204.8s91.84-204.8 204.8-204.8a245.76 245.76 0 0 1 115.84 28.16 32.32 32.32 0 0 0 41.28-11.2l23.36-41.28a32 32 0 0 0-12.8-43.52 336.32 336.32 0 0 0-167.68-44.16c-184.32 0-333.76 149.44-333.76 333.76s149.44 333.76 333.76 333.76c61.76 0 119.36-16.32 168-44.16a32 32 0 0 0 12.8-43.52z" />
+    </svg>
+  )} {...props} />
+);
+
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const [avatarVisible, setAvatarVisible] = useState(false);
@@ -369,7 +381,7 @@ const Home: React.FC = () => {
               <Text style={{ color: 'rgba(255,255,255,0.9)', fontSize: 18 }}>
                 我是一名 99 年的
               </Text>
-              <Tag color="#1890ff" style={{ fontSize: 16, padding: '4px 0px', borderRadius: 4,border: 0 ,background: '#0f1318'}}>
+              <Tag color="#1890ff" style={{ fontSize: 16, padding: '4px 12px', borderRadius: 4, border: 0, background: '#0f1318' }}>
                 后端工程师
               </Tag>
             </div>
@@ -385,30 +397,55 @@ const Home: React.FC = () => {
               {introText}<span style={{ animation: introText.length > 0 && introText.length < 100 ? 'blink 1s infinite' : 'none' }}>|</span>
             </Paragraph>
             
-            <Space size="middle">
+            <Space size="large" style={{ marginTop: 8 }}>
               <Button 
-                type="primary" 
+                type="text" 
                 size="large"
-                style={{ borderRadius: 6, height: 44, paddingLeft: 24, paddingRight: 24 }}
-                onClick={() => window.open('https://blog.csdn.net/qq_45096531?type=blog', '_blank')}
-              >
-                个人博客
-              </Button>
-              <Button 
-                size="large"
+                icon={<CSDNIcon style={{ fontSize: 32 }} />}
                 style={{ 
-                  borderRadius: 6, 
-                  height: 44, 
-                  paddingLeft: 24, 
-                  paddingRight: 24,
-                  background: 'transparent',
-                  borderColor: 'rgba(255,255,255,0.5)',
-                  color: '#fff',
+                  color: '#fc5531',
+                  padding: 0,
+                  width: 48,
+                  height: 48,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}
+                className="banner-icon-btn csdn-btn"
+                onClick={() => window.open('https://blog.csdn.net/qq_45096531?type=blog', '_blank')}
+              />
+              <Button 
+                type="text"
+                size="large"
+                icon={<GithubOutlined style={{ fontSize: 32 }} />}
+                style={{ 
+                  color: 'rgba(255,255,255,0.85)',
+                  padding: 0,
+                  width: 48,
+                  height: 48,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+                className="banner-icon-btn github-btn"
                 onClick={() => window.open('https://github.com/MmzMing', '_blank')}
-              >
-                GitHub
-              </Button>
+              />
+              <Button 
+                type="text"
+                size="large"
+                icon={<BilibiliOutlined style={{ fontSize: 32 }} />}
+                style={{ 
+                  color: '#fb7299',
+                  padding: 0,
+                  width: 48,
+                  height: 48,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+                className="banner-icon-btn bilibili-btn"
+                onClick={() => window.open('https://space.bilibili.com/15446538', '_blank')}
+              />
             </Space>
           </div>
           

@@ -31,6 +31,13 @@ import type { Color } from 'antd/es/color-picker';
 import type { MenuProps } from 'antd';
 import { useLanguage } from '../../contexts/LanguageContext';
 
+import { 
+  ThemeConfig, 
+  DEFAULT_THEME_CONFIG as DEFAULT_CONFIG, 
+  THEME_STORAGE_KEY,
+  PRESET_COLORS
+} from '../../config/theme/themeConfig';
+
 const { Title, Text } = Typography;
 const { Option } = Select;
 
@@ -38,38 +45,6 @@ interface ThemeSettingsProps {
   visible: boolean;
   onClose: () => void;
 }
-
-interface ThemeConfig {
-  mode: 'light' | 'dark' | 'auto';
-  primaryColor: string;
-  fontSize: 'small' | 'medium' | 'large';
-  spacing: 'compact' | 'normal' | 'loose';
-  sidebarCollapsed: boolean;
-  showTopLoadingBar: boolean;
-  showLogo: boolean;
-  showNavButtons: boolean;
-  showBreadcrumb: boolean;
-  keepTabsAlive: boolean;
-  showFooter: boolean;
-  enablePageTransition: boolean;
-  allowTextSelection: boolean;
-}
-
-const DEFAULT_CONFIG: ThemeConfig = {
-  mode: 'light',
-  primaryColor: '#1890ff',
-  fontSize: 'medium',
-  spacing: 'normal',
-  sidebarCollapsed: false,
-  showTopLoadingBar: true,
-  showLogo: true,
-  showNavButtons: true,
-  showBreadcrumb: true,
-  keepTabsAlive: false,
-  showFooter: true,
-  enablePageTransition: true,
-  allowTextSelection: true,
-};
 
 const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
   const [config, setConfig] = useState<ThemeConfig>(DEFAULT_CONFIG);
@@ -111,21 +86,12 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
   ];
 
   // 预设主题颜色
-  const presetColors = [
-    { label: '拂晓蓝', value: '#1890ff' },
-    { label: '薄暮', value: '#f5222d' },
-    { label: '火山', value: '#fa541c' },
-    { label: '日暮', value: '#faad14' },
-    { label: '明青', value: '#13c2c2' },
-    { label: '极光绿', value: '#52c41a' },
-    { label: '极客蓝', value: '#2f54eb' },
-    { label: '酱紫', value: '#722ed1' },
-  ];
+  const presetColors = PRESET_COLORS;
 
   // 加载已保存的配置
   useEffect(() => {
     if (visible) {
-      const savedConfig = localStorage.getItem('theme-config');
+      const savedConfig = localStorage.getItem(THEME_STORAGE_KEY);
       if (savedConfig) {
         try {
           const parsed = JSON.parse(savedConfig);
@@ -148,7 +114,7 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
 
   const handleSave = () => {
     // 保存配置到localStorage
-    localStorage.setItem('theme-config', JSON.stringify(config));
+    localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(config));
     
     // 触发主题变化事件，让App.tsx重新应用主题
     window.dispatchEvent(new Event('theme-change'));
@@ -230,7 +196,7 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
         </div>
       }
       placement="right"
-      width={360}
+      width={400}
       open={visible}
       onClose={onClose}
       footer={
@@ -263,15 +229,15 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
               value={config.mode}
               onChange={(e) => handleConfigChange('mode', e.target.value)}
               buttonStyle="solid"
-              style={{ width: '100%' }}
+              style={{ width: '100%', display: 'flex' }}
             >
-              <Radio.Button value="light" style={{ width: '33.33%', textAlign: 'center' }}>
+              <Radio.Button value="light" style={{ flex: 1, textAlign: 'center', whiteSpace: 'nowrap' }}>
                 {t('theme.mode.light')}
               </Radio.Button>
-              <Radio.Button value="dark" style={{ width: '33.33%', textAlign: 'center' }}>
+              <Radio.Button value="dark" style={{ flex: 1, textAlign: 'center', whiteSpace: 'nowrap' }}>
                 {t('theme.mode.dark')}
               </Radio.Button>
-              <Radio.Button value="auto" style={{ width: '33.33%', textAlign: 'center' }}>
+              <Radio.Button value="auto" style={{ flex: 1, textAlign: 'center', whiteSpace: 'nowrap' }}>
                 {t('theme.mode.auto')}
               </Radio.Button>
             </Radio.Group>
@@ -346,15 +312,15 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
               value={config.spacing}
               onChange={(e) => handleConfigChange('spacing', e.target.value)}
               buttonStyle="solid"
-              style={{ width: '100%' }}
+              style={{ width: '100%', display: 'flex' }}
             >
-              <Radio.Button value="compact" style={{ width: '33.33%', textAlign: 'center' }}>
+              <Radio.Button value="compact" style={{ flex: 1, textAlign: 'center', whiteSpace: 'nowrap' }}>
                 {t('theme.spacing.compact')}
               </Radio.Button>
-              <Radio.Button value="normal" style={{ width: '33.33%', textAlign: 'center' }}>
+              <Radio.Button value="normal" style={{ flex: 1, textAlign: 'center', whiteSpace: 'nowrap' }}>
                 {t('theme.spacing.normal')}
               </Radio.Button>
-              <Radio.Button value="loose" style={{ width: '33.33%', textAlign: 'center' }}>
+              <Radio.Button value="loose" style={{ flex: 1, textAlign: 'center', whiteSpace: 'nowrap' }}>
                 {t('theme.spacing.loose')}
               </Radio.Button>
             </Radio.Group>

@@ -73,8 +73,8 @@ const themeSlice = createSlice({
       // 持久化存储
       setTheme(action.payload);
       
-      // 更新HTML根元素的主题类名
-      updateThemeClass(action.payload);
+      // 触发全局主题变化事件，让 ThemeContext 处理 DOM 应用
+      window.dispatchEvent(new Event('theme-change'));
     },
     
     // 切换跟随系统
@@ -86,16 +86,14 @@ const themeSlice = createSlice({
         const systemTheme = getSystemTheme();
         state.currentTheme = systemTheme;
         setTheme(systemTheme);
-        updateThemeClass(systemTheme);
+        window.dispatchEvent(new Event('theme-change'));
       }
     },
     
     // 更新自定义配置
     updateCustomConfig: (state, action: PayloadAction<Partial<ThemeState['customConfig']>>) => {
       state.customConfig = { ...state.customConfig, ...action.payload };
-      
-      // 应用自定义配置到CSS变量
-      applyCustomConfig(state.customConfig);
+      window.dispatchEvent(new Event('theme-change'));
     },
     
     // 更新布局配置
@@ -122,8 +120,7 @@ const themeSlice = createSlice({
       // 持久化存储
       setTheme(newTheme);
       
-      // 更新HTML根元素的主题类名
-      updateThemeClass(newTheme);
+      window.dispatchEvent(new Event('theme-change'));
     },
     
     // 重置主题配置
@@ -132,8 +129,7 @@ const themeSlice = createSlice({
       state.layoutConfig = initialState.layoutConfig;
       state.animationConfig = initialState.animationConfig;
       
-      // 清除CSS变量
-      clearCustomConfig();
+      window.dispatchEvent(new Event('theme-change'));
     },
     
     // 初始化主题（从本地存储恢复）
@@ -141,7 +137,6 @@ const themeSlice = createSlice({
       const savedTheme = getTheme() as ThemeType;
       if (savedTheme) {
         state.currentTheme = savedTheme;
-        updateThemeClass(savedTheme);
       }
       
       // 如果跟随系统，检查系统主题变化
@@ -150,9 +145,10 @@ const themeSlice = createSlice({
         if (systemTheme !== state.currentTheme) {
           state.currentTheme = systemTheme;
           setTheme(systemTheme);
-          updateThemeClass(systemTheme);
         }
       }
+      
+      window.dispatchEvent(new Event('theme-change'));
     },
   },
 });

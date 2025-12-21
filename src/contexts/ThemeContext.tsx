@@ -3,38 +3,14 @@
  */
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-
-export interface ThemeConfig {
-  mode: 'light' | 'dark' | 'auto';
-  primaryColor: string;
-  fontSize: 'small' | 'medium' | 'large';
-  spacing: 'compact' | 'normal' | 'loose';
-  sidebarCollapsed: boolean;
-  showTopLoadingBar: boolean;
-  showLogo: boolean;
-  showNavButtons: boolean;
-  showBreadcrumb: boolean;
-  keepTabsAlive: boolean;
-  showFooter: boolean;
-  enablePageTransition: boolean;
-  allowTextSelection: boolean;
-}
-
-const DEFAULT_THEME_CONFIG: ThemeConfig = {
-  mode: 'light',
-  primaryColor: '#1890ff',
-  fontSize: 'medium',
-  spacing: 'normal',
-  sidebarCollapsed: false,
-  showTopLoadingBar: true,
-  showLogo: true,
-  showNavButtons: true,
-  showBreadcrumb: true,
-  keepTabsAlive: false,
-  showFooter: true,
-  enablePageTransition: true,
-  allowTextSelection: true,
-};
+import { 
+  ThemeConfig, 
+  DEFAULT_THEME_CONFIG, 
+  THEME_STORAGE_KEY,
+  applyThemeConfig,
+  getThemeConfig,
+  saveThemeConfig
+} from '../config/theme/themeConfig';
 
 interface ThemeContextType {
   config: ThemeConfig;
@@ -48,32 +24,29 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [config, setConfig] = useState<ThemeConfig>(DEFAULT_THEME_CONFIG);
+  const [config, setConfig] = useState<ThemeConfig>(getThemeConfig());
 
-  // 加载保存的配置
+  // 初始化主题
   useEffect(() => {
-    const savedConfig = localStorage.getItem('theme-config');
-    if (savedConfig) {
-      try {
-        const parsed = JSON.parse(savedConfig);
-        setConfig({ ...DEFAULT_THEME_CONFIG, ...parsed });
-      } catch (e) {
-        console.error('Failed to parse theme config:', e);
-      }
-    }
+    applyThemeConfig(config);
   }, []);
 
   // 监听主题变化事件
   useEffect(() => {
     const handleThemeChange = () => {
-      const savedConfig = localStorage.getItem('theme-config');
-      if (savedConfig) {
-        try {
-          const parsed = JSON.parse(savedConfig);
-          setConfig({ ...DEFAULT_THEME_CONFIG, ...parsed });
-        } catch (e) {
-          console.error('Failed to parse theme config:', e);
+      const startTime = performance.now();
+      try {
+        const newConfig = getThemeConfig();
+        setConfig(newConfig);
+        applyThemeConfig(newConfig);
+        
+        const endTime = performance.now();
+        const duration = endTime - startTime;
+        if (duration > 100) { // 如果切换超过100ms，记录为性能异常
+          console.warn(`[Theme] Theme switch took ${duration.toFixed(2)}ms, which is longer than expected.`);
         }
+      } catch (error) {
+        console.error('[Theme] Failed to apply theme change:', error);
       }
     };
 
@@ -84,10 +57,22 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   }, []);
 
   const updateConfig = (newConfig: Partial<ThemeConfig>) => {
-    const updatedConfig = { ...config, ...newConfig };
-    setConfig(updatedConfig);
-    localStorage.setItem('theme-config', JSON.stringify(updatedConfig));
-    window.dispatchEvent(new Event('theme-change'));
+    const startTime = performance.now();
+    try {
+      const updatedConfig = { ...config, ...newConfig };
+      setConfig(updatedConfig);
+      saveThemeConfig(updatedConfig);
+      applyThemeConfig(updatedConfig);
+      window.dispatchEvent(new Event('theme-change'));
+      
+      const endTime = performance.now();
+      const duration = endTime - startTime;
+      if (duration > 100) {
+        console.warn(`[Theme] updateConfig took ${duration.toFixed(2)}ms`);
+      }
+    } catch (error) {
+      console.error('[Theme] Error updating theme config:', error);
+    }
   };
 
   return (

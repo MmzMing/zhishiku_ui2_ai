@@ -183,12 +183,12 @@
 /* 底部描述样式 */
 .description-container {
   position: absolute;
-  bottom: 0;
+  top: calc(50% + 260px); /* 250px 是卡片一半高度 + 10px 间距 */
+  bottom: 10px;
   left: 0;
   width: 100%;
-  height: calc((100% - 500px) / 2); /* 500px 是卡片高度 */
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   z-index: 10;
   pointer-events: none;
@@ -197,6 +197,7 @@
 
 .description-text-wrapper {
   max-width: 800px;
+  max-height: 100%;
   text-align: center;
   animation: fadeUp 0.5s ease-out;
   background: rgba(0, 0, 0, 0.4); /* 轻微背景增强可读性 */
@@ -204,6 +205,18 @@
   border-radius: 16px;
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.05);
+  overflow-y: auto;
+  pointer-events: auto; /* 允许在内容过多时滚动 */
+}
+
+/* 自定义滚动条样式，使其更隐蔽 */
+.description-text-wrapper::-webkit-scrollbar {
+  width: 4px;
+}
+
+.description-text-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
 }
 
 .description-text {

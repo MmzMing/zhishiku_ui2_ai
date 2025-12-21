@@ -4,10 +4,10 @@
 
 export const developmentConfig = {
   // API配置
-  apiBaseUrl: 'http://localhost:8080/api',
+  apiBaseUrl: '/api',
   
   // 上传配置
-  uploadUrl: 'http://localhost:8080/api/upload',
+  uploadUrl: '/api/upload',
   maxFileSize: 10 * 1024 * 1024, // 10MB
   
   // 日志配置

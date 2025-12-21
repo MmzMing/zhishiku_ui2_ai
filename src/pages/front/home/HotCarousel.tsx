@@ -47,6 +47,13 @@ const carouselData: VideoItem[] = [
   }
 ];
 
+const poems = [
+  '书山有路勤为径，学海无涯苦作舟。',
+  '黑发不知勤学早，白首方悔读书迟。',
+  '纸上得来终觉浅，绝知此事要躬行。',
+  '问渠那得清如许？为有源头活水来。'
+];
+
 const HotCarousel: React.FC = () => {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(1); // Start with middle item (index 1)
@@ -55,16 +62,13 @@ const HotCarousel: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Typewriter state
-  const poems = [
-    '书山有路勤为径，学海无涯苦作舟。',
-    '黑发不知勤学早，白首方悔读书迟。',
-    '纸上得来终觉浅，绝知此事要躬行。',
-    '问渠那得清如许？为有源头活水来。'
-  ];
   const [displayText, setDisplayText] = useState('');
   const [poemIndex, setPoemIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const [typingSpeed, setTypingSpeed] = useState(150);
+
+  // Auto-play state
+  const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const currentPoem = poems[poemIndex];
@@ -73,7 +77,7 @@ const HotCarousel: React.FC = () => {
       if (!isDeleting) {
         // 正在打字
         if (displayText.length < currentPoem.length) {
-          setDisplayText(currentPoem.substring(0, displayText.length + 1));
+          setDisplayText(prev => currentPoem.substring(0, prev.length + 1));
           setTypingSpeed(150);
         } else {
           // 打完了，准备删除
@@ -83,7 +87,7 @@ const HotCarousel: React.FC = () => {
       } else {
         // 正在删除
         if (displayText.length > 0) {
-          setDisplayText(currentPoem.substring(0, displayText.length - 1));
+          setDisplayText(prev => currentPoem.substring(0, prev.length - 1));
           setTypingSpeed(50); // 删除速度快一点
         } else {
           // 删除完了，换下一句
@@ -96,7 +100,27 @@ const HotCarousel: React.FC = () => {
 
     const timer = setTimeout(handleType, typingSpeed);
     return () => clearTimeout(timer);
-  }, [displayText, isDeleting, poemIndex, typingSpeed, poems]);
+  }, [displayText, isDeleting, poemIndex, typingSpeed]);
+
+  // Auto-rotation logic
+  useEffect(() => {
+    const startAutoPlay = () => {
+      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+      autoPlayRef.current = setInterval(() => {
+        handleSwipe('left');
+      }, 5000);
+    };
+
+    if (isExpanded) {
+      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+    } else {
+      startAutoPlay();
+    }
+
+    return () => {
+      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+    };
+  }, [isExpanded, activeIndex]);
   
   // Drag state
   const dragStartRef = useRef<number | null>(null);

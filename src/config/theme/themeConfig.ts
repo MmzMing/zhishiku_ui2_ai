@@ -153,13 +153,20 @@ export const applyThemeConfig = (config: ThemeConfig): void => {
   // 应用主色调
   root.style.setProperty('--primary-color', config.primaryColor);
   
+  // 计算并应用主色调的hover和active颜色
+  const primaryHover = adjustColor(config.primaryColor, 20);
+  const primaryActive = adjustColor(config.primaryColor, -20);
+  root.style.setProperty('--primary-color-hover', primaryHover);
+  root.style.setProperty('--primary-color-active', primaryActive);
+  
   // 应用字体大小
   const fontSizeMap = {
     small: '14px',
     medium: '16px',
     large: '18px',
   };
-  root.style.setProperty('--base-font-size', fontSizeMap[config.fontSize]);
+  const fontSize = fontSizeMap[config.fontSize] || '16px';
+  root.style.setProperty('--base-font-size', fontSize);
   
   // 应用间距
   const spacingMap = {
@@ -167,10 +174,21 @@ export const applyThemeConfig = (config: ThemeConfig): void => {
     normal: '1',
     loose: '1.2',
   };
-  root.style.setProperty('--spacing-scale', spacingMap[config.spacing]);
+  const spacingScale = spacingMap[config.spacing] || '1';
+  root.style.setProperty('--spacing-scale', spacingScale);
+  
+  // 间距模式类名 (用于特殊组件的覆盖样式)
+  root.classList.toggle('compact-mode', config.spacing === 'compact');
+  root.classList.toggle('loose-mode', config.spacing === 'loose');
   
   // 应用布局设置
   root.classList.toggle('sidebar-collapsed', config.sidebarCollapsed);
+  root.classList.toggle('hide-top-loading-bar', !config.showTopLoadingBar);
+  root.classList.toggle('hide-logo', !config.showLogo);
+  root.classList.toggle('hide-nav-buttons', !config.showNavButtons);
+  root.classList.toggle('hide-breadcrumb', !config.showBreadcrumb);
+  root.classList.toggle('keep-tabs-alive', config.keepTabsAlive);
+  root.classList.toggle('hide-footer', !config.showFooter);
   
   // 应用页面功能设置
   root.classList.toggle('no-text-selection', !config.allowTextSelection);
@@ -185,6 +203,18 @@ export const getSystemTheme = (): 'light' | 'dark' => {
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }
   return 'light';
+};
+
+/**
+ * 调整颜色亮度
+ */
+export const adjustColor = (color: string, amount: number): string => {
+  const hex = color.replace('#', '');
+  const num = parseInt(hex, 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + amount));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + amount));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + amount));
+  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
 };
 
 /**

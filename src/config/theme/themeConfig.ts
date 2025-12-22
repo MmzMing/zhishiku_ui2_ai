@@ -22,6 +22,7 @@ export interface ThemeConfig {
   showBreadcrumb: boolean;
   keepTabsAlive: boolean;
   showFooter: boolean;
+  showFullscreenButton: boolean;
   
   // 页面功能
   enablePageTransition: boolean;
@@ -56,6 +57,7 @@ export const DEFAULT_THEME_CONFIG: ThemeConfig = {
   showBreadcrumb: true,
   keepTabsAlive: false,
   showFooter: true,
+  showFullscreenButton: true,
   
   // 页面功能
   enablePageTransition: true,
@@ -189,6 +191,7 @@ export const applyThemeConfig = (config: ThemeConfig): void => {
   root.classList.toggle('hide-breadcrumb', !config.showBreadcrumb);
   root.classList.toggle('keep-tabs-alive', config.keepTabsAlive);
   root.classList.toggle('hide-footer', !config.showFooter);
+  root.classList.toggle('hide-fullscreen-button', !config.showFullscreenButton);
   
   // 应用页面功能设置
   root.classList.toggle('no-text-selection', !config.allowTextSelection);

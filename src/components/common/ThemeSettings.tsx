@@ -390,6 +390,14 @@ const ThemeSettings: React.FC<ThemeSettingsProps> = ({ visible, onClose }) => {
               onChange={(checked) => handleConfigChange('showFooter', checked)}
             />
           </div>
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <Text>{t('theme.showFullscreenButton')}</Text>
+            <Switch
+              checked={config.showFullscreenButton}
+              onChange={(checked) => handleConfigChange('showFullscreenButton', checked)}
+            />
+          </div>
         </div>
 
         <Divider />

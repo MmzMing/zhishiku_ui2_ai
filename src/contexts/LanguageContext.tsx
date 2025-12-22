@@ -51,6 +51,9 @@ const translations = {
     'theme.showBreadcrumb': '面包屑导航显示',
     'theme.keepTabsAlive': '标签页常显设置',
     'theme.showFooter': '底部信息显示',
+    'theme.showFullscreenButton': '全屏按钮显示',
+    'common.fullscreen': '全屏',
+    'common.exitFullscreen': '退出全屏',
     
     // 页面功能
     'theme.pageFeatures': '页面功能',
@@ -100,6 +103,9 @@ const translations = {
     'theme.showBreadcrumb': 'Breadcrumb Navigation Display',
     'theme.keepTabsAlive': 'Keep Tabs Alive Setting',
     'theme.showFooter': 'Footer Information Display',
+    'theme.showFullscreenButton': 'Fullscreen Button Display',
+    'common.fullscreen': 'Fullscreen',
+    'common.exitFullscreen': 'Exit Fullscreen',
     
     // Page Features
     'theme.pageFeatures': 'Page Features',
@@ -149,6 +155,9 @@ const translations = {
     'theme.showBreadcrumb': 'パンくずナビ表示',
     'theme.keepTabsAlive': 'タブ常時表示設定',
     'theme.showFooter': 'フッター情報表示',
+    'theme.showFullscreenButton': '全画面ボタン表示',
+    'common.fullscreen': '全画面表示',
+    'common.exitFullscreen': '全画面表示を終了',
     
     // ページ機能
     'theme.pageFeatures': 'ページ機能',

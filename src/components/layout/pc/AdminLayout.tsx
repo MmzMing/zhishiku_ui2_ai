@@ -8,6 +8,7 @@ import { Layout, Menu, Button, Space, Avatar, Dropdown, FloatButton, Breadcrumb 
 import { Outlet, useNavigate, useLocation, Link } from 'react-router-dom';
 import { routeMeta } from '../../../router/routes';
 import { useTheme } from '../../../contexts/ThemeContext';
+import { useLanguage } from '../../../contexts/LanguageContext';
 import {
   DashboardOutlined,
   UserOutlined,
@@ -31,6 +32,8 @@ import {
   HomeOutlined,
   LogoutOutlined,
   DesktopOutlined,
+  FullscreenOutlined,
+  FullscreenExitOutlined
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import ThemeSettings from '../../common/ThemeSettings';
@@ -44,8 +47,35 @@ const AdminLayout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { config: themeConfig } = useTheme();
+  const { t } = useLanguage();
   const [themeSettingsVisible, setThemeSettingsVisible] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // 监听全屏变化
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
+  }, []);
+
+  // 全屏切换处理
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch((err) => {
+        console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+      });
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+  };
 
   useEffect(() => {
     // 监听主题变化
@@ -246,6 +276,21 @@ const AdminLayout: React.FC = () => {
             />
           )}
           <Space size="middle">
+            {themeConfig.showFullscreenButton && (
+              <Button 
+                shape="circle"
+                icon={isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />} 
+                 onClick={toggleFullscreen}
+                 title={isFullscreen ? t('common.exitFullscreen') : t('common.fullscreen')}
+                 style={{ 
+                   width: '32px',
+                  height: '32px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              />
+            )}
             <Button 
               shape="circle"
               icon={<BgColorsOutlined />} 

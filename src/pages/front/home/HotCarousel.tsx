@@ -30,7 +30,7 @@ const carouselData: VideoItem[] = [
   {
     id: 2,
     title: '剧场版 链锯人 蕾塞篇',
-    videoUrl: 'https://v16.toutiao50.com/b4cad37de650a1565b88d9c8be928c3d/6948ad42/video/tos/alisg/tos-alisg-v-0051c001-sg/o4BEgE2gNWUEpAhf3raNc4ZHDjjDDBFcQFxBme/',
+    videoUrl: 'https://v16.toutiao50.com/d024f1885e8cbffdbd81c3dc29e96d49/695cb29d/video/tos/alisg/tos-alisg-v-0051c001-sg/o4BEgE2gNWUEpAhf3raNc4ZHDjjDDBFcQFxBme/',
     poster: 'https://cdn.aqdstatic.com:966/age/20250257.jpg',
     detailUrl: '/video/2',
     duration: '01:39:10',
